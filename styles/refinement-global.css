@@ -1,0 +1,125 @@
+/* Phase 11.5 global refinement layer. Scene-specific motion remains local. */
+.wc-home-experience
+  :is(.wc-heading-1, .wc-heading-2, .wc-heading-3, .wc-scene-liquid__title) {
+  font-family: var(--wc-font-display);
+  font-weight: var(--wc-weight-bold);
+  letter-spacing: var(--wc-tracking-display);
+  text-transform: uppercase;
+}
+
+.wc-home-experience :is(.wc-button, .wc-scene-orbit__node-action) {
+  font-family: var(--wc-font-display);
+  font-weight: var(--wc-weight-semibold);
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.wc-scene-liquid__field span {
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.wc-scene-illustrations__artwork {
+  opacity: calc(0.3 + var(--wc-artwork-focus) * 0.7);
+  filter: blur(calc((1 - var(--wc-artwork-focus)) * 0.3rem))
+    saturate(calc(0.42 + var(--wc-artwork-focus) * 0.68))
+    brightness(calc(0.56 + var(--wc-artwork-focus) * 0.5));
+}
+
+.wc-scene-illustrations__plane {
+  transform: scale(calc(0.84 + var(--wc-artwork-focus) * 0.24));
+}
+
+.wc-scene-illustrations__artwork[data-active] .wc-scene-illustrations__plane {
+  box-shadow:
+    0 3.5rem 9rem rgb(0 0 0 / 68%),
+    0 0 3rem color-mix(in srgb, var(--wc-artwork-accent) 42%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--wc-artwork-accent) 72%, transparent);
+}
+
+.wc-motion-debug {
+  position: fixed;
+  z-index: calc(var(--wc-z-menu) + 20);
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: none;
+  grid-template-columns: auto auto auto;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgb(236 232 220 / 34%);
+  background: rgb(12 12 11 / 88%);
+  color: var(--wc-bone);
+  font-family: var(--wc-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.wc-home-experience[data-motion-debug="true"] .wc-motion-debug {
+  display: grid;
+}
+
+.wc-motion-debug strong {
+  color: var(--wc-orange-soft);
+}
+
+@media (min-width: 64rem) {
+  .wc-home-progress {
+    width: 7.25rem;
+    grid-template-columns: minmax(0, 1fr) 2px;
+    grid-template-rows: auto minmax(15rem, 1fr);
+    gap: 0.75rem 0.5rem;
+    padding: 0.25rem;
+    border: 0;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .wc-home-progress__current {
+    grid-column: 1 / -1;
+    padding-left: 0.65rem;
+    border-left: 1px solid currentColor;
+    text-shadow: 0 1px 0.75rem rgb(0 0 0 / 48%);
+  }
+
+  .wc-home-progress__list {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .wc-home-progress__list a {
+    justify-content: flex-start;
+    padding-left: 0.65rem;
+  }
+
+  .wc-home-progress__bar {
+    width: 2px;
+    height: 100%;
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .wc-home-progress__bar span {
+    transform: scaleY(var(--wc-scene-progress));
+    transform-origin: top;
+  }
+}
+
+@media (max-width: 63.999rem) {
+  .wc-home-progress__bar span {
+    transform: scaleX(var(--wc-scene-progress));
+    transform-origin: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-scene-illustrations__artwork,
+  .wc-scene-illustrations__plane,
+  .wc-home-progress__bar span {
+    filter: none;
+    transform: none;
+  }
+}

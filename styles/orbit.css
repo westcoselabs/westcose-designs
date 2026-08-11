@@ -1,0 +1,908 @@
+/* Scene 06 owns one sticky stage. Scroll state is expressed through variables
+   written by EcosystemOrbitRuntime so forward, reverse, and jump-scroll share
+   the same deterministic render path. */
+.wc-scene-orbit {
+  --wc-orbit-progress: 0;
+  --wc-orbit-motion-progress: 0;
+  --wc-orbit-editorial-progress: 0;
+  --wc-orbit-receiver-progress: 1;
+  --wc-orbit-handoff-progress: 0;
+  --wc-orbit-line: rgb(236 232 220 / 14%);
+  --wc-orbit-line-strong: rgb(236 232 220 / 30%);
+  z-index: 2;
+}
+
+.wc-scene-orbit .wc-home-scene__stage {
+  overflow: clip;
+  background:
+    radial-gradient(circle at 50% 48%, rgb(49 91 125 / 17%), transparent 30%),
+    radial-gradient(circle at 56% 46%, rgb(167 194 170 / 7%), transparent 48%),
+    linear-gradient(112deg, var(--wc-black) 12%, #111513 66%, var(--wc-black));
+  color: var(--wc-bone);
+}
+
+.wc-scene-orbit__layout {
+  position: relative;
+  z-index: 1;
+  display: block;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(var(--wc-header-height) + var(--wc-space-6));
+  padding-bottom: var(--wc-space-6);
+  opacity: calc(1 - var(--wc-orbit-handoff-progress));
+  transform: translateY(calc(var(--wc-orbit-handoff-progress) * -3vh));
+  will-change: opacity, transform;
+}
+
+.wc-scene-orbit__system {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: calc(100vh - var(--wc-header-height) - (2 * var(--wc-space-6)));
+  min-height: calc(100svh - var(--wc-header-height) - (2 * var(--wc-space-6)));
+  isolation: isolate;
+}
+
+.wc-scene-orbit__receiver,
+.wc-scene-orbit__canvas-layer,
+.wc-scene-orbit__fallback {
+  position: absolute;
+  inset: 0;
+}
+
+.wc-scene-orbit__receiver {
+  z-index: 0;
+  overflow: hidden;
+  opacity: var(--wc-orbit-receiver-progress);
+  pointer-events: none;
+  transform: scale(calc(0.985 + var(--wc-orbit-receiver-progress) * 0.015));
+  transform-origin: center;
+}
+
+.wc-scene-orbit__receiver-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(236 232 220 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(236 232 220 / 7%) 1px, transparent 1px);
+  background-position: center;
+  background-size: clamp(3.25rem, 6vw, 6rem) clamp(3.25rem, 6vw, 6rem);
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    black 0 28%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(circle at center, black 0 28%, transparent 75%);
+}
+
+.wc-scene-orbit__receiver-ellipse,
+.wc-scene-orbit__receiver-axis {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+}
+
+.wc-scene-orbit__receiver-ellipse {
+  width: min(78vw, 78rem);
+  height: min(47vh, 31rem);
+  border: var(--wc-border-hairline) solid rgb(236 232 220 / 20%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.wc-scene-orbit__receiver-ellipse[data-axis="y"] {
+  transform: translate(-50%, -50%) rotate(62deg) scaleX(0.72);
+}
+
+.wc-scene-orbit__receiver-axis[data-axis="x"] {
+  width: min(84vw, 84rem);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(236 232 220 / 25%),
+    transparent
+  );
+  transform: translate(-50%, -50%);
+}
+
+.wc-scene-orbit__receiver-axis[data-axis="y"] {
+  width: 1px;
+  height: min(76vh, 48rem);
+  background: linear-gradient(transparent, rgb(236 232 220 / 25%), transparent);
+  transform: translate(-50%, -50%);
+}
+
+.wc-scene-orbit__canvas-layer {
+  z-index: 2;
+  overflow: visible;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--wc-duration-slow) var(--wc-ease-soft);
+}
+
+.wc-scene-orbit__system[data-orbit-renderer="webgl"]
+  .wc-scene-orbit__canvas-layer {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.wc-scene-orbit__canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.wc-scene-orbit__fallback {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  pointer-events: none;
+  transform: translate3d(calc(var(--wc-orbit-editorial-progress) * 26vw), 0, 0)
+    scale(calc(1 - var(--wc-orbit-editorial-progress) * 0.16));
+  transition: opacity var(--wc-duration-slow) var(--wc-ease-soft);
+  transform-origin: center;
+  will-change: transform;
+}
+
+.wc-scene-orbit__system[data-orbit-renderer="webgl"] .wc-scene-orbit__fallback {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.wc-scene-orbit__tracks {
+  position: absolute;
+  inset: 7%;
+}
+
+.wc-scene-orbit__tracks span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1.72 / 1;
+  border: var(--wc-border-hairline) solid var(--wc-orbit-line);
+  border-radius: 50%;
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--wc-orbit-motion-progress) * 26deg));
+}
+
+.wc-scene-orbit__tracks span:nth-child(1) {
+  width: min(74vw, 72rem);
+}
+
+.wc-scene-orbit__tracks span:nth-child(2) {
+  width: min(58vw, 56rem);
+  border-color: var(--wc-orbit-line-strong);
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--wc-orbit-motion-progress) * -31deg + 54deg));
+}
+
+.wc-scene-orbit__tracks span:nth-child(3) {
+  width: min(39vw, 38rem);
+  transform: translate(-50%, -50%)
+    rotate(calc(var(--wc-orbit-motion-progress) * 19deg - 18deg));
+}
+
+.wc-scene-orbit__core {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: clamp(10rem, 19vw, 17rem);
+  aspect-ratio: 1;
+  place-items: center;
+  background: transparent;
+  filter: drop-shadow(0 2rem 4rem rgb(0 0 0 / 48%));
+}
+
+.wc-scene-orbit__core img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: invert(94%) sepia(8%) saturate(312%);
+}
+
+.wc-scene-orbit__fallback-worlds {
+  position: absolute;
+  inset: 0;
+}
+
+.wc-scene-orbit__fallback-world {
+  position: absolute;
+  display: grid;
+  width: clamp(6.75rem, 10vw, 9.5rem);
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: clip;
+  border: var(--wc-border-hairline) solid var(--wc-orbit-line-strong);
+  border-radius: 50%;
+  background: var(--wc-charcoal);
+  box-shadow: 0 1.25rem 3rem rgb(0 0 0 / 36%);
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.84;
+  pointer-events: auto;
+  text-decoration: none;
+  transition:
+    border-color var(--wc-duration-standard) var(--wc-ease-soft),
+    box-shadow var(--wc-duration-standard) var(--wc-ease-soft),
+    opacity var(--wc-duration-standard) var(--wc-ease-soft);
+}
+
+.wc-scene-orbit__fallback-world:focus-visible {
+  border-color: var(--wc-bone);
+  outline: 0.15rem solid var(--wc-bone);
+  outline-offset: 0.28rem;
+}
+
+.wc-scene-orbit__fallback-world[data-world="designs"] {
+  top: 7%;
+  left: 22%;
+  background: #26372f;
+  transform: rotate(-5deg);
+}
+
+.wc-scene-orbit__fallback-world[data-world="labs"] {
+  top: 38%;
+  right: 4%;
+  background: #142b3c;
+  transform: rotate(4deg);
+}
+
+.wc-scene-orbit__fallback-world[data-world="shop"] {
+  right: 23%;
+  bottom: 4%;
+  background: #30251f;
+  transform: rotate(7deg);
+}
+
+.wc-scene-orbit__fallback-world img {
+  width: 84%;
+  height: 84%;
+  object-fit: contain;
+}
+
+.wc-scene-orbit__fallback-world[data-world="designs"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wc-scene-orbit__interface-glyph {
+  position: relative;
+  display: grid;
+  width: 68%;
+  aspect-ratio: 1;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.3rem;
+  padding: 0.35rem;
+  border: 1px solid rgb(200 223 239 / 78%);
+  transform: rotate(12deg);
+}
+
+.wc-scene-orbit__interface-glyph::before,
+.wc-scene-orbit__interface-glyph i {
+  display: block;
+  border: 1px solid rgb(114 169 208 / 68%);
+  content: "";
+}
+
+.wc-scene-orbit__interface-glyph::before {
+  grid-column: 1 / -1;
+}
+
+.wc-scene-orbit__system[data-orbit-selected]:not([data-orbit-selected="none"])
+  .wc-scene-orbit__fallback-world {
+  opacity: 0.34;
+}
+
+.wc-scene-orbit__system[data-orbit-selected="designs"]
+  .wc-scene-orbit__fallback-world[data-world="designs"],
+.wc-scene-orbit__system[data-orbit-selected="labs"]
+  .wc-scene-orbit__fallback-world[data-world="labs"],
+.wc-scene-orbit__system[data-orbit-selected="shop"]
+  .wc-scene-orbit__fallback-world[data-world="shop"] {
+  border-color: var(--wc-bone);
+  box-shadow:
+    0 0 0 0.2rem rgb(236 232 220 / 12%),
+    0 1.5rem 4rem rgb(0 0 0 / 52%);
+  opacity: 1;
+}
+
+.wc-scene-orbit__editorial {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  left: 0;
+  display: grid;
+  width: 55%;
+  max-width: 52rem;
+  gap: clamp(1.75rem, 4vh, 3.5rem);
+  opacity: var(--wc-orbit-editorial-progress);
+  pointer-events: none;
+  transform: translate3d(
+    calc((1 - var(--wc-orbit-editorial-progress)) * -3rem),
+    -50%,
+    0
+  );
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+
+.wc-scene-orbit[data-orbit-phase="editorial"] .wc-scene-orbit__editorial,
+.wc-scene-orbit[data-orbit-phase="handoff"] .wc-scene-orbit__editorial {
+  visibility: visible;
+}
+
+.wc-scene-orbit__copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  max-width: 45rem;
+  gap: var(--wc-space-4);
+}
+
+.wc-scene-orbit__copy .wc-heading-1 {
+  max-width: 9ch;
+  font-size: clamp(3.4rem, 5.5vw, 7.6rem);
+  line-height: 0.86;
+}
+
+.wc-scene-orbit__copy .wc-body {
+  max-width: 35rem;
+  color: var(--wc-stone-300);
+}
+
+.wc-scene-orbit__destinations {
+  width: 100%;
+  pointer-events: none;
+}
+
+.wc-scene-orbit[data-orbit-phase="editorial"] .wc-scene-orbit__destinations {
+  pointer-events: auto;
+}
+
+.wc-scene-orbit__destinations ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-bottom: var(--wc-border-hairline) solid rgb(236 232 220 / 24%);
+  list-style: none;
+}
+
+.wc-scene-orbit__destinations li {
+  --wc-orbit-world-accent: var(--wc-bone);
+  --wc-orbit-row-delay: 0;
+  --wc-orbit-row-progress: clamp(
+    0,
+    calc((var(--wc-orbit-editorial-progress) - var(--wc-orbit-row-delay)) * 5),
+    1
+  );
+  position: relative;
+  width: 100%;
+  border-top: var(--wc-border-hairline) solid rgb(236 232 220 / 24%);
+  opacity: var(--wc-orbit-row-progress);
+  transform: translateY(calc((1 - var(--wc-orbit-row-progress)) * 1.2rem));
+}
+
+.wc-scene-orbit__destinations li:nth-child(2) {
+  --wc-orbit-row-delay: 0.08;
+}
+
+.wc-scene-orbit__destinations li:nth-child(3) {
+  --wc-orbit-row-delay: 0.16;
+}
+
+.wc-scene-orbit__destinations li[data-world="designs"] {
+  --wc-orbit-world-accent: #a7c2aa;
+}
+
+.wc-scene-orbit__destinations li[data-world="labs"] {
+  --wc-orbit-world-accent: #72a9d0;
+}
+
+.wc-scene-orbit__destinations li[data-world="shop"] {
+  --wc-orbit-world-accent: #e18453;
+}
+
+.wc-scene-orbit__node,
+.wc-scene-orbit__node[data-world] {
+  position: relative;
+  inset: auto;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: 2.4rem minmax(9rem, 0.8fr) minmax(10rem, 1fr) auto;
+  align-items: center;
+  gap: var(--wc-space-3);
+  padding: clamp(0.8rem, 1.5vh, 1.15rem) 0;
+  color: var(--wc-bone);
+  text-decoration: none;
+  transition:
+    color var(--wc-duration-standard) var(--wc-ease-soft),
+    transform var(--wc-duration-standard) var(--wc-ease-snap);
+}
+
+.wc-scene-orbit__node::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(236 232 220 / 7%), transparent 72%);
+  content: "";
+  opacity: 0;
+  transform: scaleX(0.88);
+  transform-origin: left;
+  transition:
+    opacity var(--wc-duration-standard) var(--wc-ease-soft),
+    transform var(--wc-duration-standard) var(--wc-ease-snap);
+}
+
+.wc-scene-orbit__node-number,
+.wc-scene-orbit__node-disciplines,
+.wc-scene-orbit__node-action {
+  position: relative;
+  z-index: 1;
+  font-family: var(--wc-font-mono);
+  font-size: var(--wc-font-size-micro);
+  letter-spacing: 0.07em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.wc-scene-orbit__node-number {
+  color: var(--wc-orbit-world-accent);
+}
+
+.wc-scene-orbit__node-label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--wc-font-display);
+  font-size: clamp(1.1rem, 1.65vw, 1.55rem);
+  font-weight: var(--wc-weight-bold);
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.wc-scene-orbit__node-disciplines {
+  color: var(--wc-stone-300);
+}
+
+.wc-scene-orbit__node-summary {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.wc-scene-orbit__node-action {
+  color: var(--wc-orbit-world-accent);
+  text-align: right;
+}
+
+.wc-scene-orbit__node-action::after {
+  display: inline-block;
+  margin-left: var(--wc-space-2);
+  content: "\2197";
+  transform: translate(-0.18rem, 0.18rem);
+  transition: transform var(--wc-duration-standard) var(--wc-ease-snap);
+}
+
+.wc-scene-orbit__node:focus-visible {
+  outline: 2px solid var(--wc-orbit-world-accent);
+  outline-offset: 0.3rem;
+}
+
+.wc-scene-orbit__system[data-orbit-selected="designs"]
+  li[data-world="designs"]
+  .wc-scene-orbit__node,
+.wc-scene-orbit__system[data-orbit-selected="labs"]
+  li[data-world="labs"]
+  .wc-scene-orbit__node,
+.wc-scene-orbit__system[data-orbit-selected="shop"]
+  li[data-world="shop"]
+  .wc-scene-orbit__node {
+  color: var(--wc-orbit-world-accent);
+  transform: translateX(var(--wc-space-2));
+}
+
+.wc-scene-orbit__system[data-orbit-selected="designs"]
+  li[data-world="designs"]
+  .wc-scene-orbit__node::before,
+.wc-scene-orbit__system[data-orbit-selected="labs"]
+  li[data-world="labs"]
+  .wc-scene-orbit__node::before,
+.wc-scene-orbit__system[data-orbit-selected="shop"]
+  li[data-world="shop"]
+  .wc-scene-orbit__node::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.wc-scene-orbit__system[data-orbit-selected="designs"]
+  li[data-world="designs"]
+  .wc-scene-orbit__node-action::after,
+.wc-scene-orbit__system[data-orbit-selected="labs"]
+  li[data-world="labs"]
+  .wc-scene-orbit__node-action::after,
+.wc-scene-orbit__system[data-orbit-selected="shop"]
+  li[data-world="shop"]
+  .wc-scene-orbit__node-action::after {
+  transform: translate(0, 0);
+}
+
+.wc-scene-orbit__handoff {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  display: grid;
+  overflow: clip;
+  place-items: center;
+  color: var(--wc-black);
+  pointer-events: none;
+}
+
+.wc-scene-orbit__handoff::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at center, rgb(255 255 255 / 68%), transparent 42%),
+    var(--wc-off-white);
+  content: "";
+  transform: scaleY(var(--wc-orbit-handoff-progress));
+  transform-origin: bottom;
+}
+
+.wc-scene-orbit__handoff > img {
+  position: absolute;
+  width: clamp(12rem, 28vw, 28rem);
+  height: auto;
+  opacity: calc(var(--wc-orbit-handoff-progress) * 0.055);
+  transform: scale(calc(0.84 + var(--wc-orbit-handoff-progress) * 0.16));
+}
+
+.wc-scene-orbit__handoff-copy {
+  display: grid;
+  max-width: min(86vw, 76rem);
+  justify-items: center;
+  gap: clamp(1.5rem, 4vh, 3rem);
+  opacity: var(--wc-orbit-handoff-progress);
+  text-align: center;
+  transform: translateY(calc((1 - var(--wc-orbit-handoff-progress)) * 2rem));
+  visibility: hidden;
+}
+
+.wc-scene-orbit[data-orbit-handoff="active"] .wc-scene-orbit__handoff-copy,
+.wc-scene-orbit[data-orbit-handoff="interactive"]
+  .wc-scene-orbit__handoff-copy {
+  visibility: visible;
+}
+
+.wc-scene-orbit__handoff p {
+  max-width: 13ch;
+  margin: 0;
+  font-family: var(--wc-font-display);
+  font-size: clamp(3rem, 7.4vw, 8.8rem);
+  font-weight: var(--wc-weight-bold);
+  letter-spacing: var(--wc-tracking-display);
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.wc-scene-orbit__start {
+  visibility: hidden;
+  display: inline-flex;
+  min-width: 9rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wc-space-6);
+  padding: var(--wc-space-3) 0;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  color: currentColor;
+  font-family: var(--wc-font-mono);
+  font-size: var(--wc-font-size-micro);
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.wc-scene-orbit__start::after {
+  content: "\2192";
+  transition: transform var(--wc-duration-standard) var(--wc-ease-snap);
+}
+
+.wc-scene-orbit[data-orbit-handoff="interactive"] .wc-scene-orbit__handoff {
+  pointer-events: auto;
+}
+
+.wc-scene-orbit[data-orbit-handoff="interactive"] .wc-scene-orbit__start {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wc-scene-orbit__start:focus-visible {
+  outline: 2px solid var(--wc-black);
+  outline-offset: 0.4rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wc-scene-orbit__node:hover {
+    color: var(--wc-orbit-world-accent);
+    transform: translateX(var(--wc-space-2));
+  }
+
+  .wc-scene-orbit__node:hover::before {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .wc-scene-orbit__node:hover .wc-scene-orbit__node-action::after,
+  .wc-scene-orbit__start:hover::after {
+    transform: translateX(0.3rem);
+  }
+}
+
+/* Touch and reduced-motion layouts tell the same story in normal flow. The
+   worlds and destination rows remain accessible, tappable controls. */
+@media (max-width: 63.999rem),
+  (prefers-reduced-motion: reduce),
+  (scripting: none) {
+  .wc-scene-orbit {
+    min-height: auto;
+  }
+
+  .wc-scene-orbit .wc-home-scene__stage {
+    position: relative;
+    display: block;
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .wc-scene-orbit__layout {
+    display: block;
+    min-height: auto;
+    padding-top: calc(var(--wc-header-height) + var(--wc-space-12));
+    padding-bottom: var(--wc-space-16);
+    opacity: 1;
+    transform: none;
+  }
+
+  .wc-scene-orbit__system {
+    display: grid;
+    min-height: auto;
+    gap: var(--wc-space-10);
+  }
+
+  .wc-scene-orbit__receiver,
+  .wc-scene-orbit__canvas-layer {
+    display: none;
+  }
+
+  .wc-scene-orbit__fallback {
+    position: relative;
+    min-height: clamp(20rem, 62vw, 32rem);
+    opacity: 1 !important;
+    pointer-events: auto;
+    transform: none;
+    visibility: visible;
+  }
+
+  .wc-scene-orbit__tracks {
+    inset: 4% 8%;
+  }
+
+  .wc-scene-orbit__tracks span {
+    transform: translate(-50%, -50%);
+  }
+
+  .wc-scene-orbit__tracks span:nth-child(1) {
+    width: min(86vw, 42rem);
+  }
+
+  .wc-scene-orbit__tracks span:nth-child(2) {
+    width: min(68vw, 34rem);
+    transform: translate(-50%, -50%) rotate(54deg);
+  }
+
+  .wc-scene-orbit__tracks span:nth-child(3) {
+    width: min(48vw, 24rem);
+    transform: translate(-50%, -50%) rotate(-18deg);
+  }
+
+  .wc-scene-orbit__core {
+    width: clamp(7.5rem, 25vw, 12rem);
+  }
+
+  .wc-scene-orbit__fallback-world {
+    width: clamp(4.75rem, 15vw, 7.5rem);
+  }
+
+  .wc-scene-orbit__fallback-world[data-world="designs"] {
+    top: 2%;
+    left: 10%;
+  }
+
+  .wc-scene-orbit__fallback-world[data-world="labs"] {
+    top: 36%;
+    right: 4%;
+  }
+
+  .wc-scene-orbit__fallback-world[data-world="shop"] {
+    right: 14%;
+    bottom: 1%;
+  }
+
+  .wc-scene-orbit__editorial {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    max-width: none;
+    gap: var(--wc-space-10);
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    visibility: visible;
+  }
+
+  .wc-scene-orbit__copy {
+    max-width: 44rem;
+  }
+
+  .wc-scene-orbit__copy .wc-heading-1 {
+    font-size: clamp(3.25rem, 10vw, 6rem);
+  }
+
+  .wc-scene-orbit__destinations,
+  .wc-scene-orbit[data-orbit-phase] .wc-scene-orbit__destinations {
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  .wc-scene-orbit__destinations li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .wc-scene-orbit__node,
+  .wc-scene-orbit__node[data-world] {
+    grid-template-columns: 2.25rem minmax(8rem, 0.7fr) minmax(9rem, 1fr) auto;
+    min-height: 5.5rem;
+    pointer-events: auto;
+  }
+
+  .wc-scene-orbit__handoff {
+    position: relative;
+    min-height: min(78vh, 48rem);
+    padding: var(--wc-space-20) var(--wc-page-gutter);
+    background: var(--wc-off-white);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .wc-scene-orbit__handoff::before {
+    display: none;
+  }
+
+  .wc-scene-orbit__handoff > img {
+    opacity: 0.045;
+    transform: none;
+  }
+
+  .wc-scene-orbit__handoff-copy {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+  }
+
+  .wc-scene-orbit__start,
+  .wc-scene-orbit[data-orbit-handoff] .wc-scene-orbit__start {
+    visibility: visible;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .wc-scene-orbit__layout {
+    padding-bottom: var(--wc-space-12);
+  }
+
+  .wc-scene-orbit__system {
+    gap: var(--wc-space-8);
+  }
+
+  .wc-scene-orbit__fallback {
+    min-height: 19rem;
+  }
+
+  .wc-scene-orbit__copy .wc-heading-1 {
+    font-size: clamp(3rem, 14vw, 4.75rem);
+  }
+
+  .wc-scene-orbit__node,
+  .wc-scene-orbit__node[data-world] {
+    grid-template-columns: 2rem 1fr auto;
+    gap: var(--wc-space-2) var(--wc-space-3);
+    padding-block: var(--wc-space-4);
+  }
+
+  .wc-scene-orbit__node-disciplines {
+    grid-column: 2 / -1;
+    grid-row: 2;
+  }
+
+  .wc-scene-orbit__node-action {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .wc-scene-orbit__handoff {
+    min-height: 72svh;
+  }
+
+  .wc-scene-orbit__handoff p {
+    font-size: clamp(3.25rem, 15vw, 5.6rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-scene-orbit__fallback-world,
+  .wc-scene-orbit__node,
+  .wc-scene-orbit__node::before,
+  .wc-scene-orbit__node-action::after,
+  .wc-scene-orbit__start::after {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .wc-scene-orbit .wc-home-scene__stage {
+    background: var(--wc-black);
+  }
+}
+
+@media (forced-colors: active) {
+  .wc-scene-orbit .wc-home-scene__stage,
+  .wc-scene-orbit__fallback-world,
+  .wc-scene-orbit__handoff {
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .wc-scene-orbit__receiver-grid {
+    display: none;
+  }
+
+  .wc-scene-orbit__tracks span,
+  .wc-scene-orbit__fallback-world,
+  .wc-scene-orbit__destinations ul,
+  .wc-scene-orbit__destinations li,
+  .wc-scene-orbit__start {
+    border-color: CanvasText;
+  }
+
+  .wc-scene-orbit__node:focus-visible,
+  .wc-scene-orbit__fallback-world:focus-visible,
+  .wc-scene-orbit__start:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .wc-scene-orbit__canvas-layer {
+    display: none;
+  }
+
+  .wc-scene-orbit__fallback {
+    opacity: 1 !important;
+  }
+}

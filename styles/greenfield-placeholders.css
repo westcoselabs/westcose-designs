@@ -1,0 +1,294 @@
+/*
+ * Temporary Greenfield asset slots.
+ * These frames reserve the approved composition without impersonating finished
+ * project artwork. Future files can replace each frame through the typed
+ * manifest while preserving the layout and transition geometry.
+ */
+
+.wc-scene-greenfield__asset-status {
+  max-width: 35rem;
+  padding-left: var(--wc-space-4);
+  border-left: 1px solid rgb(236 232 220 / 36%);
+  color: var(--wc-stone-300);
+  font-family: var(--wc-font-mono);
+  font-size: var(--wc-font-size-micro);
+  letter-spacing: 0.06em;
+  line-height: var(--wc-leading-meta);
+  text-transform: uppercase;
+}
+
+.wc-scene-greenfield__system {
+  display: grid;
+  min-height: min(66vh, 46rem);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(0.6rem, 1.25vw, 1rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wc-scene-greenfield__slot {
+  min-width: 0;
+}
+
+.wc-scene-greenfield__slot figure {
+  display: grid;
+  width: 100%;
+  gap: var(--wc-space-2);
+  margin: 0;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="brand-board"] {
+  grid-column: 1 / 6;
+  grid-row: 1 / 4;
+  align-self: center;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="district-mark"] {
+  grid-column: 6 / 9;
+  grid-row: 1;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="school-system"] {
+  grid-column: 9 / 13;
+  grid-row: 1;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="type-color"] {
+  grid-column: 6 / 10;
+  grid-row: 2;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="stationery"] {
+  grid-column: 10 / 13;
+  grid-row: 2;
+}
+
+.wc-scene-greenfield__slot[data-greenfield-slot="rollout"] {
+  grid-column: 6 / 13;
+  grid-row: 3;
+}
+
+.wc-greenfield-placeholder-frame {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-height: 0;
+  overflow: clip;
+  place-items: center;
+  border: 1px solid rgb(236 232 220 / 30%);
+  background:
+    linear-gradient(rgb(236 232 220 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(236 232 220 / 7%) 1px, transparent 1px),
+    linear-gradient(145deg, rgb(236 232 220 / 8%), transparent 52%),
+    var(--wc-graphite);
+  background-size: 1rem 1rem, 1rem 1rem, 100% 100%, 100% 100%;
+  box-shadow: 0 1.25rem 3rem rgb(0 0 0 / 28%);
+  color: var(--wc-bone);
+}
+
+.wc-greenfield-placeholder-frame::before,
+.wc-greenfield-placeholder-frame::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgb(236 232 220 / 18%);
+  content: "";
+  pointer-events: none;
+}
+
+.wc-greenfield-placeholder-frame::before {
+  width: 62%;
+  height: 1px;
+  transform: translate(-50%, -50%);
+}
+
+.wc-greenfield-placeholder-frame::after {
+  width: 1px;
+  height: 62%;
+  transform: translate(-50%, -50%);
+}
+
+.wc-greenfield-placeholder-frame__index,
+.wc-greenfield-placeholder-frame__label,
+.wc-greenfield-placeholder-frame__size {
+  position: absolute;
+  z-index: 1;
+  width: auto;
+  height: auto;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  color: currentColor;
+  font-family: var(--wc-font-mono);
+  font-size: clamp(0.5rem, 0.75vw, var(--wc-font-size-micro));
+  font-weight: var(--wc-weight-semibold);
+  letter-spacing: 0.08em;
+  line-height: var(--wc-leading-meta);
+  text-transform: uppercase;
+}
+
+.wc-greenfield-placeholder-frame__index {
+  top: var(--wc-space-3);
+  left: var(--wc-space-3);
+}
+
+.wc-greenfield-placeholder-frame__label {
+  top: 50%;
+  left: 50%;
+  max-width: calc(100% - var(--wc-space-6));
+  padding: var(--wc-space-2) var(--wc-space-3);
+  border: 1px solid rgb(236 232 220 / 28%);
+  background: rgb(12 12 11 / 72%);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.wc-greenfield-placeholder-frame__size {
+  right: var(--wc-space-3);
+  bottom: var(--wc-space-3);
+  left: var(--wc-space-3);
+  color: var(--wc-stone-300);
+}
+
+.wc-scene-greenfield__slot figcaption {
+  display: grid;
+  gap: 0.15rem;
+  color: var(--wc-stone-300);
+  font-family: var(--wc-font-mono);
+  font-size: clamp(0.48rem, 0.62vw, var(--wc-font-size-micro));
+  letter-spacing: 0.055em;
+  line-height: var(--wc-leading-meta);
+  text-transform: uppercase;
+}
+
+.wc-scene-greenfield__slot figcaption span:first-child {
+  color: var(--wc-bone);
+}
+
+/* Match the Scene 02 handoff proxy to the first Scene 03 production slot. */
+.wc-scene-falling__end-handoff {
+  width: min(32vw, 27rem, 54.4vh);
+  height: auto;
+  aspect-ratio: 4 / 5;
+}
+
+.wc-scene-falling__handoff-board.wc-greenfield-placeholder-frame {
+  display: grid;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  padding: 0;
+  place-items: center;
+  background:
+    linear-gradient(rgb(236 232 220 / 7%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(236 232 220 / 7%) 1px, transparent 1px),
+    linear-gradient(145deg, rgb(49 89 71 / 36%), transparent 58%),
+    var(--wc-graphite);
+  background-size: 1.25rem 1.25rem, 1.25rem 1.25rem, 100% 100%, 100% 100%;
+}
+
+.wc-scene-falling__handoff-board
+  .wc-greenfield-placeholder-frame__index,
+.wc-scene-falling__handoff-board
+  .wc-greenfield-placeholder-frame__label {
+  display: block;
+  width: auto;
+  aspect-ratio: auto;
+  border-radius: 0;
+  font-family: var(--wc-font-mono);
+  font-size: var(--wc-font-size-micro);
+  font-weight: var(--wc-weight-semibold);
+}
+
+.wc-scene-falling__handoff-board
+  .wc-greenfield-placeholder-frame__index {
+  border: 0;
+}
+
+.wc-scene-falling__handoff-board
+  .wc-greenfield-placeholder-frame__label {
+  border: 1px solid rgb(236 232 220 / 28%);
+}
+
+.wc-scene-falling__handoff-board
+  .wc-greenfield-placeholder-frame__size {
+  position: absolute;
+  right: var(--wc-space-4);
+  bottom: var(--wc-space-4);
+  left: var(--wc-space-4);
+  width: auto;
+  font-size: var(--wc-font-size-micro);
+}
+
+@media (min-width: 48rem) and (max-width: 63.999rem) {
+  .wc-scene-greenfield__system {
+    min-height: min(62vh, 38rem);
+  }
+
+  .wc-scene-greenfield__slot figcaption {
+    font-size: 0.48rem;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .wc-scene-greenfield__asset-status {
+    max-width: none;
+  }
+
+  .wc-scene-greenfield__system {
+    position: static;
+    display: grid;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    gap: var(--wc-space-8);
+  }
+
+  .wc-scene-greenfield__slot,
+  .wc-scene-greenfield__slot[data-greenfield-slot] {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .wc-scene-greenfield__slot figure {
+    width: 100%;
+    max-width: 24rem;
+  }
+
+  .wc-scene-greenfield__slot[data-greenfield-slot="brand-board"] figure {
+    max-width: 20rem;
+  }
+
+  .wc-scene-greenfield__slot figcaption {
+    font-size: var(--wc-font-size-micro);
+  }
+
+  .wc-scene-falling__end-handoff {
+    width: min(72vw, 24rem);
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-scene-greenfield__system,
+  .wc-scene-greenfield__slot,
+  .wc-greenfield-placeholder-frame {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .wc-scene-greenfield__system {
+    min-height: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .wc-greenfield-placeholder-frame,
+  .wc-scene-greenfield__asset-status {
+    border-color: CanvasText;
+  }
+}

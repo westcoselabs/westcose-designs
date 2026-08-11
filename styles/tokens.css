@@ -1,0 +1,213 @@
+/*
+ * WestCose token architecture
+ * Primitive values -> semantic theme aliases -> component contracts.
+ * Display and body faces are loaded through next/font in the root layout.
+ */
+
+:root {
+  /* Primitive color system */
+  --wc-black: #0c0c0b;
+  --wc-charcoal: #181817;
+  --wc-graphite: #292926;
+  --wc-bone: #ece8dc;
+  --wc-off-white: #f6f3eb;
+  --wc-white: #fffdfa;
+  --wc-stone-500: #77746c;
+  --wc-stone-600: #5f5d56;
+  --wc-stone-300: #b7b3a7;
+  --wc-green: #315947;
+  --wc-green-soft: #a7c2aa;
+  --wc-blue: #315b7d;
+  --wc-orange: #b9572f;
+  --wc-orange-soft: #e18453;
+
+  /* Primitive type system */
+  --wc-font-display:
+    var(--font-westcose-display), "Arial Narrow", "Helvetica Neue Condensed",
+    Arial, sans-serif;
+  --wc-font-sans:
+    var(--font-westcose-body), "Avenir Next", Avenir, "Segoe UI", Helvetica,
+    Arial, sans-serif;
+  --wc-font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --wc-font-size-display-xl: clamp(3.75rem, 2.15rem + 8vw, 12rem);
+  --wc-font-size-display-lg: clamp(3rem, 1.8rem + 6vw, 8.5rem);
+  --wc-font-size-h1: clamp(2.75rem, 1.9rem + 4.25vw, 7rem);
+  --wc-font-size-h2: clamp(2.125rem, 1.55rem + 2.85vw, 4.5rem);
+  --wc-font-size-h3: clamp(1.5rem, 1.35rem + 0.8vw, 2.125rem);
+  --wc-font-size-body-lg: clamp(1.125rem, 1.03rem + 0.48vw, 1.5rem);
+  --wc-font-size-body: clamp(1rem, 0.965rem + 0.18vw, 1.125rem);
+  --wc-font-size-meta: clamp(0.75rem, 0.72rem + 0.12vw, 0.875rem);
+  --wc-font-size-micro: clamp(0.6875rem, 0.67rem + 0.08vw, 0.75rem);
+  --wc-leading-display: 0.88;
+  --wc-leading-heading: 1.02;
+  --wc-leading-body: 1.62;
+  --wc-leading-meta: 1.25;
+  --wc-tracking-display: -0.035em;
+  --wc-tracking-heading: -0.035em;
+  --wc-tracking-body: -0.012em;
+  --wc-tracking-meta: 0.16em;
+  --wc-weight-regular: 400;
+  --wc-weight-medium: 550;
+  --wc-weight-semibold: 600;
+  --wc-weight-bold: 700;
+
+  /* Primitive spacing system */
+  --wc-space-0: 0;
+  --wc-space-1: 0.25rem;
+  --wc-space-2: 0.5rem;
+  --wc-space-3: 0.75rem;
+  --wc-space-4: 1rem;
+  --wc-space-5: 1.25rem;
+  --wc-space-6: 1.5rem;
+  --wc-space-8: 2rem;
+  --wc-space-10: 2.5rem;
+  --wc-space-12: 3rem;
+  --wc-space-16: 4rem;
+  --wc-space-20: 5rem;
+  --wc-space-24: 6rem;
+  --wc-space-32: 8rem;
+  --wc-space-40: 10rem;
+
+  /* Primitive shape, depth, and motion */
+  --wc-radius-xs: 0.125rem;
+  --wc-radius-sm: 0.25rem;
+  --wc-radius-md: 0.5rem;
+  --wc-radius-pill: 999px;
+  --wc-border-hairline: 1px;
+  --wc-shadow-soft: 0 1rem 3rem rgb(12 12 11 / 12%);
+  --wc-shadow-glass: 0 1.5rem 5rem rgb(12 12 11 / 18%);
+  --wc-duration-fast: 140ms;
+  --wc-duration-standard: 220ms;
+  --wc-duration-slow: 480ms;
+  --wc-ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
+  --wc-ease-snap: cubic-bezier(0.16, 1, 0.3, 1);
+  --wc-ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --wc-ease-linear-scroll: linear;
+
+  /* Semantic layout system */
+  --wc-page-gutter: clamp(1.25rem, 4vw, 4rem);
+  --wc-section-space: clamp(5rem, 10vw, 10rem);
+  --wc-section-space-compact: clamp(3.5rem, 7vw, 7rem);
+  --wc-grid-gap: clamp(0.75rem, 1.6vw, 1.75rem);
+  --wc-container-wide: 100rem;
+  --wc-container-content: 78rem;
+  --wc-container-prose: 44rem;
+  --wc-header-height: 5.5rem;
+  --wc-control-height-sm: 2.75rem;
+  --wc-control-height: 2.875rem;
+  --wc-control-height-lg: 3.25rem;
+  --wc-focus-width: 2px;
+  --wc-focus-offset: 4px;
+  --wc-z-header: 100;
+  --wc-z-menu: 110;
+}
+
+/* Light semantic theme */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+  --wc-background: var(--wc-off-white);
+  --wc-foreground: var(--wc-black);
+  --wc-surface: var(--wc-white);
+  --wc-surface-subtle: var(--wc-bone);
+  --wc-muted: var(--wc-stone-600);
+  --wc-accent: var(--wc-green);
+  --wc-accent-foreground: var(--wc-white);
+  --wc-border: rgb(12 12 11 / 18%);
+  --wc-border-strong: rgb(12 12 11 / 38%);
+  --wc-grid: rgb(12 12 11 / 9%);
+  --wc-focus: var(--wc-green);
+  --wc-selection: var(--wc-green);
+  --wc-selection-foreground: var(--wc-white);
+  --wc-glass-fill: rgb(246 243 235 / 86%);
+  --wc-glass-foreground: var(--wc-black);
+  --wc-glass-border: rgb(12 12 11 / 20%);
+  --wc-glass-highlight: rgb(255 253 250 / 74%);
+}
+
+/* System dark theme when the visitor has not chosen an explicit theme. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --wc-background: var(--wc-black);
+    --wc-foreground: var(--wc-bone);
+    --wc-surface: var(--wc-charcoal);
+    --wc-surface-subtle: var(--wc-graphite);
+    --wc-muted: var(--wc-stone-300);
+    --wc-accent: var(--wc-green-soft);
+    --wc-accent-foreground: var(--wc-black);
+    --wc-border: rgb(236 232 220 / 22%);
+    --wc-border-strong: rgb(236 232 220 / 46%);
+    --wc-grid: rgb(236 232 220 / 10%);
+    --wc-focus: var(--wc-green-soft);
+    --wc-selection: var(--wc-green-soft);
+    --wc-selection-foreground: var(--wc-black);
+    --wc-glass-fill: rgb(24 24 23 / 88%);
+    --wc-glass-foreground: var(--wc-bone);
+    --wc-glass-border: rgb(236 232 220 / 24%);
+    --wc-glass-highlight: rgb(236 232 220 / 14%);
+  }
+}
+
+/* Explicit dark theme for user choice and future scene-level theme control. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --wc-background: var(--wc-black);
+  --wc-foreground: var(--wc-bone);
+  --wc-surface: var(--wc-charcoal);
+  --wc-surface-subtle: var(--wc-graphite);
+  --wc-muted: var(--wc-stone-300);
+  --wc-accent: var(--wc-green-soft);
+  --wc-accent-foreground: var(--wc-black);
+  --wc-border: rgb(236 232 220 / 22%);
+  --wc-border-strong: rgb(236 232 220 / 46%);
+  --wc-grid: rgb(236 232 220 / 10%);
+  --wc-focus: var(--wc-green-soft);
+  --wc-selection: var(--wc-green-soft);
+  --wc-selection-foreground: var(--wc-black);
+  --wc-glass-fill: rgb(24 24 23 / 88%);
+  --wc-glass-foreground: var(--wc-bone);
+  --wc-glass-border: rgb(236 232 220 / 24%);
+  --wc-glass-highlight: rgb(236 232 220 / 14%);
+}
+
+/* Component contracts */
+:root {
+  --wc-button-radius: var(--wc-radius-xs);
+  --wc-button-padding-inline: var(--wc-space-6);
+  --wc-button-gap: var(--wc-space-3);
+  --wc-button-font-size: var(--wc-font-size-meta);
+  --wc-button-font-weight: var(--wc-weight-semibold);
+  --wc-glass-radius: var(--wc-radius-md);
+  --wc-glass-blur: 1.125rem;
+  --wc-nav-radius: var(--wc-radius-pill);
+  --wc-nav-padding: var(--wc-space-2);
+}
+
+@theme inline {
+  --color-background: var(--wc-background);
+  --color-foreground: var(--wc-foreground);
+  --color-surface: var(--wc-surface);
+  --color-surface-subtle: var(--wc-surface-subtle);
+  --color-muted: var(--wc-muted);
+  --color-accent: var(--wc-accent);
+  --color-accent-foreground: var(--wc-accent-foreground);
+  --color-border: var(--wc-border);
+  --color-border-strong: var(--wc-border-strong);
+  --color-bone: var(--wc-bone);
+  --color-charcoal: var(--wc-charcoal);
+  --color-graphite: var(--wc-graphite);
+  --color-westcose-blue: var(--wc-blue);
+  --color-westcose-orange: var(--wc-orange);
+  --color-westcose-green: var(--wc-green);
+  --font-sans: var(--wc-font-sans);
+  --font-display: var(--wc-font-display);
+  --font-mono: var(--wc-font-mono);
+  --radius-xs: var(--wc-radius-xs);
+  --radius-sm: var(--wc-radius-sm);
+  --radius-md: var(--wc-radius-md);
+  --radius-pill: var(--wc-radius-pill);
+  --ease-cinematic: var(--wc-ease-cinematic);
+  --ease-snap: var(--wc-ease-snap);
+  --ease-soft: var(--wc-ease-soft);
+}

@@ -1,0 +1,165 @@
+/*
+ * Global element defaults stay deliberately quiet. Personality belongs in the
+ * semantic foundation classes, while these rules protect usability everywhere.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 0;
+  background: var(--wc-background);
+  color: var(--wc-foreground);
+  font-synthesis: none;
+  scrollbar-gutter: stable;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  background: var(--wc-background);
+  color: var(--wc-foreground);
+  font-family: var(--wc-font-sans);
+  font-size: var(--wc-font-size-body);
+  font-weight: var(--wc-weight-regular);
+  letter-spacing: var(--wc-tracking-body);
+  line-height: var(--wc-leading-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  color: inherit;
+  font: inherit;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+[id] {
+  scroll-margin-top: calc(var(--wc-header-height) + var(--wc-space-8));
+}
+
+::selection {
+  background: var(--wc-selection);
+  color: var(--wc-selection-foreground);
+}
+
+:focus-visible {
+  outline: var(--wc-focus-width) solid var(--wc-focus);
+  outline-offset: var(--wc-focus-offset);
+}
+
+.wc-skip-link {
+  position: fixed;
+  z-index: calc(var(--wc-z-menu) + 10);
+  top: var(--wc-space-3);
+  left: var(--wc-space-3);
+  display: inline-flex;
+  min-height: var(--wc-control-height);
+  align-items: center;
+  padding-inline: var(--wc-space-4);
+  border: var(--wc-border-hairline) solid var(--wc-border-strong);
+  border-radius: var(--wc-radius-xs);
+  background: var(--wc-foreground);
+  color: var(--wc-background);
+  font-size: var(--wc-font-size-meta);
+  font-weight: var(--wc-weight-semibold);
+  transform: translateY(calc(-100% - var(--wc-space-6)));
+  transition: transform var(--wc-duration-fast) var(--wc-ease-snap);
+}
+
+.wc-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.wc-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}
