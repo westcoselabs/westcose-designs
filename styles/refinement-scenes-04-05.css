@@ -408,8 +408,7 @@
     repeating-linear-gradient(0deg, transparent 0 4rem, rgb(12 12 11 / 7%) 4rem calc(4rem + 1px));
 }
 
-.wc-refined-sketchbook__pen,
-.wc-refined-corporate__pen {
+.wc-refined-sketchbook__pen {
   position: absolute;
   display: block;
   width: clamp(11rem, 24vw, 20rem);
@@ -427,8 +426,7 @@
   opacity: 0;
 }
 
-.wc-refined-sketchbook__pen::after,
-.wc-refined-corporate__pen::after {
+.wc-refined-sketchbook__pen::after {
   position: absolute;
   top: -0.2rem;
   right: -1.7rem;
@@ -438,8 +436,7 @@
   content: "";
 }
 
-.wc-refined-sketchbook__pen > i,
-.wc-refined-corporate__pen > i {
+.wc-refined-sketchbook__pen > i {
   position: absolute;
   top: -0.28rem;
   left: 12%;
@@ -776,11 +773,42 @@
 }
 
 .wc-refined-corporate__pen {
+  position: absolute;
   z-index: 8;
   top: 10%;
   left: 0;
-  width: clamp(10rem, 19vw, 17rem);
+  display: block;
+  width: clamp(8.5rem, 15vw, 13rem);
+  aspect-ratio: 1;
+  overflow: visible;
+  border-radius: 50%;
+  filter: drop-shadow(0 1.15rem 1.35rem rgb(12 12 11 / 24%));
   transform-origin: 50% 50%;
+}
+
+.wc-refined-corporate__pen-fallback,
+.wc-refined-corporate__pen-canvas {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  inset: 0;
+}
+
+.wc-refined-corporate__pen-fallback {
+  display: block;
+  border: 1px solid rgb(12 12 11 / 24%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 36% 28%, rgb(236 232 220 / 74%), transparent 12%),
+    radial-gradient(circle at 58% 62%, rgb(49 91 125 / 56%), transparent 38%),
+    linear-gradient(145deg, #4b4a45, #171715);
+  box-shadow: inset 0 0 0 0.4rem rgb(236 232 220 / 8%);
+  transition: opacity 240ms var(--wc-ease-soft);
+}
+
+.wc-refined-corporate__pen[data-model-state="model"]
+  .wc-refined-corporate__pen-fallback {
+  opacity: 0;
 }
 
 .wc-refined-corporate__dusk {
@@ -799,50 +827,6 @@
   pointer-events: none;
 }
 
-.wc-refined-corporate__orbit-bridge {
-  position: relative;
-  width: min(66vw, 60rem);
-  aspect-ratio: 1.7;
-}
-
-.wc-refined-corporate__orbit-bridge > span {
-  position: absolute;
-  border: 1px solid rgb(236 232 220 / 54%);
-  border-radius: 50%;
-}
-
-.wc-refined-corporate__orbit-bridge > span[data-corporate-arc="outer"] {
-  inset: 0;
-}
-
-.wc-refined-corporate__orbit-bridge > span[data-corporate-arc="middle"] {
-  inset: 13% 18%;
-  border-color: rgb(49 91 125 / 82%);
-}
-
-.wc-refined-corporate__orbit-bridge > span[data-corporate-arc="inner"] {
-  inset: 27% 34%;
-  border-color: rgb(196 203 36 / 64%);
-}
-
-.wc-refined-corporate__orbit-mark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: clamp(5.5rem, 11vw, 10rem);
-  height: auto;
-  filter: invert(96%) sepia(8%) saturate(272%) hue-rotate(352deg) brightness(96%) contrast(91%);
-  transform: translate(-50%, -50%);
-}
-
-html[data-corporate-orbit-bridge] .wc-site-header[data-nav-theme] {
-  --wc-nav-scene-background: rgb(12 12 11 / 94%);
-  --wc-nav-scene-foreground: var(--wc-bone);
-  --wc-nav-scene-muted: var(--wc-stone-300);
-  --wc-nav-scene-border: rgb(236 232 220 / 24%);
-  --wc-nav-scene-accent: var(--wc-green-soft);
-}
-
 @media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
   .wc-refined-sketchbook__intro,
   .wc-refined-sketchbook__book,
@@ -852,9 +836,7 @@ html[data-corporate-orbit-bridge] .wc-site-header[data-nav-theme] {
   .wc-refined-corporate__copy,
   .wc-refined-corporate__system,
   .wc-refined-corporate__piece,
-  .wc-refined-corporate__settle-mark,
-  .wc-refined-corporate__orbit-bridge,
-  .wc-refined-corporate__orbit-mark {
+  .wc-refined-corporate__settle-mark {
     visibility: hidden;
     opacity: 0;
   }
@@ -1037,7 +1019,7 @@ html[data-corporate-orbit-bridge] .wc-site-header[data-nav-theme] {
     bottom: 2%;
     left: auto;
     visibility: visible !important;
-    width: min(47vw, 15rem);
+    width: min(42vw, 13rem);
     opacity: 0.82 !important;
     transform: rotate(-8deg) !important;
   }
@@ -1049,22 +1031,6 @@ html[data-corporate-orbit-bridge] .wc-site-header[data-nav-theme] {
     opacity: 1 !important;
   }
 
-  .wc-refined-corporate__orbit-bridge,
-  .wc-refined-corporate__orbit-bridge > span {
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .wc-refined-corporate__orbit-mark {
-    visibility: visible !important;
-    opacity: 1 !important;
-    transform: translate(-50%, -50%) !important;
-  }
-
-  .wc-refined-corporate__orbit-bridge {
-    width: min(82vw, 44rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
@@ -1116,8 +1082,7 @@ html[data-corporate-orbit-bridge] .wc-site-header[data-nav-theme] {
 @media (forced-colors: active) {
   .wc-refined-sketchbook__page-face,
   .wc-refined-corporate__construction,
-  .wc-refined-corporate__piece,
-  .wc-refined-corporate__orbit-bridge > span {
+  .wc-refined-corporate__piece {
     border-color: CanvasText;
   }
 

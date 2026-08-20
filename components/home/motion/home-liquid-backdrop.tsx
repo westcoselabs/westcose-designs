@@ -15,77 +15,95 @@ void main() {
   gl_Position = vec4(a_position, 0.0, 1.0);
 }`;
 
+const VARIATION_D_WARM = [185 / 255, 87 / 255, 47 / 255] as const;
+
 const FRAGMENT_SHADER = `#version 300 es
 precision highp float;
 
 uniform vec2 u_resolution;
-uniform vec2 u_pointer;
 uniform float u_time;
-uniform float u_energy;
-uniform float u_pointer_strength;
 uniform vec3 u_accent;
 
-in vec2 v_uv;
 out vec4 out_color;
 
 float hash(vec2 p) {
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
 }
 
 float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
-  f = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + 1.0), f.x),
-    f.y
-  );
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
 }
 
 float fbm(vec2 p) {
-  float value = 0.0;
-  float amplitude = 0.52;
+  float v = 0.0;
+  float amp = 0.5;
+  mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
   for (int i = 0; i < 5; i++) {
-    value += amplitude * noise(p);
-    p = mat2(1.62, 1.18, -1.18, 1.62) * p + 0.19;
-    amplitude *= 0.48;
+    v += amp * noise(p);
+    p = rot * p * 2.02;
+    amp *= 0.5;
   }
-  return value;
+  return v;
 }
 
 void main() {
-  vec2 aspect = vec2(u_resolution.x / max(u_resolution.y, 1.0), 1.0);
-  vec2 uv = (v_uv - 0.5) * aspect;
-  vec2 pointer = (u_pointer - 0.5) * aspect;
-  vec2 pointer_delta = uv - pointer;
-  float distance_to_pointer = length(vec2(pointer_delta.x * 0.46, pointer_delta.y * 1.28));
-  float pointer_field = exp(-distance_to_pointer * 6.5) * u_pointer_strength;
+  const float speed = 0.085;
+  const float scale = 1.9;
+  const float warp = 3.4;
+  const float seamPosition = 0.6;
+  const float seamGlow = 0.6;
+  const float grain = 0.05;
+  const vec3 base = vec3(0.0470588, 0.0470588, 0.0431373);
+  const vec3 cold = vec3(0.192157, 0.356863, 0.490196);
+  const vec3 hot = vec3(0.882353, 0.517647, 0.32549);
 
-  float slow_time = u_time * (0.055 + u_energy * 0.035);
-  vec2 domain = uv * 1.45;
-  domain.x *= 1.0 + u_energy * 0.72;
-  domain.x -= slow_time * (1.8 + u_energy * 4.2);
-  domain.y += sin(uv.x * 3.2 - slow_time * 4.0) * (0.04 + u_energy * 0.08);
-  float first_warp = fbm(domain + vec2(slow_time * 2.2, -slow_time * 0.54));
-  float second_warp = fbm(
-    domain * 1.62 + vec2(-slow_time * 1.4, slow_time * 0.72) + first_warp * 1.85
+  vec2 uv = gl_FragCoord.xy / u_resolution;
+  float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+  vec2 p = vec2(uv.x * aspect, uv.y) * scale;
+  float t = u_time * speed;
+
+  vec2 q = vec2(
+    fbm(p + vec2(0.0, t)),
+    fbm(p + vec2(5.2, 1.3 - t * 0.7))
   );
-  float liquid = smoothstep(0.18, 0.92, first_warp * 0.58 + second_warp * 0.72);
-  float refraction = sin((distance_to_pointer - pointer_field * 0.25) * 32.0 - u_time * 0.7);
-  liquid += refraction * pointer_field * 0.16;
+  vec2 r = vec2(
+    fbm(p + warp * q + vec2(1.7, 9.2) + t * 0.45),
+    fbm(p + warp * q + vec2(8.3, 2.8) - t * 0.35)
+  );
+  float f = fbm(p + warp * r);
 
-  vec3 ink = vec3(0.018, 0.019, 0.018);
-  vec3 cold = vec3(0.055, 0.12, 0.17);
-  vec3 color = mix(ink, cold, smoothstep(0.22, 0.86, liquid) * 0.68);
-  color = mix(color, u_accent, smoothstep(0.56, 1.02, liquid) * (0.24 + u_energy * 0.2));
-  color += vec3(0.18, 0.16, 0.12) * pointer_field * 0.2;
+  float depth = smoothstep(0.15, 0.95, f);
+  float heat = smoothstep(0.35, 1.05, r.x + f * 0.55);
+  float cool = smoothstep(0.20, 0.85, r.y);
 
-  float vignette = smoothstep(1.02, 0.22, length(uv));
-  color *= 0.52 + vignette * 0.62;
-  color += (hash(gl_FragCoord.xy + u_time) - 0.5) / 255.0;
+  vec3 color = base;
+  color = mix(color, cold, cool * 0.72 * (1.0 - uv.y * 0.35));
+  color = mix(color, u_accent, heat * 0.78 * smoothstep(0.05, 0.85, uv.x));
+  color = mix(color, hot, pow(depth, 3.0) * 0.5);
+
+  float seamY = seamPosition + 0.035 * sin(uv.x * 3.1 + t * 2.0) + 0.02 * (f - 0.5);
+  float seam = exp(-pow((uv.y - seamY) * 34.0, 2.0));
+  color += hot * seam * seamGlow * (0.35 + 0.65 * smoothstep(0.0, 0.6, uv.x));
+  color += vec3(1.0) * exp(-pow((uv.y - seamY) * 190.0, 2.0)) * 0.18 * seamGlow;
+
+  float vignette = smoothstep(
+    1.35,
+    0.25,
+    length((uv - vec2(0.5)) * vec2(aspect, 1.0))
+  );
+  color *= mix(0.42, 1.0, vignette);
+
+  float noiseGrain = hash(gl_FragCoord.xy + fract(u_time) * 91.7) - 0.5;
+  color += noiseGrain * grain;
+  color = max(color, base * 0.85);
+
   out_color = vec4(color, 1.0);
 }`;
 
@@ -204,13 +222,7 @@ export function HomeLiquidBackdrop() {
     const buffer = gl.createBuffer();
     const positionLocation = gl.getAttribLocation(program, "a_position");
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-    const pointerLocation = gl.getUniformLocation(program, "u_pointer");
     const timeLocation = gl.getUniformLocation(program, "u_time");
-    const energyLocation = gl.getUniformLocation(program, "u_energy");
-    const pointerStrengthLocation = gl.getUniformLocation(
-      program,
-      "u_pointer_strength",
-    );
     const accentLocation = gl.getUniformLocation(program, "u_accent");
 
     if (!buffer || positionLocation < 0) {
@@ -231,10 +243,7 @@ export function HomeLiquidBackdrop() {
     gl.enableVertexAttribArray(positionLocation);
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-    const pointer = { x: 0.67, y: 0.38, targetX: 0.67, targetY: 0.38 };
     const accent = [...readLiquidRuntime().accent] as [number, number, number];
-    let pointerStrength = 0;
-    let targetPointerStrength = 0;
     let tickerAttached = false;
     let lastTickerTime: number | null = null;
     let shaderElapsed = 0;
@@ -258,19 +267,17 @@ export function HomeLiquidBackdrop() {
       }
 
       const liquidRuntime = readLiquidRuntime();
-      pointer.x += (pointer.targetX - pointer.x) * 0.075;
-      pointer.y += (pointer.targetY - pointer.y) * 0.075;
-      pointerStrength += (targetPointerStrength - pointerStrength) * 0.07;
-      accent[0] += (liquidRuntime.accent[0] - accent[0]) * 0.035;
-      accent[1] += (liquidRuntime.accent[1] - accent[1]) * 0.035;
-      accent[2] += (liquidRuntime.accent[2] - accent[2]) * 0.035;
+      const targetAccent =
+        document.documentElement.dataset.homeScene === "scene-01-5"
+          ? liquidRuntime.accent
+          : VARIATION_D_WARM;
+      accent[0] += (targetAccent[0] - accent[0]) * 0.035;
+      accent[1] += (targetAccent[1] - accent[1]) * 0.035;
+      accent[2] += (targetAccent[2] - accent[2]) * 0.035;
 
       gl.useProgram(program);
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-      gl.uniform2f(pointerLocation, pointer.x, pointer.y);
       gl.uniform1f(timeLocation, elapsed / 1000);
-      gl.uniform1f(energyLocation, liquidRuntime.energy);
-      gl.uniform1f(pointerStrengthLocation, pointerStrength);
       gl.uniform3f(accentLocation, accent[0], accent[1], accent[2]);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
@@ -295,7 +302,8 @@ export function HomeLiquidBackdrop() {
         !contextLost &&
         (openingPending ||
           homeScene === "scene-01" ||
-          homeScene === "scene-01-5");
+          homeScene === "scene-01-5" ||
+          homeScene === "scene-02");
 
       if (root) root.dataset.rafActive = String(shouldAnimate);
 
@@ -308,16 +316,6 @@ export function HomeLiquidBackdrop() {
         tickerAttached = false;
         lastTickerTime = null;
       }
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      pointer.targetX = event.clientX / Math.max(window.innerWidth, 1);
-      pointer.targetY = 1 - event.clientY / Math.max(window.innerHeight, 1);
-      targetPointerStrength = 1;
-    };
-
-    const handlePointerLeave = () => {
-      targetPointerStrength = 0;
     };
 
     const handleContextLost = (event: Event) => {
@@ -357,11 +355,6 @@ export function HomeLiquidBackdrop() {
       attributeFilter: ["data-home-opening", "data-home-scene"],
     });
     document.addEventListener("visibilitychange", syncActivity);
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    document.documentElement.addEventListener(
-      "pointerleave",
-      handlePointerLeave,
-    );
     canvas.addEventListener("webglcontextlost", handleContextLost);
     canvas.addEventListener("webglcontextrestored", handleContextRestored);
     syncActivity();
@@ -375,11 +368,6 @@ export function HomeLiquidBackdrop() {
       resizeObserver.disconnect();
       attributeObserver.disconnect();
       document.removeEventListener("visibilitychange", syncActivity);
-      window.removeEventListener("pointermove", handlePointerMove);
-      document.documentElement.removeEventListener(
-        "pointerleave",
-        handlePointerLeave,
-      );
       canvas.removeEventListener("webglcontextlost", handleContextLost);
       canvas.removeEventListener("webglcontextrestored", handleContextRestored);
       gl.deleteBuffer(buffer);

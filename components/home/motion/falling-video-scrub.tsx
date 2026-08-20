@@ -5,7 +5,6 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 import { useHomeExperience } from "@/lib/home/home-experience-context";
 import {
-  FALLING_STUDIO_ARTWORK,
   FALLING_STUDIO_CATEGORIES,
   FALLING_STUDIO_HANDOFF,
 } from "@/lib/home/falling-studio-manifest";
@@ -33,35 +32,18 @@ type MediaState =
   | "fallback"
   | "reduced";
 
-const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const STATIC_STORY_QUERY =
+  "(max-width: 47.999rem), (prefers-reduced-motion: reduce)";
 const MIN_SEEK_DELTA = 1 / 60;
 const FINAL_FRAME_OFFSET = 1 / 30;
 const STALL_TIMEOUT_MS = 8000;
 const HANDOFF_START = 0.84;
-const ARTWORK_BY_ID = new Map<string, (typeof FALLING_STUDIO_ARTWORK)[number]>(
-  FALLING_STUDIO_ARTWORK.map((artwork) => [artwork.id, artwork]),
-);
 
-function quadraticBezier(
-  start: number,
-  control: number,
-  end: number,
-  progress: number,
-) {
-  const inverse = 1 - progress;
-
-  return (
-    inverse * inverse * start +
-    2 * inverse * progress * control +
-    progress * progress * end
-  );
-}
-
-function motionIsReduced(preference: boolean) {
+function shouldUseStaticStory(preference: boolean) {
   return (
     preference ||
     (typeof window !== "undefined" &&
-      window.matchMedia(REDUCED_MOTION_QUERY).matches)
+      window.matchMedia(STATIC_STORY_QUERY).matches)
   );
 }
 
@@ -84,7 +66,7 @@ export function FallingVideoScrub({
     if (
       !video ||
       !shouldLoadMetadata ||
-      motionIsReduced(prefersReducedMotion)
+      shouldUseStaticStory(prefersReducedMotion)
     ) {
       return;
     }
@@ -115,13 +97,6 @@ export function FallingVideoScrub({
         ".wc-scene-falling__legend li",
         scope ?? undefined,
       );
-      const entryReceiver = scope?.querySelector<HTMLElement>(
-        "[data-falling-entry-receiver]",
-      );
-      const artworkElements = gsap.utils.toArray<HTMLElement>(
-        "[data-falling-artwork]",
-        scope ?? undefined,
-      );
       const endHandoff = scope?.querySelector<HTMLElement>(
         "[data-falling-end-handoff]",
       );
@@ -134,7 +109,7 @@ export function FallingVideoScrub({
         scope.dataset.videoState = state;
       };
 
-      if (motionIsReduced(prefersReducedMotion)) {
+      if (shouldUseStaticStory(prefersReducedMotion)) {
         video.pause();
         video.preload = "none";
         setMediaState("reduced");
@@ -150,13 +125,6 @@ export function FallingVideoScrub({
       let stallTimerId: number | null = null;
       let forceNextSeek = false;
       let activeLegendIndex = -1;
-      let scopeWidth = Math.max(scope.clientWidth, 1);
-      let scopeHeight = Math.max(scope.clientHeight, 1);
-
-      const measureScope = () => {
-        scopeWidth = Math.max(scope.clientWidth, 1);
-        scopeHeight = Math.max(scope.clientHeight, 1);
-      };
 
       const clearStallTimer = () => {
         if (stallTimerId !== null) {
@@ -267,9 +235,6 @@ export function FallingVideoScrub({
         const introProgress = gsap.parseEase("power2.inOut")(
           gsap.utils.clamp(0, 1, targetProgress / 0.2),
         );
-        const receiverProgress = gsap.parseEase("power2.out")(
-          gsap.utils.clamp(0, 1, targetProgress / 0.1),
-        );
         const handoffProgress = gsap.parseEase("power2.inOut")(
           gsap.utils.clamp(
             0,
@@ -292,13 +257,6 @@ export function FallingVideoScrub({
           });
         }
 
-        if (entryReceiver) {
-          gsap.set(entryReceiver, {
-            autoAlpha: Math.max(0, 0.74 * (1 - receiverProgress)),
-            yPercent: receiverProgress * 55,
-          });
-        }
-
         if (endHandoff) {
           gsap.set(endHandoff, {
             autoAlpha: handoffProgress,
@@ -309,66 +267,6 @@ export function FallingVideoScrub({
             force3D: true,
           });
         }
-
-        artworkElements.forEach((element) => {
-          const artworkId = element.dataset.fallingArtwork;
-          const artwork = artworkId ? ARTWORK_BY_ID.get(artworkId) : undefined;
-
-          if (!artwork) {
-            return;
-          }
-
-          const localProgress = gsap.utils.clamp(
-            0,
-            1,
-            (targetProgress - artwork.progress[0]) /
-              (artwork.progress[1] - artwork.progress[0]),
-          );
-          const pathProgress = gsap.parseEase("power1.inOut")(localProgress);
-          const fadeIn = gsap.utils.clamp(0, 1, localProgress / 0.13);
-          const fadeOut =
-            1 - gsap.utils.clamp(0, 1, (localProgress - 0.82) / 0.18);
-          const opacity = fadeIn * fadeOut;
-          const x = quadraticBezier(
-            artwork.path[0][0],
-            artwork.path[1][0],
-            artwork.path[2][0],
-            pathProgress,
-          );
-          const y = quadraticBezier(
-            artwork.path[0][1],
-            artwork.path[1][1],
-            artwork.path[2][1],
-            pathProgress,
-          );
-          const rotation = gsap.utils.interpolate(
-            artwork.rotation[0],
-            artwork.rotation[1],
-            pathProgress,
-          );
-          const scale = gsap.utils.interpolate(
-            artwork.scale[0],
-            artwork.scale[1],
-            pathProgress,
-          );
-          const depthProgress =
-            artwork.depth === "foreground" ? pathProgress : pathProgress * 0.58;
-
-          gsap.set(element, {
-            autoAlpha: opacity,
-            x: scopeWidth * x - element.offsetWidth / 2,
-            y: scopeHeight * y - element.offsetHeight / 2,
-            z:
-              artwork.depth === "foreground"
-                ? -110 + depthProgress * 260
-                : -260 + depthProgress * 150,
-            rotationZ: rotation,
-            rotationX: artwork.tilt[0] * (1 - pathProgress * 1.65),
-            rotationY: artwork.tilt[1] * (1 - pathProgress * 1.8),
-            scale,
-            force3D: true,
-          });
-        });
 
         scheduleSeek();
       };
@@ -457,7 +355,6 @@ export function FallingVideoScrub({
         end: "bottom bottom",
         invalidateOnRefresh: true,
         onRefresh: (self) => {
-          measureScope();
           renderProgress(self.progress);
         },
         onUpdate: (self) => renderProgress(self.progress),
@@ -509,12 +406,9 @@ export function FallingVideoScrub({
           window.cancelAnimationFrame(seekFrameId);
         }
 
-        gsap.set(
-          [copy, legend, entryReceiver, endHandoff, ...artworkElements],
-          {
+        gsap.set([copy, legend, endHandoff], {
           clearProps: "opacity,transform,visibility",
-          },
-        );
+        });
         legendItems.forEach((item) => item.removeAttribute("data-active"));
         scope.style.removeProperty("--wc-falling-progress");
         scope.removeAttribute("data-video-presented");
@@ -540,7 +434,8 @@ export function FallingVideoScrub({
           className="wc-scene-falling__poster"
           src={posterSrc}
           alt=""
-          fill
+          width={1280}
+          height={720}
           sizes="100vw"
           loading="lazy"
           unoptimized
@@ -592,7 +487,8 @@ export function FallingVideoScrub({
               <Image
                 src={still.src}
                 alt={still.alt}
-                fill
+                width={1280}
+                height={720}
                 sizes="(min-width: 48rem) 33vw, 92vw"
                 loading="lazy"
                 unoptimized

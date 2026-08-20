@@ -5,7 +5,6 @@
   --wc-orbit-progress: 0;
   --wc-orbit-motion-progress: 0;
   --wc-orbit-editorial-progress: 0;
-  --wc-orbit-receiver-progress: 1;
   --wc-orbit-handoff-progress: 0;
   --wc-orbit-line: rgb(236 232 220 / 14%);
   --wc-orbit-line-strong: rgb(236 232 220 / 30%);
@@ -21,97 +20,22 @@
   color: var(--wc-bone);
 }
 
-.wc-scene-orbit__layout {
+.wc-scene-orbit__system {
   position: relative;
-  z-index: 1;
   display: block;
+  width: 100%;
   min-height: 100vh;
   min-height: 100svh;
-  padding-top: calc(var(--wc-header-height) + var(--wc-space-6));
-  padding-bottom: var(--wc-space-6);
+  isolation: isolate;
   opacity: calc(1 - var(--wc-orbit-handoff-progress));
   transform: translateY(calc(var(--wc-orbit-handoff-progress) * -3vh));
   will-change: opacity, transform;
 }
 
-.wc-scene-orbit__system {
-  position: relative;
-  display: block;
-  width: 100%;
-  min-height: calc(100vh - var(--wc-header-height) - (2 * var(--wc-space-6)));
-  min-height: calc(100svh - var(--wc-header-height) - (2 * var(--wc-space-6)));
-  isolation: isolate;
-}
-
-.wc-scene-orbit__receiver,
 .wc-scene-orbit__canvas-layer,
 .wc-scene-orbit__fallback {
   position: absolute;
   inset: 0;
-}
-
-.wc-scene-orbit__receiver {
-  z-index: 0;
-  overflow: hidden;
-  opacity: var(--wc-orbit-receiver-progress);
-  pointer-events: none;
-  transform: scale(calc(0.985 + var(--wc-orbit-receiver-progress) * 0.015));
-  transform-origin: center;
-}
-
-.wc-scene-orbit__receiver-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgb(236 232 220 / 7%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(236 232 220 / 7%) 1px, transparent 1px);
-  background-position: center;
-  background-size: clamp(3.25rem, 6vw, 6rem) clamp(3.25rem, 6vw, 6rem);
-  -webkit-mask-image: radial-gradient(
-    circle at center,
-    black 0 28%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(circle at center, black 0 28%, transparent 75%);
-}
-
-.wc-scene-orbit__receiver-ellipse,
-.wc-scene-orbit__receiver-axis {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  pointer-events: none;
-}
-
-.wc-scene-orbit__receiver-ellipse {
-  width: min(78vw, 78rem);
-  height: min(47vh, 31rem);
-  border: var(--wc-border-hairline) solid rgb(236 232 220 / 20%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.wc-scene-orbit__receiver-ellipse[data-axis="y"] {
-  transform: translate(-50%, -50%) rotate(62deg) scaleX(0.72);
-}
-
-.wc-scene-orbit__receiver-axis[data-axis="x"] {
-  width: min(84vw, 84rem);
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgb(236 232 220 / 25%),
-    transparent
-  );
-  transform: translate(-50%, -50%);
-}
-
-.wc-scene-orbit__receiver-axis[data-axis="y"] {
-  width: 1px;
-  height: min(76vh, 48rem);
-  background: linear-gradient(transparent, rgb(236 232 220 / 25%), transparent);
-  transform: translate(-50%, -50%);
 }
 
 .wc-scene-orbit__canvas-layer {
@@ -318,10 +242,10 @@
   position: absolute;
   z-index: 4;
   top: 50%;
-  left: 0;
+  left: max(var(--wc-page-gutter), 7.5rem);
   display: grid;
-  width: 55%;
-  max-width: 52rem;
+  width: min(55%, 52rem);
+  max-width: calc(100vw - max(var(--wc-page-gutter), 7.5rem) - var(--wc-page-gutter));
   gap: clamp(1.75rem, 4vh, 3.5rem);
   opacity: var(--wc-orbit-editorial-progress);
   pointer-events: none;
@@ -343,6 +267,7 @@
   position: relative;
   z-index: 1;
   display: grid;
+  grid-column: auto;
   max-width: 45rem;
   gap: var(--wc-space-4);
 }
@@ -668,22 +593,16 @@
     overflow: hidden;
   }
 
-  .wc-scene-orbit__layout {
-    display: block;
-    min-height: auto;
-    padding-top: calc(var(--wc-header-height) + var(--wc-space-12));
-    padding-bottom: var(--wc-space-16);
-    opacity: 1;
-    transform: none;
-  }
-
   .wc-scene-orbit__system {
     display: grid;
     min-height: auto;
     gap: var(--wc-space-10);
+    padding: calc(var(--wc-header-height) + var(--wc-space-12))
+      var(--wc-page-gutter) var(--wc-space-16);
+    opacity: 1;
+    transform: none;
   }
 
-  .wc-scene-orbit__receiver,
   .wc-scene-orbit__canvas-layer {
     display: none;
   }
@@ -813,7 +732,7 @@
 }
 
 @media (max-width: 47.999rem) {
-  .wc-scene-orbit__layout {
+  .wc-scene-orbit__system {
     padding-bottom: var(--wc-space-12);
   }
 
@@ -878,10 +797,6 @@
     background: Canvas;
     color: CanvasText;
     forced-color-adjust: auto;
-  }
-
-  .wc-scene-orbit__receiver-grid {
-    display: none;
   }
 
   .wc-scene-orbit__tracks span,

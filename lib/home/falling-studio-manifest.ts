@@ -30,22 +30,23 @@ export type FallingStudioArtwork = {
 };
 
 export const FALLING_STUDIO_MEDIA = {
-  video: "/experience/falling-studio/falling-placeholder.mp4",
-  poster: "/experience/falling-studio/falling-placeholder-poster.webp",
+  video:
+    "/experience/falling-studio/i_want_to_create_a_video_using_scrub.mp4",
+  poster: "/experience/falling-studio/falling-official-still-00.webp",
   stills: [
     {
-      src: "/experience/falling-studio/falling-placeholder-still-00.webp",
-      alt: "Falling Studio sequence, opening composition.",
+      src: "/experience/falling-studio/falling-official-still-00.webp",
+      alt: "WestCose work suspended through the opening Falling Studio composition.",
       label: "Entry",
     },
     {
-      src: "/experience/falling-studio/falling-placeholder-still-50.webp",
-      alt: "Falling Studio sequence, midpoint composition.",
+      src: "/experience/falling-studio/falling-official-still-50.webp",
+      alt: "WestCose artwork, apparel, and sketch studies falling through the studio.",
       label: "Descent",
     },
     {
-      src: "/experience/falling-studio/falling-placeholder-still-100.webp",
-      alt: "Falling Studio sequence, closing composition.",
+      src: "/experience/falling-studio/falling-official-still-100.webp",
+      alt: "WestCose apparel and drawing studies in the closing Falling Studio composition.",
       label: "Handoff",
     },
   ],

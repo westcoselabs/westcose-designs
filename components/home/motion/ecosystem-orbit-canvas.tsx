@@ -10,13 +10,13 @@ import {
   type RefObject,
 } from "react";
 import * as THREE from "three";
-import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 import {
+  ORBIT_CENTER_MODEL_SRC,
   ORBIT_WORLDS,
   getOrbitEditorialProgress,
   getOrbitMotionProgress,
-  getOrbitWorld,
   type OrbitWorld,
   type OrbitWorldId,
 } from "@/lib/home/orbit-worlds";
@@ -36,16 +36,39 @@ type EcosystemOrbitCanvasProps = {
 type OrbitWorldAnchorProps = {
   world: OrbitWorld;
   index: number;
-  designsTexture: THREE.Texture;
-  shopTexture: THREE.Texture;
+  model: THREE.Group;
   onWorldEnter: (worldId: OrbitWorldId) => void;
   onWorldLeave: () => void;
   onWorldActivate: (worldId: OrbitWorldId) => void;
 };
 
+type ModelPresentation = {
+  targetSize: number;
+  rotation: [number, number, number];
+};
+
 const ORBIT_RADIUS_X = 3.05;
 const ORBIT_RADIUS_Y = 1.82;
 const WORLD_COUNT = ORBIT_WORLDS.length;
+const CENTER_MODEL_TARGET_SIZE = 0.92;
+const ORBIT_MODEL_SOURCES = [
+  ORBIT_CENTER_MODEL_SRC,
+  ...ORBIT_WORLDS.map((world) => world.modelSrc),
+];
+const WORLD_MODEL_PRESENTATION: Record<OrbitWorldId, ModelPresentation> = {
+  designs: {
+    targetSize: 1.78,
+    rotation: [0.08, -0.24, -0.06],
+  },
+  labs: {
+    targetSize: 1.88,
+    rotation: [-0.04, 0.3, 0.025],
+  },
+  shop: {
+    targetSize: 1.82,
+    rotation: [0.06, -0.2, 0.045],
+  },
+};
 
 function initialWorldPosition(index: number): [number, number, number] {
   const angle = (index / WORLD_COUNT) * Math.PI * 2 + Math.PI * 0.12;
@@ -93,162 +116,52 @@ function RendererLifecycle({
   return null;
 }
 
-function CentralMark() {
-  const svg = useLoader(SVGLoader, "/brand/westcose-monogram.svg");
-  const geometries = useMemo(() => {
-    const nextGeometries = svg.paths.flatMap((path) =>
-      path.toShapes(false).map(
-        (shape) =>
-          new THREE.ExtrudeGeometry(shape, {
-            depth: 4,
-            bevelEnabled: false,
-            curveSegments: 12,
-            steps: 1,
-          }),
-      ),
-    );
-    const bounds = new THREE.Box3();
+function NormalizedModel({
+  model,
+  rotation = [0, 0, 0],
+  targetSize,
+}: {
+  model: THREE.Group;
+  rotation?: [number, number, number];
+  targetSize: number;
+}) {
+  const prepared = useMemo(() => {
+    const object = model.clone(true);
+    object.updateMatrixWorld(true);
 
-    for (const geometry of nextGeometries) {
-      geometry.computeBoundingBox();
+    const bounds = new THREE.Box3().setFromObject(object, true);
+    const size = bounds.getSize(new THREE.Vector3());
+    const largestDimension = Math.max(size.x, size.y, size.z);
 
-      if (geometry.boundingBox) {
-        bounds.union(geometry.boundingBox);
-      }
+    if (bounds.isEmpty() || largestDimension <= Number.EPSILON) {
+      return {
+        object,
+        position: [0, 0, 0] as [number, number, number],
+        scale: 1,
+      };
     }
 
-    const center = bounds.getCenter(new THREE.Vector3());
+    const scale = targetSize / largestDimension;
+    const center = bounds.getCenter(new THREE.Vector3()).multiplyScalar(-scale);
 
-    for (const geometry of nextGeometries) {
-      geometry.translate(-center.x, -center.y, -center.z);
-      geometry.scale(0.0052, -0.0052, 0.0052);
-      geometry.computeVertexNormals();
-    }
-
-    return nextGeometries;
-  }, [svg]);
-
-  useEffect(
-    () => () => {
-      for (const geometry of geometries) {
-        geometry.dispose();
-      }
-    },
-    [geometries],
-  );
+    return {
+      object,
+      position: center.toArray() as [number, number, number],
+      scale,
+    };
+  }, [model, targetSize]);
 
   return (
-    <group scale={0.9}>
-      {geometries.map((geometry, index) => (
-        <mesh key={index} geometry={geometry}>
-          <meshStandardMaterial
-            color="#ece8dc"
-            emissive="#1d211f"
-            emissiveIntensity={0.12}
-            metalness={0.18}
-            roughness={0.46}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-      ))}
+    <group rotation={rotation}>
+      <group position={prepared.position} scale={prepared.scale}>
+        <primitive object={prepared.object} />
+      </group>
     </group>
   );
 }
 
-function DesignsWorld({ texture }: { texture: THREE.Texture }) {
-  return (
-    <group rotation={[0.1, -0.24, -0.08]}>
-      <mesh scale={[1.08, 0.88, 0.72]}>
-        <icosahedronGeometry args={[0.82, 2]} />
-        <meshStandardMaterial
-          color="#26372f"
-          flatShading
-          metalness={0.08}
-          roughness={0.88}
-        />
-      </mesh>
-      <mesh position={[-0.18, 0.13, 0.72]} rotation={[-0.08, 0.08, -0.08]}>
-        <planeGeometry args={[1.28, 0.84]} />
-        <meshBasicMaterial
-          map={texture}
-          transparent
-          side={THREE.DoubleSide}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh position={[0.5, -0.34, 0.58]} rotation={[0.04, -0.2, 0.16]}>
-        <boxGeometry args={[0.62, 0.42, 0.035]} />
-        <meshStandardMaterial color="#d9e6d8" roughness={0.72} />
-      </mesh>
-    </group>
-  );
-}
-
-function LabsWorld() {
-  return (
-    <group rotation={[-0.08, 0.32, 0.04]}>
-      <mesh>
-        <boxGeometry args={[1.18, 1.18, 1.18, 5, 5, 5]} />
-        <meshStandardMaterial
-          color="#142b3c"
-          emissive="#173d58"
-          emissiveIntensity={0.36}
-          metalness={0.52}
-          roughness={0.45}
-          wireframe
-        />
-      </mesh>
-      {[-0.44, 0, 0.44].map((offset, index) => (
-        <mesh
-          key={offset}
-          position={[offset, index === 1 ? 0.12 : -0.08, 0.7]}
-          rotation={[0, 0, index === 1 ? 0 : offset * -0.16]}
-        >
-          <boxGeometry args={[0.58, index === 1 ? 0.66 : 0.46, 0.035]} />
-          <meshStandardMaterial
-            color={index === 1 ? "#c8dfef" : "#244d69"}
-            emissive="#315b7d"
-            emissiveIntensity={index === 1 ? 0.24 : 0.5}
-            metalness={0.34}
-            roughness={0.42}
-          />
-        </mesh>
-      ))}
-      <mesh position={[0, 0, 0.735]}>
-        <boxGeometry args={[0.34, 0.026, 0.015]} />
-        <meshBasicMaterial color="#315b7d" toneMapped={false} />
-      </mesh>
-    </group>
-  );
-}
-
-function ShopWorld({ texture }: { texture: THREE.Texture }) {
-  return (
-    <group rotation={[0.14, -0.16, 0.08]}>
-      <mesh scale={[1.04, 0.72, 0.9]}>
-        <dodecahedronGeometry args={[0.82, 1]} />
-        <meshStandardMaterial
-          color="#30251f"
-          flatShading
-          metalness={0.16}
-          roughness={0.82}
-        />
-      </mesh>
-      <mesh position={[0, 0.05, 0.82]} rotation={[0, 0, -0.04]}>
-        <circleGeometry args={[0.55, 48]} />
-        <meshBasicMaterial
-          map={texture}
-          transparent
-          side={THREE.DoubleSide}
-          toneMapped={false}
-        />
-      </mesh>
-      <mesh position={[-0.58, -0.4, 0.55]} rotation={[0.08, -0.12, -0.18]}>
-        <boxGeometry args={[0.46, 0.62, 0.055]} />
-        <meshStandardMaterial color="#e18453" roughness={0.76} />
-      </mesh>
-    </group>
-  );
+function CentralMark({ model }: { model: THREE.Group }) {
+  return <NormalizedModel model={model} targetSize={CENTER_MODEL_TARGET_SIZE} />;
 }
 
 const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
@@ -256,8 +169,7 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
     {
       world,
       index,
-      designsTexture,
-      shopTexture,
+      model,
       onWorldEnter,
       onWorldLeave,
       onWorldActivate,
@@ -265,6 +177,7 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
     ref,
   ) {
     const position = initialWorldPosition(index);
+    const presentation = WORLD_MODEL_PRESENTATION[world.id];
 
     return (
       <group
@@ -283,11 +196,11 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
           onWorldActivate(world.id);
         }}
       >
-        {world.visual === "identity" ? (
-          <DesignsWorld texture={designsTexture} />
-        ) : null}
-        {world.visual === "interface" ? <LabsWorld /> : null}
-        {world.visual === "goods" ? <ShopWorld texture={shopTexture} /> : null}
+        <NormalizedModel
+          model={model}
+          rotation={presentation.rotation}
+          targetSize={presentation.targetSize}
+        />
 
         <mesh>
           <sphereGeometry args={[1.34, 14, 14]} />
@@ -314,15 +227,10 @@ function OrbitUniverse({
   onReady,
   onFailure,
 }: EcosystemOrbitCanvasProps) {
-  const designsWorld = getOrbitWorld("designs");
-  const shopWorld = getOrbitWorld("shop");
-  const designsTextureSrc =
-    "textureSrc" in designsWorld ? designsWorld.textureSrc : "";
-  const shopTextureSrc = "textureSrc" in shopWorld ? shopWorld.textureSrc : "";
-  const [designsTexture, shopTexture] = useLoader(THREE.TextureLoader, [
-    designsTextureSrc,
-    shopTextureSrc,
-  ]);
+  const [centerModel, ...worldModels] = useLoader(
+    GLTFLoader,
+    ORBIT_MODEL_SOURCES,
+  );
   const worldRefs = useRef<Record<OrbitWorldId, THREE.Group | null>>({
     designs: null,
     labs: null,
@@ -332,14 +240,6 @@ function OrbitUniverse({
   const universeRef = useRef<THREE.Group>(null);
   const focusLightRef = useRef<THREE.PointLight>(null);
   const invalidate = useThree((state) => state.invalidate);
-
-  useEffect(() => {
-    for (const texture of [designsTexture, shopTexture]) {
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = 4;
-      texture.needsUpdate = true;
-    }
-  }, [designsTexture, shopTexture]);
 
   useEffect(() => {
     invalidate();
@@ -466,18 +366,38 @@ function OrbitUniverse({
         onFailure={onFailure}
         onReady={onReady}
       />
-      <ambientLight intensity={0.7} />
-      <directionalLight color="#ece8dc" intensity={1.3} position={[2, 4, 5]} />
+      <ambientLight intensity={0.48} />
+      <hemisphereLight
+        color="#dce7e1"
+        groundColor="#070908"
+        intensity={1.1}
+      />
+      <directionalLight
+        color="#fff0df"
+        intensity={2.15}
+        position={[4.5, 6.5, 6]}
+      />
+      <directionalLight
+        color="#5f98c1"
+        intensity={1.3}
+        position={[-5, 1.5, 3]}
+      />
       <pointLight
         ref={focusLightRef}
         color="#72a9d0"
-        intensity={6}
-        distance={6}
+        intensity={7}
+        distance={8}
         position={[1.8, 1.4, 2.8]}
+      />
+      <pointLight
+        color="#e18453"
+        intensity={3.2}
+        distance={7}
+        position={[-2.6, -1.4, 3.4]}
       />
 
       <group ref={universeRef}>
-        <CentralMark />
+        <CentralMark model={centerModel.scene} />
         {[2.16, 2.84, 3.55].map((radius, index) => (
           <mesh key={radius} rotation={[0, 0, index * 0.08]}>
             <torusGeometry args={[radius, 0.006, 5, 128]} />
@@ -498,8 +418,7 @@ function OrbitUniverse({
             }}
             world={world}
             index={index}
-            designsTexture={designsTexture}
-            shopTexture={shopTexture}
+            model={worldModels[index].scene}
             onWorldEnter={onWorldEnter}
             onWorldLeave={onWorldLeave}
             onWorldActivate={onWorldActivate}

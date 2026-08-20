@@ -17,7 +17,6 @@ import {
   getOrbitEditorialProgress,
   getOrbitHandoffProgress,
   getOrbitMotionProgress,
-  getOrbitReceiverProgress,
   isOrbitWorldId,
   type OrbitWorldId,
 } from "@/lib/home/orbit-worlds";
@@ -136,7 +135,7 @@ export function EcosystemOrbitRuntime({
           setCanvasReady(false);
         }
       },
-      { rootMargin: "75% 0px", threshold: 0 },
+      { rootMargin: "200% 0px", threshold: 0 },
     );
     const visibilityObserver = new IntersectionObserver(
       ([entry]) => setIsVisible(entry.isIntersecting),
@@ -185,7 +184,6 @@ export function EcosystemOrbitRuntime({
 
       const updateProgress = (progress: number) => {
         const editorialProgress = getOrbitEditorialProgress(progress);
-        const receiverProgress = getOrbitReceiverProgress(progress);
         const handoffProgress = getOrbitHandoffProgress(progress);
 
         progressRef.current = progress;
@@ -200,10 +198,6 @@ export function EcosystemOrbitRuntime({
           editorialProgress.toFixed(4),
         );
         section.style.setProperty(
-          "--wc-orbit-receiver-progress",
-          receiverProgress.toFixed(4),
-        );
-        section.style.setProperty(
           "--wc-orbit-handoff-progress",
           handoffProgress.toFixed(4),
         );
@@ -212,7 +206,7 @@ export function EcosystemOrbitRuntime({
             ? "handoff"
             : editorialProgress > 0.08
               ? "editorial"
-              : "receiver";
+              : "orbit";
         section.dataset.orbitHandoff =
           handoffProgress > 0.72
             ? "interactive"
@@ -238,7 +232,6 @@ export function EcosystemOrbitRuntime({
         section.style.removeProperty("--wc-orbit-progress");
         section.style.removeProperty("--wc-orbit-motion-progress");
         section.style.removeProperty("--wc-orbit-editorial-progress");
-        section.style.removeProperty("--wc-orbit-receiver-progress");
         section.style.removeProperty("--wc-orbit-handoff-progress");
       };
     },

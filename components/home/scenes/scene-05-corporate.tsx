@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { CorporatePenRuntime } from "@/components/home/motion/corporate-pen-runtime";
 import { CorporateSceneMotion } from "@/components/home/motion/corporate-scene-motion";
 import { SceneShell } from "@/components/home/scene-shell";
 import { Container } from "@/components/layout/container";
@@ -111,31 +112,15 @@ export function Scene05Corporate() {
                 data-corporate-settle-mark
               />
 
-              <span className="wc-refined-corporate__pen" data-corporate-pen>
-                <i />
-              </span>
+              <CorporatePenRuntime />
             </div>
           </Container>
 
-          <div className="wc-refined-corporate__dusk" data-corporate-dusk>
-            <div
-              className="wc-refined-corporate__orbit-bridge"
-              data-corporate-orbit-bridge
-              aria-hidden="true"
-            >
-              <span data-corporate-arc="outer" />
-              <span data-corporate-arc="middle" />
-              <span data-corporate-arc="inner" />
-              <Image
-                className="wc-refined-corporate__orbit-mark"
-                data-corporate-orbit-mark
-                src="/brand/westcose-monogram.svg"
-                width={180}
-                height={180}
-                alt=""
-              />
-            </div>
-          </div>
+          <div
+            className="wc-refined-corporate__dusk"
+            data-corporate-dusk
+            aria-hidden="true"
+          />
         </div>
       </CorporateSceneMotion>
     </SceneShell>

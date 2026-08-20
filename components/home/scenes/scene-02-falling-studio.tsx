@@ -4,7 +4,6 @@ import { FallingVideoScrub } from "@/components/home/motion/falling-video-scrub"
 import { SceneShell } from "@/components/home/scene-shell";
 import { Container } from "@/components/layout/container";
 import {
-  FALLING_STUDIO_ARTWORK,
   FALLING_STUDIO_CATEGORIES,
   FALLING_STUDIO_MEDIA,
   FALLING_STUDIO_STATIC_ARTWORK,
@@ -22,43 +21,6 @@ export function Scene02FallingStudio() {
         posterSrc={FALLING_STUDIO_MEDIA.poster}
         stills={FALLING_STUDIO_MEDIA.stills}
       >
-        <div className="wc-scene-falling__shaft" aria-hidden="true">
-          <span
-            className="wc-refined-falling__entry-portal"
-            data-falling-entry-receiver
-          >
-            <i />
-          </span>
-          <span className="wc-scene-falling__depth-line" />
-        </div>
-
-        <div className="wc-refined-falling__artwork-field" aria-hidden="true">
-          {FALLING_STUDIO_ARTWORK.map((artwork) => (
-            <figure
-              key={artwork.id}
-              className="wc-refined-falling__artwork"
-              data-falling-artwork={artwork.id}
-              data-falling-category={artwork.category}
-              data-depth={artwork.depth}
-            >
-              <div className="wc-refined-falling__artwork-media">
-                <Image
-                  src={artwork.src}
-                  width={artwork.width}
-                  height={artwork.height}
-                  sizes={
-                    artwork.depth === "foreground"
-                      ? "(max-width: 1023px) 46vw, 32vw"
-                      : "(max-width: 1023px) 34vw, 24vw"
-                  }
-                  alt=""
-                />
-              </div>
-              <figcaption>{artwork.title}</figcaption>
-            </figure>
-          ))}
-        </div>
-
         <Container className="wc-scene-falling__content" width="wide">
           <div className="wc-scene-falling__copy">
             <p className="wc-home-scene__label">Scene 02 / Falling Studio</p>

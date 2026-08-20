@@ -18,10 +18,6 @@ export function getOrbitEditorialProgress(progress: number) {
   return smoothstep(progress, ORBIT_EDITORIAL_START, ORBIT_EDITORIAL_END);
 }
 
-export function getOrbitReceiverProgress(progress: number) {
-  return 1 - smoothstep(progress, 0.04, ORBIT_EDITORIAL_START + 0.08);
-}
-
 export function getOrbitHandoffProgress(progress: number) {
   return smoothstep(progress, ORBIT_HANDOFF_START, 1);
 }
@@ -48,6 +44,7 @@ export type OrbitWorld = {
   readonly id: OrbitWorldId;
   readonly label: string;
   readonly href: "/work" | "/westcose-labs" | "/shop";
+  readonly modelSrc: `/experience/${string}.${"glb" | "gltf"}`;
   readonly disciplines: string;
   readonly summary: string;
   readonly accent: {
@@ -59,11 +56,15 @@ export type OrbitWorld = {
   readonly textureAlt?: string;
 };
 
+export const ORBIT_CENTER_MODEL_SRC =
+  "/experience/orbit/models/w.gltf" as const;
+
 export const ORBIT_WORLDS = [
   {
     id: "designs",
     label: "WestCose Designs",
     href: "/work",
+    modelSrc: "/experience/pen/westcose_designs.glb",
     disciplines: "Identity / Illustration / Apparel",
     summary:
       "Brand systems, illustration, and graphic work built to hold together across every application.",
@@ -79,6 +80,8 @@ export const ORBIT_WORLDS = [
     id: "labs",
     label: "WestCose Labs",
     href: "/westcose-labs",
+    modelSrc:
+      "/experience/orbit/models/wc_building_westcose_labs_01.glb",
     disciplines: "Websites / Software / Experiments",
     summary:
       "Websites, software, and experiments shaped with the same clear visual thinking.",
@@ -92,6 +95,8 @@ export const ORBIT_WORLDS = [
     id: "shop",
     label: "WestCose Shop",
     href: "/shop",
+    modelSrc:
+      "/experience/orbit/models/wc_building_westcose_shop_01.glb",
     disciplines: "Streetwear / Merch / Objects",
     summary:
       "Apparel, merchandise, and physical objects made for the WestCose world.",

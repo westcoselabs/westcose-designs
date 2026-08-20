@@ -27,7 +27,8 @@
 .wc-home-experience:is(
     [data-active-scene="scene-00"],
     [data-active-scene="scene-01"],
-    [data-active-scene="scene-01-5"]
+    [data-active-scene="scene-01-5"],
+    [data-active-scene="scene-02"]
   )
   .wc-liquid-backdrop {
   opacity: 1;
@@ -43,9 +44,9 @@
 
 .wc-liquid-backdrop__fallback {
   background:
-    radial-gradient(ellipse at 74% 30%, rgb(185 87 47 / 30%), transparent 32%),
-    radial-gradient(ellipse at 27% 73%, rgb(49 91 125 / 34%), transparent 38%),
-    radial-gradient(ellipse at 48% 48%, rgb(236 232 220 / 8%), transparent 54%),
+    radial-gradient(ellipse at 76% 67%, rgb(225 132 83 / 34%), transparent 28%),
+    radial-gradient(ellipse at 61% 48%, rgb(185 87 47 / 30%), transparent 36%),
+    radial-gradient(ellipse at 25% 24%, rgb(49 91 125 / 38%), transparent 42%),
     var(--wc-black);
 }
 
@@ -486,58 +487,39 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
   position: absolute;
   inset: 0;
   overflow: clip;
-  background:
-    radial-gradient(circle at 72% 34%, rgb(185 87 47 / 11%), transparent 22%),
-    radial-gradient(circle at 34% 68%, rgb(49 91 125 / 12%), transparent 29%);
+  background: linear-gradient(
+    90deg,
+    rgb(12 12 11 / 90%) 0,
+    rgb(12 12 11 / 24%) 40%,
+    rgb(12 12 11 / 34%) 62%,
+    rgb(12 12 11 / 95%) 100%
+  );
 }
 
-.wc-scene-liquid__field::after {
+.wc-scene-liquid__field::before {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(105deg, transparent 32%, rgb(236 232 220 / 8%), transparent 67%);
+  inset: clamp(1rem, 2.8vw, 2.5rem);
+  border: var(--wc-border-hairline) solid var(--wc-dark-border);
   content: "";
-}
-
-.wc-scene-liquid__field span {
-  position: absolute;
-  border: 1px solid rgb(236 232 220 / 16%);
-  border-radius: 48% 52% 42% 58%;
-}
-
-.wc-scene-liquid__field span:nth-child(1) {
-  top: 8%;
-  right: -12%;
-  width: min(58rem, 62vw);
-  aspect-ratio: 1.35;
-  transform: rotate(-12deg);
-}
-
-.wc-scene-liquid__field span:nth-child(2) {
-  bottom: -22%;
-  left: 18%;
-  width: min(48rem, 48vw);
-  aspect-ratio: 1;
-  transform: rotate(24deg);
-}
-
-.wc-scene-liquid__field span:nth-child(3) {
-  top: 37%;
-  left: -8%;
-  width: min(28rem, 28vw);
-  aspect-ratio: 1.7;
+  pointer-events: none;
 }
 
 .wc-scene-liquid__content {
   position: relative;
   z-index: 1;
   display: grid;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 100dvh;
   grid-template-rows: auto 1fr auto;
-  gap: var(--wc-space-8);
-  padding-top: calc(var(--wc-header-height) + var(--wc-space-16));
-  padding-bottom: var(--wc-space-10);
+  gap: clamp(1.25rem, 3vh, 2.5rem);
+  padding-top: calc(var(--wc-header-height) + var(--wc-space-10));
+  padding-bottom: clamp(2.5rem, 6vh, 4.5rem);
   color: var(--wc-bone);
+}
+
+.wc-scene-liquid__content > .wc-home-scene__label {
+  justify-self: center;
+  color: var(--wc-stone-300);
+  text-align: center;
 }
 
 .wc-scene-liquid__reveal {
@@ -545,48 +527,60 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
 }
 
 .wc-scene-liquid__title {
-  max-width: 14ch;
+  width: 100%;
   align-self: center;
   font-family: var(--wc-font-display);
-  font-size: clamp(3.35rem, 6.2vw, 8rem);
+  font-size: clamp(4.4rem, 8.2vw, 7.375rem);
   font-weight: var(--wc-weight-bold);
-  letter-spacing: var(--wc-tracking-display);
-  line-height: 0.88;
+  letter-spacing: -0.034em;
+  line-height: 0.86;
+  text-align: center;
   text-transform: uppercase;
-  text-wrap: balance;
 }
 
 .wc-scene-liquid__line {
   display: block;
   overflow: clip;
+  white-space: nowrap;
 }
 
 .wc-scene-liquid__line > span {
   display: block;
 }
 
-.wc-scene-liquid__line[data-accent] {
-  margin-top: 0.12em;
-  margin-left: clamp(1.25rem, 5vw, 5rem);
+.wc-scene-liquid__line[data-tone="ghost"] {
+  color: rgb(236 232 220 / 22%);
+}
+
+.wc-scene-liquid__line[data-tone="solid"] {
+  color: var(--wc-bone);
+}
+
+.wc-scene-liquid__line[data-tone="accent"] {
   color: var(--wc-orange-soft);
 }
 
 .wc-scene-liquid__footer {
   display: grid;
-  grid-template-columns: minmax(0, 40rem) auto;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--wc-space-8);
-  padding-top: var(--wc-space-5);
-  border-top: var(--wc-border-hairline) solid rgb(236 232 220 / 28%);
+  width: min(100%, 38.75rem);
+  justify-items: center;
+  justify-self: center;
+  gap: var(--wc-space-7);
+  text-align: center;
 }
 
-.wc-scene-liquid__footer .wc-button {
+.wc-scene-liquid__footer .wc-button,
+.wc-scene-liquid__cta {
   --wc-foreground: var(--wc-bone);
   --wc-background: var(--wc-black);
-  --wc-glass-foreground: var(--wc-bone);
-  --wc-glass-border: rgb(236 232 220 / 32%);
-  --wc-glass-fill: rgb(12 12 11 / 66%);
+  min-width: min(100%, 16.875rem);
+  min-height: 3.5rem;
+  border-radius: var(--wc-radius-xs);
+  font-family: var(--wc-font-mono);
+}
+
+.wc-scene-liquid__cta::after {
+  content: "\2197";
 }
 
 .wc-scene-liquid__scroll {
@@ -815,7 +809,7 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
 
 /* Scene 02: scroll-controlled Falling Studio film */
 .wc-scene-falling .wc-home-scene__stage {
-  background: var(--wc-black);
+  background: transparent;
   color: var(--wc-bone);
 }
 
@@ -835,7 +829,7 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
   z-index: 0;
   inset: 0;
   overflow: clip;
-  background: var(--wc-black);
+  background: transparent;
 }
 
 .wc-scene-falling__media::after {
@@ -2051,30 +2045,20 @@ html[data-home-scene="scene-04"][data-sketchbook-white-breath]
   }
 
   .wc-scene-liquid__content {
-    gap: var(--wc-space-6);
-    padding-top: calc(var(--wc-header-height) + var(--wc-space-12));
-    padding-bottom: calc(var(--wc-space-20) + env(safe-area-inset-bottom));
+    gap: var(--wc-space-4);
+    padding-top: calc(var(--wc-header-height) + var(--wc-space-8));
+    padding-bottom: calc(var(--wc-space-10) + env(safe-area-inset-bottom));
   }
 
-  .wc-scene-liquid__field span:nth-child(1) {
-    top: 18%;
-    right: -42%;
-    width: 110vw;
-  }
-
-  .wc-scene-liquid__field span:nth-child(2) {
-    bottom: 4%;
-    left: -30%;
-    width: 90vw;
+  .wc-scene-liquid__field::before {
+    inset: var(--wc-space-4);
   }
 
   .wc-scene-liquid__title {
-    max-width: 10ch;
-    font-size: clamp(3.25rem, 15vw, 5.25rem);
-  }
-
-  .wc-scene-liquid__line[data-accent] {
-    margin-left: 0.45em;
+    width: 100%;
+    max-width: none;
+    font-size: clamp(2.35rem, 11vw, 4.75rem);
+    line-height: 0.88;
   }
 
   .wc-scene-liquid__scroll {
@@ -2083,13 +2067,14 @@ html[data-home-scene="scene-04"][data-sketchbook-white-breath]
   }
 
   .wc-scene-liquid__footer {
+    width: min(100%, 32rem);
     grid-template-columns: 1fr;
-    align-items: start;
-    gap: var(--wc-space-5);
+    align-items: center;
+    gap: var(--wc-space-4);
   }
 
   .wc-scene-liquid__footer .wc-button {
-    width: fit-content;
+    width: min(100%, 16.875rem);
   }
 
   .wc-scene-illustrations {
@@ -2461,12 +2446,15 @@ html[data-home-scene="scene-04"][data-sketchbook-white-breath]
   .wc-scene-falling__still-media {
     position: relative;
     overflow: clip;
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 16 / 9;
     border: 1px solid rgb(236 232 220 / 20%);
     background: var(--wc-graphite);
   }
 
   .wc-scene-falling__still-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 

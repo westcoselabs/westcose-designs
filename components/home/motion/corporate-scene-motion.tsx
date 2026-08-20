@@ -71,16 +71,6 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
         );
         const pen = scope.querySelector<HTMLElement>("[data-corporate-pen]");
         const dusk = scope.querySelector<HTMLElement>("[data-corporate-dusk]");
-        const orbitBridge = scope.querySelector<HTMLElement>(
-          "[data-corporate-orbit-bridge]",
-        );
-        const arcs = gsap.utils.toArray<HTMLElement>(
-          "[data-corporate-arc]",
-          scope,
-        );
-        const orbitMark = scope.querySelector<HTMLElement>(
-          "[data-corporate-orbit-mark]",
-        );
         const pieces = Object.fromEntries(
           (Object.keys(PIECE_REVEALS) as CorporatePieceName[]).map((name) => [
             name,
@@ -117,8 +107,6 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
             normalize(progress, SCENE_PHASES.holdEnd, SCENE_PHASES.exitEnd),
           );
           const systemExit = easeSoft(normalize(progress, 0.875, 0.975));
-          const arcReveal = easeOut(normalize(progress, 0.875, 0.975));
-          const markReveal = easeOut(normalize(progress, 0.925, 0.995));
           const penTravel = easeSoft(normalize(progress, 0.01, 0.71));
           const penExit = easeSoft(normalize(progress, 0.71, 0.84));
           const phase =
@@ -239,39 +227,6 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
               autoAlpha: exit,
             });
           }
-
-          if (orbitBridge) {
-            gsap.set(orbitBridge, {
-              autoAlpha: arcReveal,
-              scale: 0.93 + arcReveal * 0.07,
-              rotationZ: (1 - arcReveal) * -4,
-              force3D: true,
-            });
-          }
-
-          arcs.forEach((arc, index) => {
-            gsap.set(arc, {
-              opacity: arcReveal * (0.34 + index * 0.2),
-              scaleX: 1.24 - arcReveal * 0.24 - index * 0.025,
-              scaleY: 0.76 + arcReveal * 0.24 + index * 0.025,
-              rotationZ: (1 - arcReveal) * (index % 2 === 0 ? -14 : 11),
-              force3D: true,
-            });
-          });
-
-          if (orbitMark) {
-            gsap.set(orbitMark, {
-              autoAlpha: markReveal,
-              scale: 0.78 + markReveal * 0.22,
-              rotationZ: (1 - markReveal) * -7,
-              force3D: true,
-            });
-          }
-
-          document.documentElement.toggleAttribute(
-            "data-corporate-orbit-bridge",
-            exit > 0.46 && progress < 0.999,
-          );
         };
 
         const trigger = ScrollTrigger.create({
@@ -285,25 +240,12 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
             render(self.progress);
           },
           onUpdate: (self) => render(self.progress),
-          onLeave: () => {
-            document.documentElement.removeAttribute(
-              "data-corporate-orbit-bridge",
-            );
-          },
-          onLeaveBack: () => {
-            document.documentElement.removeAttribute(
-              "data-corporate-orbit-bridge",
-            );
-          },
         });
 
         render(trigger.progress);
 
         return () => {
           trigger.kill();
-          document.documentElement.removeAttribute(
-            "data-corporate-orbit-bridge",
-          );
           scope.style.removeProperty("--wc-corporate-progress");
           scope.removeAttribute("data-corporate-phase");
           gsap.set(
@@ -316,9 +258,6 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
               settleMark,
               pen,
               dusk,
-              orbitBridge,
-              orbitMark,
-              ...arcs,
               ...Object.values(pieces),
             ],
             {
@@ -331,9 +270,6 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
 
       return () => {
         media.revert();
-        document.documentElement.removeAttribute(
-          "data-corporate-orbit-bridge",
-        );
       };
     },
     { scope: scopeRef },
