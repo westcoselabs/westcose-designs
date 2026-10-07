@@ -2,6 +2,7 @@
 @import "../styles/tokens.css";
 @import "../styles/base.css";
 @import "../styles/foundations.css";
+@import "../styles/brand-components.css";
 @import "../styles/home.css";
 @import "../styles/orbit.css";
 @import "../styles/project-brief.css";
@@ -9,5 +10,6 @@
 @import "../styles/refinement-scenes-04-05.css";
 @import "../styles/refinement-global.css";
 @import "../styles/coastal-hero.css";
+@import "../styles/apparel.css";
 @import "../styles/liquid-navigation.css";
 @import "../styles/cinematic-home.css";

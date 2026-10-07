@@ -55,3 +55,34 @@ export function ButtonLink({
     />
   );
 }
+
+export type IconButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  "aria-label"
+> & {
+  /** Accessible name; icon buttons have no visible text. */
+  label: string;
+  tone?: "neutral" | "signal" | "coastal";
+  emphasis?: "accent" | "solid";
+};
+
+/** Round icon-only control (steppers, shuffle, dismiss). */
+export function IconButton({
+  label,
+  tone = "neutral",
+  emphasis,
+  className,
+  type = "button",
+  ...props
+}: IconButtonProps) {
+  return (
+    <button
+      {...props}
+      type={type}
+      aria-label={label}
+      className={["wc-icon-button", className].filter(Boolean).join(" ")}
+      data-tone={tone}
+      data-emphasis={emphasis}
+    />
+  );
+}

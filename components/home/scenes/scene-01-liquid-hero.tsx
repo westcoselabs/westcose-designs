@@ -9,6 +9,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 import { SceneShell } from "@/components/home/scene-shell";
+import { ArrowLink } from "@/components/ui/arrow-link";
+import { IconBadge } from "@/components/ui/icon-badge";
+import { DisplayHeading, Eyebrow, Lede } from "@/components/ui/typography";
 import { LiquidHeroReveal } from "@/components/home/motion/liquid-hero-reveal";
 import heroArtwork from "@/portfolio/hero4.png";
 
@@ -25,7 +28,7 @@ const heroServices = [
     description: "Bold, detailed artwork with attitude and edge.",
     href: "#scene-01-5",
     icon: PenNib,
-    tone: "orange",
+    tone: "signal-soft",
   },
   {
     title: "Apparel Design",
@@ -39,7 +42,7 @@ const heroServices = [
     description: "Design systems and guidelines that scale with purpose.",
     href: "#scene-05",
     icon: SquaresFour,
-    tone: "orange",
+    tone: "signal-soft",
   },
 ] as const;
 
@@ -65,32 +68,29 @@ export function Scene01LiquidHero() {
 
         <div className="wc-scene-liquid__content wc-coastal-hero__content">
           <div className="wc-coastal-hero__copy">
-            <p className="wc-coastal-hero__eyebrow" data-hero-reveal>
-              <span aria-hidden="true">✦</span>
+            <Eyebrow className="wc-coastal-hero__eyebrow" data-hero-reveal>
               Coastal misfits. Creative engines.
-            </p>
-            <h1
+            </Eyebrow>
+            <DisplayHeading
+              as="h1"
+              size="hero"
               id="scene-01-title"
               className="wc-coastal-hero__title"
               tabIndex={-1}
-            >
-              <span data-hero-reveal>We build</span>
-              <span data-hero-reveal>Things people</span>
-              <span data-hero-reveal>Remember.</span>
-            </h1>
-            <p className="wc-coastal-hero__description" data-hero-reveal>
+              lines={["We build", "Things people", "Remember."]}
+              lineProps={{ "data-hero-reveal": "" }}
+            />
+            <Lede className="wc-coastal-hero__description" data-hero-reveal>
               Branding, illustration, apparel, and visual systems, crafted in
               the WestCose style.
-            </p>
-            <Link
+            </Lede>
+            <ArrowLink
               className="wc-coastal-hero__cta"
               href="#scene-01-5"
               data-hero-reveal
             >
               View our work
-              <span className="wc-coastal-hero__cta-rule" aria-hidden="true" />
-              <ArrowRight size={22} aria-hidden="true" />
-            </Link>
+            </ArrowLink>
           </div>
 
           <nav
@@ -101,15 +101,15 @@ export function Scene01LiquidHero() {
             {heroServices.map(
               ({ title, description, href, icon: Icon, tone }, index) => (
                 <Link
-                  className="wc-hero-service"
+                  className="wc-glass-card wc-hero-service"
                   href={href}
                   data-tone={tone}
                   data-hero-reveal
                   key={title}
                 >
-                  <span className="wc-hero-service__icon" aria-hidden="true">
+                  <IconBadge className="wc-hero-service__icon" tone={tone}>
                     <Icon size={26} weight="regular" />
-                  </span>
+                  </IconBadge>
                   <div className="wc-hero-service__copy">
                     <h2>{title}</h2>
                     <p>{description}</p>

@@ -1,0 +1,341 @@
+/* Coastal brand components: the shared visual language of the homepage
+   (hero, service scenes) and any page that adopts it. React wrappers live in
+   components/ui. Scenes add layout and modifier classes on top; they should
+   not restyle these primitives from scratch. */
+
+/* Eyebrow: ✦ + mono kicker */
+.wc-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  color: var(--wc-coastal-bright);
+  font-family: var(--wc-font-mono);
+  font-size: clamp(0.625rem, 0.65vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.wc-eyebrow__mark {
+  color: var(--wc-signal);
+  font-size: 1.25rem;
+}
+
+/* Display heading: stacked uppercase lines, last line in signal orange */
+.wc-display {
+  font-family: var(--wc-font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+  text-transform: uppercase;
+}
+
+.wc-display[data-size="hero"] {
+  font-size: clamp(3.5rem, 5.6vw, 6.625rem);
+  letter-spacing: -0.042em;
+  line-height: 0.98;
+}
+
+.wc-display[data-size="section"] {
+  font-size: clamp(3.25rem, 5.4vw, 6.25rem);
+}
+
+.wc-display__line {
+  display: block;
+  width: fit-content;
+  white-space: nowrap;
+}
+
+.wc-display__line:last-child {
+  color: var(--wc-signal);
+  font-size: 1.04em;
+}
+
+/* Lede and meta label */
+.wc-lede {
+  max-width: 32.5rem;
+  color: var(--wc-text-warm);
+  font-size: clamp(0.875rem, 0.9vw, 1.0625rem);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.wc-meta-label {
+  color: var(--wc-stone-500);
+  font-family: var(--wc-font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Arrow link: the primary in-scene call to action */
+.wc-arrow-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 1rem;
+  color: var(--wc-signal-bright);
+  font-family: var(--wc-font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.wc-arrow-link__rule {
+  width: 4.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+  transition: width 260ms var(--wc-ease-soft);
+}
+
+.wc-arrow-link svg {
+  transition: transform 220ms var(--wc-ease-soft);
+}
+
+.wc-arrow-link:hover .wc-arrow-link__rule,
+.wc-arrow-link:focus-visible .wc-arrow-link__rule {
+  width: 5.5rem;
+}
+
+.wc-arrow-link:hover svg,
+.wc-arrow-link:focus-visible svg {
+  transform: translateX(4px);
+}
+
+/* On phones the link can become a full-width tap target. */
+@media (max-width: 47.999rem) {
+  .wc-arrow-link[data-block="mobile"] {
+    display: flex;
+    width: 100%;
+    min-height: 3.25rem;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--wc-signal-bright) 55%, transparent);
+    border-radius: var(--wc-radius-pill);
+    background: color-mix(in srgb, var(--wc-signal) 8%, transparent);
+  }
+
+  .wc-arrow-link[data-block="mobile"] .wc-arrow-link__rule {
+    display: none;
+  }
+}
+
+/* Tinted glass card: hero service cards, kit panels, control pills */
+.wc-glass-card {
+  --wc-card-accent: var(--wc-coastal-bright);
+  border: 1px solid rgb(236 232 220 / 29%);
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--wc-card-accent) 14%, transparent),
+      rgb(236 232 220 / 5%) 46%,
+      rgb(7 7 6 / 46%)
+    ),
+    rgb(17 17 15 / 76%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 0.875rem 1.875rem rgb(0 0 0 / 22%);
+  color: var(--wc-bone);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.wc-glass-card:is([data-tone="signal"], [data-tone="signal-soft"]) {
+  --wc-card-accent: var(--wc-signal-soft);
+}
+
+.wc-glass-card[data-tone="neutral"] {
+  --wc-card-accent: var(--wc-bone);
+}
+
+.wc-glass-card[data-emphasis="accent"] {
+  border-color: color-mix(in srgb, var(--wc-card-accent) 48%, transparent);
+}
+
+.wc-glass-card[data-shape="pill"] {
+  border-radius: var(--wc-radius-pill);
+}
+
+/* Icon badge: outlined circle holding a glyph */
+.wc-icon-badge {
+  --wc-badge-accent: var(--wc-coastal-bright);
+  display: grid;
+  width: var(--wc-badge-size, 3rem);
+  flex: none;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: rgb(7 7 6 / 35%);
+  color: var(--wc-badge-accent);
+}
+
+.wc-icon-badge[data-tone="signal"] {
+  --wc-badge-accent: var(--wc-signal);
+}
+
+.wc-icon-badge[data-tone="signal-soft"] {
+  --wc-badge-accent: var(--wc-signal-soft);
+}
+
+.wc-icon-badge[data-size="sm"] {
+  --wc-badge-size: 2.125rem;
+}
+
+/* Icon button: round control for steppers, shuffles, dismissals */
+.wc-icon-button {
+  --wc-button-accent: var(--wc-bone);
+  display: grid;
+  width: 2.375rem;
+  flex: none;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(236 232 220 / 30%);
+  border-radius: 50%;
+  background: rgb(12 12 11 / 80%);
+  color: var(--wc-bone);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 160ms ease;
+}
+
+.wc-icon-button[data-tone="signal"] {
+  --wc-button-accent: var(--wc-signal-soft);
+}
+
+.wc-icon-button[data-tone="coastal"] {
+  --wc-button-accent: var(--wc-coastal);
+}
+
+.wc-icon-button[data-emphasis="accent"] {
+  border-color: var(--wc-button-accent);
+  color: var(--wc-button-accent);
+}
+
+.wc-icon-button[data-emphasis="solid"] {
+  border-color: var(--wc-signal);
+  background: var(--wc-signal);
+  box-shadow: 0 0 1.25rem rgb(241 90 23 / 40%);
+  color: var(--wc-black);
+}
+
+.wc-icon-button:hover {
+  border-color: var(--wc-button-accent);
+  background: color-mix(in srgb, var(--wc-button-accent) 16%, rgb(12 12 11 / 85%));
+}
+
+.wc-icon-button[data-emphasis="solid"]:hover {
+  background: var(--wc-signal-bright);
+}
+
+.wc-icon-button:active {
+  transform: scale(0.92);
+}
+
+@media (pointer: coarse) {
+  .wc-icon-button {
+    width: 2.75rem;
+  }
+}
+
+/* Chip: mono pill label */
+.wc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgb(236 232 220 / 26%);
+  border-radius: var(--wc-radius-pill);
+  background: rgb(12 12 11 / 80%);
+  color: var(--wc-bone);
+  font-family: var(--wc-font-mono);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.wc-chip[data-tone="signal"] {
+  border-color: rgb(241 90 23 / 50%);
+}
+
+.wc-chip[data-tone="signal"] svg {
+  color: var(--wc-signal);
+}
+
+.wc-chip[data-variant="tag"] {
+  padding: 0.15rem 0.4rem;
+  border-color: rgb(236 232 220 / 16%);
+  border-radius: var(--wc-radius-sm);
+  background: rgb(236 232 220 / 6%);
+  color: var(--wc-stone-300);
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+/* Segmented control: mutually exclusive toggle buttons */
+.wc-segmented {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.wc-segmented__option {
+  flex: 1;
+  min-height: 2.75rem;
+  border: 1px solid rgb(236 232 220 / 22%);
+  border-radius: var(--wc-radius-pill);
+  background: rgb(17 17 15 / 70%);
+  color: var(--wc-stone-300);
+  cursor: pointer;
+  font-family: var(--wc-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+.wc-segmented__option[aria-pressed="true"] {
+  border-color: var(--wc-bone);
+  background: var(--wc-bone);
+  color: var(--wc-black);
+}
+
+/* Shared focus treatment for the components above */
+.wc-arrow-link:focus-visible,
+.wc-icon-button:focus-visible,
+.wc-segmented__option:focus-visible,
+a.wc-glass-card:focus-visible {
+  outline: 2px solid var(--wc-coastal-bright);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wc-arrow-link__rule,
+  .wc-arrow-link svg,
+  .wc-icon-button,
+  .wc-segmented__option {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .wc-glass-card,
+  .wc-icon-badge,
+  .wc-icon-button,
+  .wc-chip,
+  .wc-segmented__option {
+    border-color: CanvasText;
+  }
+}

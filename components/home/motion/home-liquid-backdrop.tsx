@@ -23,6 +23,8 @@ precision highp float;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec3 u_accent;
+uniform float u_drift;
+uniform float u_stretch;
 
 out vec4 out_color;
 
@@ -66,7 +68,10 @@ void main() {
 
   vec2 uv = gl_FragCoord.xy / u_resolution;
   float aspect = u_resolution.x / max(u_resolution.y, 1.0);
-  vec2 p = vec2(uv.x * aspect, uv.y) * scale;
+  // Scene handoffs pull the field right to left; while it moves, highlights
+  // stretch horizontally into short trails.
+  float streamX = (uv.x - 0.5) * (1.0 - u_stretch * 0.38) + 0.5;
+  vec2 p = vec2(streamX * aspect + u_drift, uv.y) * scale;
   float t = u_time * speed;
 
   vec2 q = vec2(
@@ -224,6 +229,8 @@ export function HomeLiquidBackdrop() {
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     const timeLocation = gl.getUniformLocation(program, "u_time");
     const accentLocation = gl.getUniformLocation(program, "u_accent");
+    const driftLocation = gl.getUniformLocation(program, "u_drift");
+    const stretchLocation = gl.getUniformLocation(program, "u_stretch");
 
     if (!buffer || positionLocation < 0) {
       if (buffer) gl.deleteBuffer(buffer);
@@ -244,6 +251,8 @@ export function HomeLiquidBackdrop() {
     gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
     const accent = [...readLiquidRuntime().accent] as [number, number, number];
+    let drift = readLiquidRuntime().drift;
+    let stretch = 0;
     let tickerAttached = false;
     let lastTickerTime: number | null = null;
     let shaderElapsed = 0;
@@ -275,10 +284,18 @@ export function HomeLiquidBackdrop() {
       accent[1] += (targetAccent[1] - accent[1]) * 0.035;
       accent[2] += (targetAccent[2] - accent[2]) * 0.035;
 
+      // Ease toward the scroll-owned drift so wheel steps read as a current;
+      // the remaining lag is how hard the liquid is being pulled.
+      const driftStep = (liquidRuntime.drift - drift) * 0.07;
+      drift += driftStep;
+      stretch += (Math.min(1, Math.abs(driftStep) * 40) - stretch) * 0.08;
+
       gl.useProgram(program);
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
       gl.uniform1f(timeLocation, elapsed / 1000);
       gl.uniform3f(accentLocation, accent[0], accent[1], accent[2]);
+      gl.uniform1f(driftLocation, drift);
+      gl.uniform1f(stretchLocation, stretch);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
 
@@ -301,7 +318,8 @@ export function HomeLiquidBackdrop() {
         !document.hidden &&
         !contextLost &&
         (openingPending ||
-          homeScene === "scene-01");
+          homeScene === "scene-01" ||
+          homeScene === "scene-01-5");
 
       if (root) root.dataset.rafActive = String(shouldAnimate);
 

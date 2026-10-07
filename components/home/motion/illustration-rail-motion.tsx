@@ -2,11 +2,16 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { LIQUID_HANDOFF_DRIFT } from "@/lib/home/cinematic-motion";
 import { useHomeExperience } from "@/lib/home/home-experience-context";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { useReducedMotionPreference } from "@/lib/motion/use-reduced-motion";
 
-const ENTER_END = 0.15;
+// While the rail rises over the departing hero, the track trails in from the
+// right by this fraction of the viewport, as if pulled by the liquid current.
+const APPROACH_OFFSET = 0.5;
+// Additional liquid drift across the rail's travel, continuing the handoff.
+const RAIL_DRIFT = 1;
 const RAIL_TRAVEL_START = 0.1;
 const RAIL_TRAVEL_END = 0.7;
 const HANDOFF_START = 0.85;
@@ -31,7 +36,8 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
     update(); media.addEventListener("change", update);
     return () => media.removeEventListener("change", update);
   }, []);
-  const { setLiquidAccent, setLiquidEnergy } = useHomeExperience();
+  const { setLiquidAccent, setLiquidDrift, setLiquidEnergy } =
+    useHomeExperience();
 
   useGSAP(
     () => {
@@ -113,9 +119,12 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
         });
       };
 
-      const render = (sceneProgress: number) => {
-        const enterProgress = gsap.parseEase("power2.out")(
-          gsap.utils.clamp(0, 1, sceneProgress / ENTER_END),
+      // approachProgress covers the 100svh where the stage rises into view;
+      // sceneProgress covers the pinned stretch after it.
+      const render = (sceneProgress: number, approachProgress: number) => {
+        const arrival = gsap.parseEase("sine.out")(approachProgress);
+        const headerIn = gsap.parseEase("power2.out")(
+          gsap.utils.clamp(0, 1, (approachProgress - 0.5) / 0.5),
         );
         const railProgress = gsap.utils.clamp(
           0,
@@ -123,7 +132,9 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
           (sceneProgress - RAIL_TRAVEL_START) /
             (RAIL_TRAVEL_END - RAIL_TRAVEL_START),
         );
-        const trackX = gsap.utils.interpolate(startX, endX, railProgress);
+        const trackX =
+          gsap.utils.interpolate(startX, endX, railProgress) +
+          (1 - arrival) * viewport.clientWidth * APPROACH_OFFSET;
         const viewportCenter = viewport.clientWidth / 2;
         let nearestIndex = 0;
         let nearestDistance = Number.POSITIVE_INFINITY;
@@ -199,13 +210,12 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
 
         if (header) {
           gsap.set(header, {
-            opacity: enterProgress * (1 - tiltProgress),
-            y: (1 - enterProgress) * 18 + tiltProgress * -24,
+            opacity: headerIn * (1 - tiltProgress),
+            y: (1 - headerIn) * 28 + tiltProgress * -24,
           });
         }
 
         gsap.set(viewport, {
-          opacity: 0.72 + enterProgress * 0.28,
           perspectiveOrigin: `50% ${50 + tiltProgress * 34}%`,
         });
 
@@ -216,6 +226,10 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
           );
         }
 
+        // The hero owns the liquid until the rail pins.
+        if (approachProgress < 1) return;
+
+        setLiquidDrift(LIQUID_HANDOFF_DRIFT + railProgress * RAIL_DRIFT);
         setLiquidEnergy(
           0.18 +
             Math.sin(railProgress * Math.PI) * 0.2 +
@@ -225,8 +239,28 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
         );
       };
 
+      let approachProgress = 0;
+      let sceneProgress = 0;
+      const update = () => render(sceneProgress, approachProgress);
+
       measure();
-      render(0);
+      update();
+
+      const approachTrigger = ScrollTrigger.create({
+        trigger: scene,
+        start: "top bottom",
+        end: "top top",
+        invalidateOnRefresh: true,
+        onRefresh: (self) => {
+          approachProgress = self.progress;
+          measure();
+          update();
+        },
+        onUpdate: (self) => {
+          approachProgress = self.progress;
+          update();
+        },
+      });
 
       const trigger = ScrollTrigger.create({
         trigger: scene,
@@ -234,10 +268,14 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
         end: "bottom bottom",
         invalidateOnRefresh: true,
         onRefresh: (self) => {
+          sceneProgress = self.progress;
           measure();
-          render(self.progress);
+          update();
         },
-        onUpdate: (self) => render(self.progress),
+        onUpdate: (self) => {
+          sceneProgress = self.progress;
+          update();
+        },
       });
 
       const scheduleRefresh = () => {
@@ -270,6 +308,7 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
       return () => {
         imagesActive = false;
         resizeObserver.disconnect();
+        approachTrigger.kill();
         trigger.kill();
 
         if (resizeFrameId !== null) {
@@ -291,7 +330,13 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
     },
     {
       scope: scopeRef,
-      dependencies: [prefersReducedMotion, compact, setLiquidAccent, setLiquidEnergy],
+      dependencies: [
+        prefersReducedMotion,
+        compact,
+        setLiquidAccent,
+        setLiquidDrift,
+        setLiquidEnergy,
+      ],
       revertOnUpdate: true,
     },
   );

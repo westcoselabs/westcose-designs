@@ -48,13 +48,6 @@ export function BrandDevelopmentSceneMotion({
           "[data-brand-development-nav]",
           scope,
         );
-        const exitLine = scope.querySelector<HTMLElement>(
-          "[data-brand-development-exit-line]",
-        );
-        const exitMaterials = gsap.utils.toArray<HTMLElement>(
-          "[data-line-material]",
-          scope,
-        );
         const easeOut = gsap.parseEase("power2.out");
         const easeSoft = gsap.parseEase("power2.inOut");
         let activeIndex = -1;
@@ -130,28 +123,6 @@ export function BrandDevelopmentSceneMotion({
               force3D: true,
             });
           });
-
-          const exitProgress = easeSoft(
-            normalizedProgress(progress, 0.84, 1),
-          );
-
-          if (exitLine) {
-            gsap.set(exitLine, {
-              autoAlpha: exitProgress,
-              yPercent: (1 - exitProgress) * 80,
-            });
-          }
-
-          exitMaterials.forEach((material, index) => {
-            gsap.set(material, {
-              scaleX: gsap.utils.clamp(
-                0,
-                1,
-                exitProgress * (index === 0 ? 1.18 : 1.05) - index * 0.08,
-              ),
-              transformOrigin: index === 0 ? "0% 50%" : "100% 50%",
-            });
-          });
         };
 
         const trigger = ScrollTrigger.create({
@@ -167,7 +138,7 @@ export function BrandDevelopmentSceneMotion({
 
         return () => {
           trigger.kill();
-          gsap.set([intro, exitLine, ...beatElements, ...exitMaterials], {
+          gsap.set([intro, ...beatElements], {
             clearProps:
               "opacity,visibility,transform,zIndex,transformOrigin",
           });

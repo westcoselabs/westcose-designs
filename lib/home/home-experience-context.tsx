@@ -7,6 +7,8 @@ import type { HomeSceneId } from "@/lib/home/scene-registry";
 export type LiquidRuntimeState = {
   accent: [number, number, number];
   energy: number;
+  /** Scroll-driven horizontal offset of the liquid field, in shader units. */
+  drift: number;
 };
 
 export type HomeExperienceContextValue = {
@@ -18,6 +20,7 @@ export type HomeExperienceContextValue = {
   reportHeroVisualReady: () => void;
   setLiquidAccent: (accent: [number, number, number]) => void;
   setLiquidEnergy: (energy: number) => void;
+  setLiquidDrift: (drift: number) => void;
 };
 
 export const HomeExperienceContext =

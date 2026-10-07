@@ -21,6 +21,16 @@
   --wc-orange: #b9572f;
   --wc-orange-soft: #e18453;
 
+  /* Coastal brand accents (hero, service scenes, shared components) */
+  --wc-ink: #070706;
+  --wc-signal: #f15a17;
+  --wc-signal-bright: #ff7a3c;
+  --wc-signal-soft: #f5834e;
+  --wc-coastal: #2da2a5;
+  --wc-coastal-bright: #4abac1;
+  --wc-text-warm: #d7d2c6;
+  --wc-text-warm-muted: #d4d0c5;
+
   /* Primitive type system */
   --wc-font-display:
     var(--font-westcose-display), "Arial Narrow", "Helvetica Neue Condensed",

@@ -68,13 +68,13 @@ export const HOME_SCENES = [
   {
     id: "scene-04",
     number: "04",
-    label: "Sketchbook World",
-    shortLabel: "Sketchbook",
-    layout: "pinned",
-    scrollHeight: "320svh",
+    label: "Graphic Apparel",
+    shortLabel: "Apparel",
+    layout: "flow",
+    scrollHeight: "100svh",
     environmentTheme: "dark",
     navTheme: "dark",
-    cursorMode: "flip",
+    cursorMode: "explore",
   },
   {
     id: "scene-05",

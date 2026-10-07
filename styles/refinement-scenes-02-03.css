@@ -446,41 +446,6 @@
   text-align: right;
 }
 
-.wc-brand-development__exit-line {
-  position: absolute;
-  z-index: 8;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 5rem;
-  overflow: hidden;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.wc-brand-development__exit-line [data-line-material] {
-  position: absolute;
-  display: block;
-  height: 1px;
-}
-
-.wc-brand-development__exit-line [data-line-material="vector"] {
-  right: 38%;
-  bottom: 1.8rem;
-  left: 0;
-  background: linear-gradient(90deg, transparent, var(--wc-blue));
-}
-
-.wc-brand-development__exit-line [data-line-material="graphite"] {
-  right: -2%;
-  bottom: 1.8rem;
-  width: 43%;
-  background: repeating-linear-gradient(90deg, rgb(236 232 220 / 82%) 0 0.45rem, transparent 0.45rem 0.6rem);
-  filter: drop-shadow(0 0.15rem 0 rgb(236 232 220 / 16%));
-  rotate: -1.25deg;
-}
-
 /* Small screens and reduced motion become an authored, normal-flow story. */
 @media (max-width: 47.999rem), (prefers-reduced-motion: reduce) {
   .wc-scene-falling--refined,
@@ -662,10 +627,6 @@
 
   .wc-brand-development__beat figcaption small {
     text-align: left;
-  }
-
-  .wc-brand-development__exit-line {
-    display: none;
   }
 }
 

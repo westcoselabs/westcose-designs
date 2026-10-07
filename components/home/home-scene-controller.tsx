@@ -50,6 +50,7 @@ export function HomeSceneController({ children }: HomeSceneControllerProps) {
   const liquidRuntimeRef = useRef<LiquidRuntimeState>({
     accent: [0.72, 0.34, 0.18],
     energy: 0.16,
+    drift: 0,
   });
   const prefersReducedMotion = useReducedMotionPreference();
   const [openingComplete, setOpeningComplete] = useState(false);
@@ -79,6 +80,9 @@ export function HomeSceneController({ children }: HomeSceneControllerProps) {
   const setLiquidEnergy = useCallback((energy: number) => {
     liquidRuntimeRef.current.energy = energy;
   }, []);
+  const setLiquidDrift = useCallback((drift: number) => {
+    liquidRuntimeRef.current.drift = drift;
+  }, []);
 
   const activateScene = useCallback((scene: HomeScene, progress = 0) => {
     activeSceneIdRef.current = scene.id;
@@ -107,6 +111,7 @@ export function HomeSceneController({ children }: HomeSceneControllerProps) {
       reportHeroVisualReady,
       setLiquidAccent,
       setLiquidEnergy,
+      setLiquidDrift,
     }),
     [
       completeOpening,
@@ -116,6 +121,7 @@ export function HomeSceneController({ children }: HomeSceneControllerProps) {
       reportHeroVisualReady,
       sceneState.sceneId,
       setLiquidAccent,
+      setLiquidDrift,
       setLiquidEnergy,
     ],
   );

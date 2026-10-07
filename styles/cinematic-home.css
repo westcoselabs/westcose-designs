@@ -13,14 +13,11 @@
 .wc-cinema-opening__grid i:last-child { height: 1px; inset: 50% 0 auto; }
 .wc-cinema-opening__edition { position: absolute; right: var(--wc-page-gutter); top: var(--wc-page-gutter); font: .6rem var(--wc-font-mono); letter-spacing: .16em; text-transform: uppercase; color: #aaa99e; }
 .wc-cinema-opening .wc-scene-loader__skip { border-radius: 2rem; min-height: 44px; }
-.wc-home-scene__label, .wc-home-progress, .wc-home-cursor-state,
-.wc-brand-development__beat-number, .wc-brand-development__nav li span,
-.wc-refined-sketchbook__caption > span, .wc-scene-project-brief__index > p { display: none !important; }
+.wc-home-scene__label, .wc-home-progress, .wc-home-cursor-state, .wc-brand-development__beat-number, .wc-brand-development__nav li span, .wc-scene-project-brief__index > p { display: none !important; }
 .wc-brand-development__beat figcaption { grid-template-columns: 1fr; }
 .wc-brand-development__nav li { color: #b6b4aa; }
 .wc-scene-illustrations__caption { color: #d4d0c5; }
 .wc-scene-illustrations__number { display: none; }
-.wc-scene-illustrations .wc-home-scene__stage { background: #0c0c0b; }
 .wc-scene-illustrations__identity > span { color: #b6b4aa; }
 .wc-paper-stage { position: fixed; inset: 0; z-index: 25; pointer-events: none; overflow: clip; }
 .wc-paper-stage * { pointer-events: none !important; touch-action: pan-y; }
@@ -48,18 +45,6 @@
 .wc-scene-falling[data-paper-mode="static"] .wc-scene-falling__legend { display: none; }
 .wc-refined-falling__static-story figcaption > span { display: none; }
 .wc-refined-falling__static-story figcaption { grid-template-columns: 1fr; }
-.wc-refined-sketchbook__page-front { background-image: url('/experience/paper-grain.svg'); }
-.wc-refined-sketchbook__page-back { background: #e9e4d7 url('/experience/paper-grain.svg'); }
-.wc-refined-sketchbook__page[data-turning="true"] .wc-refined-sketchbook__page-front { border-radius: 0 5% 8% 0 / 0 3% 6% 0; }
-.wc-page-flex { position: absolute; inset: 0; display: none; transform-style: preserve-3d; }
-.wc-refined-sketchbook__page[data-turning="true"] > .wc-page-flex { display: block; }
-.wc-refined-sketchbook__page[data-turning="true"] > .wc-refined-sketchbook__page-face { opacity: 0; }
-.wc-page-flex__strip { position: absolute; inset: 0 auto 0 0; transform-origin: 0 50%; transform-style: preserve-3d; }
-.wc-page-flex__face, .wc-page-flex__back { position: absolute; inset: 0; overflow: hidden; backface-visibility: hidden; }
-.wc-page-flex__face::after, .wc-page-flex__back::after { position: absolute; inset: 0; background: rgb(57 42 16 / var(--wc-curl-shade, 0)); content: ''; }
-.wc-page-flex__face .wc-refined-sketchbook__page-front { border: 0; border-radius: 0; }
-.wc-page-flex__face .wc-refined-sketchbook__ink-mask { display: none; }
-.wc-page-flex__back { background: #e9e4d7 url('/experience/paper-grain.svg'); transform: rotateY(180deg); }
 .wc-refined-corporate__piece { background-image: url('/experience/paper-grain.svg'); }
 .wc-scene-corporate .wc-home-scene__stage { isolation: isolate; }
 .wc-corporate-orbit-mark { position: fixed; inset: 0; display: grid; place-items: center; z-index: 24; pointer-events: none; visibility: hidden; }

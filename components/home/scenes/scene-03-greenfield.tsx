@@ -94,14 +94,6 @@ export function Scene03Greenfield() {
           </div>
         </Container>
 
-        <div
-          className="wc-brand-development__exit-line"
-          data-brand-development-exit-line
-          aria-hidden="true"
-        >
-          <span data-line-material="vector" />
-          <span data-line-material="graphite" />
-        </div>
       </BrandDevelopmentSceneMotion>
     </SceneShell>
   );

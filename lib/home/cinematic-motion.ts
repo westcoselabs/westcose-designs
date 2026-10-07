@@ -5,6 +5,9 @@ export function phase(value: number, start: number, end: number) {
   return t * t * (3 - 2 * t);
 }
 export const PAPER_HANDOFF_START = 0.88;
+// Liquid field offset at the hero → illustration rail handoff; the hero
+// drifts the liquid up to it and the rail continues from it.
+export const LIQUID_HANDOFF_DRIFT = 0.9;
 export type PaperFrame = {
   progress: number;
   handoff: number;

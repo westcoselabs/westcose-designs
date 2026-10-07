@@ -2,9 +2,9 @@
    Design dials: variance 8 / motion 5 / density 4. Preserve the existing palette
    and GSAP scene handoff, with a separate normal-flow composition on phones. */
 .wc-coastal-hero {
-  --hero-orange: #f15a17;
-  --hero-teal: #4abac1;
-  --hero-ink: #070706;
+  --hero-orange: var(--wc-signal);
+  --hero-teal: var(--wc-coastal-bright);
+  --hero-ink: var(--wc-ink);
 }
 
 /* Scene links must cross the sticky scene's activation point. The ordinary
@@ -15,6 +15,19 @@
 
 .wc-coastal-hero .wc-home-scene__stage {
   min-height: max(48rem, 100svh);
+}
+
+/* Desktop handoff: the hero stays pinned for one more stage height while the
+   illustration rail rises over it, so the scenes overlap instead of passing
+   through an empty stage. The rail keeps its document position. */
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  .wc-home-experience:not([data-reduced-motion="true"]) .wc-coastal-hero {
+    --wc-hero-stage-height: max(48rem, 100svh);
+    min-height: calc(
+      var(--wc-home-scene-height) + var(--wc-hero-stage-height)
+    );
+    margin-bottom: calc(var(--wc-hero-stage-height) * -1);
+  }
 }
 
 .wc-coastal-hero .wc-scene-liquid__reveal {
@@ -80,80 +93,28 @@
   width: min(46%, 45rem);
 }
 
+/* Eyebrow, display heading, lede, arrow link, glass card and icon badge come
+   from styles/brand-components.css; only hero-specific rhythm lives here. */
 .wc-coastal-hero__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 1.1rem;
   margin-bottom: clamp(1.5rem, 3svh, 2.5rem);
-  color: var(--hero-teal);
-  font-family: var(--wc-font-mono);
-  font-size: clamp(0.625rem, 0.65vw, 0.75rem);
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  line-height: 1.5;
-  text-transform: uppercase;
-}
-
-.wc-coastal-hero__eyebrow > span {
-  color: var(--hero-orange);
-  font-size: 1.25rem;
-}
-
-.wc-coastal-hero__title {
-  font-family: var(--wc-font-display);
-  font-size: clamp(3.5rem, 5.6vw, 6.625rem);
-  font-weight: 700;
-  letter-spacing: -0.042em;
-  line-height: 0.98;
-  text-transform: uppercase;
-}
-
-.wc-coastal-hero__title > span {
-  display: block;
-  width: fit-content;
-  white-space: nowrap;
 }
 
 .wc-coastal-hero__title > span:nth-child(2) {
   font-size: 0.925em;
 }
+
 .wc-coastal-hero__title > span:last-child {
-  color: var(--hero-orange);
   font-size: 1.057em;
 }
 
 .wc-coastal-hero__description {
-  max-width: 32.5rem;
   margin-top: 1.65rem;
-  color: #d7d2c6;
-  font-size: clamp(0.875rem, 0.9vw, 1.0625rem);
-  font-weight: 500;
-  line-height: 1.6;
 }
 
 .wc-coastal-hero__cta {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 1rem;
   margin-top: clamp(1.4rem, 3svh, 2.6rem);
-  color: #ff7a3c;
-  font-family: var(--wc-font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-decoration: none;
-  text-transform: uppercase;
 }
 
-.wc-coastal-hero__cta-rule {
-  width: 4.5rem;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.7;
-}
-
-.wc-coastal-hero__cta svg,
 .wc-hero-service__arrow {
   transition: transform 220ms var(--wc-ease-soft);
 }
@@ -166,7 +127,6 @@
 }
 
 .wc-hero-service {
-  --service-accent: var(--hero-teal);
   position: relative;
   display: grid;
   min-height: 9.75rem;
@@ -175,41 +135,10 @@
   align-items: start;
   gap: 1rem;
   padding: 1.25rem;
-  border: 1px solid rgb(236 232 220 / 29%);
-  border-radius: 0.75rem;
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in srgb, var(--service-accent) 14%, transparent),
-      rgb(236 232 220 / 5%) 46%,
-      rgb(7 7 6 / 46%)
-    ),
-    rgb(17 17 15 / 76%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 10%),
-    0 0.875rem 1.875rem rgb(0 0 0 / 22%);
-  color: var(--wc-bone);
   text-decoration: none;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
   transition:
     border-color 200ms ease,
     background-color 200ms ease;
-}
-
-.wc-hero-service[data-tone="orange"] {
-  --service-accent: #f5834e;
-}
-
-.wc-hero-service__icon {
-  display: grid;
-  width: 3rem;
-  aspect-ratio: 1;
-  place-items: center;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  background: rgb(7 7 6 / 35%);
-  color: var(--service-accent);
 }
 
 .wc-hero-service h2 {
@@ -225,14 +154,14 @@
 .wc-hero-service p {
   max-width: 18rem;
   margin-top: 0.4rem;
-  color: #d4d0c5;
+  color: var(--wc-text-warm-muted);
   font-size: clamp(0.6875rem, 0.72vw, 0.8125rem);
   line-height: 1.45;
 }
 
 .wc-hero-service__index {
   align-self: end;
-  color: var(--service-accent);
+  color: var(--wc-card-accent);
   font-family: var(--wc-font-mono);
   font-size: 0.6875rem;
   letter-spacing: 0.12em;
@@ -240,7 +169,7 @@
 
 .wc-hero-service__arrow {
   justify-self: end;
-  color: var(--service-accent);
+  color: var(--wc-card-accent);
 }
 
 /* The full-width artwork takes the place of the progress rail in the opening. */
@@ -256,7 +185,7 @@
     transform: translateX(4px);
   }
   .wc-hero-service:hover {
-    border-color: var(--service-accent);
+    border-color: var(--wc-card-accent);
     background-color: rgb(36 41 39 / 70%);
   }
 }
