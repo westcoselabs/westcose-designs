@@ -1,5 +1,6 @@
 import { HomeSceneController } from "@/components/home/home-scene-controller";
 import { HomeLiquidBackdrop } from "@/components/home/motion/home-liquid-backdrop";
+import { Scene0203BrandHandoff } from "@/components/home/motion/scene-02-03-brand-handoff";
 import { Scene00Loader } from "@/components/home/scenes/scene-00-loader";
 import { Scene015IllustrationRail } from "@/components/home/scenes/scene-015-illustration-rail";
 import { Scene01LiquidHero } from "@/components/home/scenes/scene-01-liquid-hero";
@@ -19,6 +20,7 @@ export function HomeExperience() {
       <Scene015IllustrationRail />
       <Scene02FallingStudio />
       <Scene03Greenfield />
+      <Scene0203BrandHandoff />
       <Scene04Sketchbook />
       <Scene05Corporate />
       <Scene06Orbit />

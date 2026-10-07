@@ -1,124 +1,101 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useRef } from "react";
 
-import { Container } from "@/components/layout/container";
-import { ButtonLink } from "@/components/ui/button";
-import {
-  ecosystemNavigation,
-  primaryNavigation,
-  projectInquiryNavigation,
-  siteNavigation,
-  type NavigationItem,
-} from "@/lib/navigation";
+import { NavigationGlass } from "@/components/navigation/navigation-glass";
 import { siteConfig } from "@/lib/seo/site";
 
-function NavigationLabel({ item }: { item: NavigationItem }) {
-  return (
-    <>
-      <span>{item.label}</span>
-      {item.indicator ? (
-        <span className="wc-navigation-indicator" aria-hidden="true">
-          {item.indicator}
-        </span>
-      ) : null}
-    </>
-  );
-}
+const navigation = [
+  { label: "Home", href: "/", path: "/" },
+  { label: "About", href: "/#scene-02", path: "/studio" },
+  { label: "Services", href: "/#hero-services", path: "/services" },
+  { label: "Contact", href: "/#scene-07", path: "/start-a-project" },
+  { label: "Shop", href: "/shop", path: "/shop" },
+  { label: "Labs", href: "/westcose-labs", path: "/westcose-labs" },
+] as const;
 
 export function SiteHeader() {
+  const pathname = usePathname();
+  const menuRef = useRef<HTMLDetailsElement>(null);
+  const triggerRef = useRef<HTMLElement>(null);
+
+  function closeMenu() {
+    if (menuRef.current) menuRef.current.open = false;
+  }
+
   return (
-    <header className="wc-site-header" data-site-header>
-      <Container className="wc-site-header__inner" width="wide">
+    <header className="wc-site-header wc-liquid-header" data-site-header>
+      <div className="wc-liquid-header__shell">
+        <NavigationGlass />
         <Link
-          className="wc-site-header__brand"
+          className="wc-liquid-header__brand"
           href="/"
           aria-label={`${siteConfig.name}, home`}
         >
           <Image
-            className="wc-site-header__brand-mark"
-            src="/brand/westcose-logo.svg"
+            src="/brand/westcose-monogram-reversed.svg"
             alt=""
-            width={1080}
-            height={1080}
-            sizes="3rem"
-            loading="eager"
+            width={36}
+            height={36}
             unoptimized
-            aria-hidden="true"
           />
-          <span className="wc-sr-only">WestCose Designs</span>
         </Link>
-
-        <nav className="wc-site-header__desktop-nav" aria-label="Primary">
-          <ul className="wc-site-header__desktop-list">
-            {primaryNavigation.map((item) => (
-              <li key={item.href}>
-                <Link className="wc-site-header__nav-link" href={item.href}>
-                  <NavigationLabel item={item} />
-                </Link>
-              </li>
-            ))}
-            <li className="wc-site-header__project-link">
-              <ButtonLink
-                href={projectInquiryNavigation.href}
-                size="sm"
-                variant="outline"
-              >
-                {projectInquiryNavigation.label}
-              </ButtonLink>
-            </li>
-            {ecosystemNavigation.map((item) => (
-              <li key={item.href}>
-                <Link className="wc-site-header__nav-link" href={item.href}>
-                  <NavigationLabel item={item} />
+        <nav className="wc-liquid-header__desktop" aria-label="Primary">
+          <ul className="wc-liquid-header__links">
+            {navigation.map((item) => (
+              <li key={item.label}>
+                <Link
+                  className="wc-liquid-header__link"
+                  href={item.href}
+                  aria-current={pathname === item.path ? "page" : undefined}
+                >
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-
-        <details className="wc-site-header__disclosure">
-          <summary className="wc-site-header__menu-trigger">
+        <details
+          ref={menuRef}
+          className="wc-liquid-header__menu"
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && menuRef.current?.open) {
+              closeMenu();
+              triggerRef.current?.focus();
+            }
+          }}
+        >
+          <summary ref={triggerRef} className="wc-liquid-header__trigger">
             <span>Menu</span>
-            <span className="wc-site-header__menu-icon" aria-hidden="true">
+            <span className="wc-liquid-header__menu-icon" aria-hidden="true">
               <span />
               <span />
             </span>
           </summary>
-
-          <div className="wc-site-header__mobile-panel">
-            <nav aria-label="Mobile primary">
-              <ul className="wc-site-header__mobile-list">
-                {siteNavigation.map((item, index) => (
-                  <li
-                    key={item.href}
-                    className="wc-site-header__mobile-item"
-                    data-kind={
-                      item.href === projectInquiryNavigation.href
-                        ? "project"
-                        : "indicator" in item
-                          ? "ecosystem"
-                          : "primary"
-                    }
+          <nav
+            className="wc-liquid-header__mobile-panel"
+            aria-label="Mobile primary"
+          >
+            <ul>
+              {navigation.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    className="wc-liquid-header__link"
+                    href={item.href}
+                    aria-current={pathname === item.path ? "page" : undefined}
+                    onClick={closeMenu}
                   >
-                    <Link
-                      className="wc-site-header__mobile-link"
-                      href={item.href}
-                    >
-                      <span
-                        className="wc-site-header__mobile-index"
-                        aria-hidden="true"
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <NavigationLabel item={item} />
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
         </details>
-      </Container>
+      </div>
     </header>
   );
 }

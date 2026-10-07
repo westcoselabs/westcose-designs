@@ -63,14 +63,19 @@ export function Scene03Greenfield() {
                 }
               >
                 <figure>
-                  <div className="wc-brand-development__media">
+                  <div
+                    className="wc-brand-development__media"
+                    data-brand-development-handoff-receiver={
+                      beat.id === "mark" ? "" : undefined
+                    }
+                  >
                     <Image
                       src={beat.src}
                       width={beat.width}
                       height={beat.height}
                       sizes="(max-width: 767px) 92vw, (max-width: 1279px) 60vw, 54vw"
                       alt={beat.alt}
-                      loading="lazy"
+                      loading={beat.id === "mark" ? "eager" : "lazy"}
                     />
                   </div>
                   <figcaption>

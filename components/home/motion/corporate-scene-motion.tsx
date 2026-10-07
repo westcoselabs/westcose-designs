@@ -91,11 +91,12 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
 
         const render = (rawProgress: number) => {
           const progress = gsap.utils.clamp(0, 1, rawProgress);
-          const enter = easeOut(
-            normalize(progress, 0, SCENE_PHASES.enterEnd),
-          );
-          const copyIn = easeOut(normalize(progress, 0, 0.095));
-          const copyOut = easeSoft(normalize(progress, 0.18, 0.35));
+          const enter =
+            0.22 +
+            easeOut(normalize(progress, 0, SCENE_PHASES.enterEnd)) * 0.78;
+          const copyIn =
+            0.62 + easeOut(normalize(progress, 0, 0.095)) * 0.38;
+          const copyOut = easeSoft(normalize(progress, 0.86, 0.99));
           const gridIn = easeOut(normalize(progress, 0.015, 0.2));
           const build = easeSoft(
             normalize(progress, SCENE_PHASES.enterEnd, SCENE_PHASES.buildEnd),
@@ -106,9 +107,9 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
           const exit = easeSoft(
             normalize(progress, SCENE_PHASES.holdEnd, SCENE_PHASES.exitEnd),
           );
-          const systemExit = easeSoft(normalize(progress, 0.875, 0.975));
+          const systemExit = easeSoft(normalize(progress, 0.975, 0.9995));
           const penTravel = easeSoft(normalize(progress, 0.01, 0.71));
-          const penExit = easeSoft(normalize(progress, 0.71, 0.84));
+          const penExit = easeSoft(normalize(progress, 0.93, 0.995));
           const phase =
             progress < SCENE_PHASES.enterEnd
               ? "enter"
@@ -131,9 +132,9 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
 
           gsap.set(system, {
             autoAlpha: enter * (1 - systemExit),
-            scale: 0.975 + enter * 0.025 - settle * 0.012 + exit * 0.04,
+            scale: 0.975 + enter * 0.025 - settle * 0.012 + exit * 0.018,
             xPercent: (1 - enter) * 3 - settle * 0.6,
-            yPercent: (1 - enter) * 4 - settle * 0.8 + exit * 2.5,
+            yPercent: (1 - enter) * 4 - settle * 0.8 + exit * 1.1,
             force3D: true,
           });
 
@@ -141,8 +142,8 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
             gsap.set(grid, {
               opacity: 0.12 + gridIn * 0.88 - settle * 0.2,
               scale: 0.975 + gridIn * 0.025 - settle * 0.012 + exit * 0.1,
-              rotationZ: exit * 10,
-              borderRadius: `${exit * 50}%`,
+              rotationZ: exit * 2.5,
+              borderRadius: `${exit * 8}%`,
               force3D: true,
             });
           }
@@ -182,14 +183,14 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
                 xPercent:
                   (1 - reveal) * motion.xPercent -
                   settle * motion.xPercent * 0.07 +
-                  exit * (index - 1.5) * 3.2,
+                  exit * (index - 1.5) * 1.2,
                 yPercent:
                   (1 - reveal) * motion.yPercent - settle * (index + 1) * 0.32,
                 rotationZ:
                   (1 - reveal) * motion.rotation +
                   reveal * assembledRotation * (1 - settle) +
                   settle * assembledRotation * 0.12 +
-                  exit * exitAngle,
+                  exit * exitAngle * 0.45,
                 scale: 0.93 + reveal * 0.07 - settle * 0.004,
                 force3D: true,
               });
@@ -224,7 +225,9 @@ export function CorporateSceneMotion({ children }: { children: ReactNode }) {
 
           if (dusk) {
             gsap.set(dusk, {
-              autoAlpha: exit,
+              autoAlpha: exit * 0.68,
+              scaleY: 0.08 + exit * 0.92,
+              transformOrigin: "50% 100%",
             });
           }
         };

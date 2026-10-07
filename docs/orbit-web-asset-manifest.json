@@ -1,0 +1,1406 @@
+{
+  "schemaVersion": 1,
+  "generator": "scripts/build-orbit-assets.mjs",
+  "toolchain": {
+    "node": "v24.11.1",
+    "gltfTransformCli": "4.4.2",
+    "gltfTransformCore": "4.4.2",
+    "gltfTransformFunctions": "4.4.2",
+    "meshoptimizer": "0.22.0",
+    "sharp": "0.35.3",
+    "three": "182"
+  },
+  "settings": {
+    "colorTextures": {
+      "slots": [
+        "baseColorTexture",
+        "emissiveTexture"
+      ],
+      "format": "image/webp",
+      "quality": 90,
+      "effort": 100
+    },
+    "dataTextures": {
+      "slots": [
+        "normalTexture",
+        "metallicRoughnessTexture",
+        "occlusionTexture"
+      ],
+      "format": "image/webp",
+      "lossless": true,
+      "effort": 100
+    },
+    "compactTextureMaximum": 1024,
+    "resizeFilter": "lanczos3",
+    "meshopt": {
+      "level": "medium",
+      "rationale": "The CLI's high level clamps normal precision to 8 bits; medium retains the requested 12-bit custom-normal precision while still applying Meshopt compression.",
+      "quantizationVolume": "mesh",
+      "positionBits": 16,
+      "normalAndTangentBits": 12,
+      "texcoordBits": 14,
+      "colorBits": 10,
+      "weightBits": 12,
+      "genericBits": 16,
+      "simplify": false,
+      "join": false,
+      "deduplicate": false,
+      "materialConsolidation": false,
+      "topologyChanges": false
+    }
+  },
+  "assets": [
+    {
+      "id": "designs",
+      "source": {
+        "path": "public/experience/pen/westcose_designs.glb",
+        "bytes": 19388984,
+        "sha256": "75f37cb0ee8d981fb2cbbea58dd4b60dcf247af1122f1c07c03333b3d34086ed",
+        "counts": {
+          "scenes": 1,
+          "nodes": 1,
+          "meshes": 1,
+          "primitives": 1,
+          "vertices": 70100,
+          "triangles": 102838,
+          "materials": 1,
+          "textures": 3,
+          "normalAccessors": 1,
+          "tangentAccessors": 0
+        },
+        "bounds": {
+          "min": [
+            -0.94510102,
+            -0.88845611,
+            -0.92144316
+          ],
+          "max": [
+            0.94266802,
+            0.89070714,
+            0.93487513
+          ],
+          "size": [
+            1.88776904,
+            1.77916324,
+            1.8563183
+          ]
+        },
+        "extensions": {
+          "used": [],
+          "required": []
+        },
+        "topologySignature": "8d4313860501844d09bb821a87274bf7cead757043c42de791a69ada1899dd46",
+        "materialSignature": "b42d00f8ebda5e6818ecb183a882f68cdef07625f02c26a017d23c05aef85379",
+        "textures": [
+          {
+            "index": 1,
+            "name": "base_color",
+            "uri": "",
+            "slots": [
+              "baseColorTexture"
+            ],
+            "role": "color-q90",
+            "mimeType": "image/jpeg",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 4214887,
+            "sha256": "ddd02dd9b61068de5f9790d4bedc619b521bf8fdccca3126339a4eca439e6a0e"
+          },
+          {
+            "index": 2,
+            "name": "metallic_roughness",
+            "uri": "",
+            "slots": [
+              "metallicRoughnessTexture"
+            ],
+            "role": "data-lossless",
+            "mimeType": "image/jpeg",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 3064164,
+            "sha256": "fb5e717b6ba04e10899975b29021b1c3c1d61fc85c1201a881b6ab5d6d3d1e23"
+          },
+          {
+            "index": 0,
+            "name": "normal",
+            "uri": "",
+            "slots": [
+              "normalTexture"
+            ],
+            "role": "data-lossless",
+            "mimeType": "image/png",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 8630948,
+            "sha256": "03dd40e2161dc3a2f6135efac8649c935dad2ffad859e4806d46faafd179a1bc"
+          }
+        ],
+        "validation": {
+          "errors": 0,
+          "warnings": 1,
+          "infos": 0,
+          "hints": 0,
+          "messages": [
+            {
+              "code": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE",
+              "severity": 1,
+              "pointer": "/meshes/0/primitives/0/material",
+              "message": "Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations."
+            }
+          ]
+        },
+        "sha256After": "75f37cb0ee8d981fb2cbbea58dd4b60dcf247af1122f1c07c03333b3d34086ed"
+      },
+      "derivatives": {
+        "full": {
+          "path": "public/experience/orbit/models/westcose_designs.web-full.glb",
+          "bytes": 15215988,
+          "sha256": "3718f50d6d839dd06056be04e3147e14db42bcd69c6ab3f59f578fd6a71a13d9",
+          "counts": {
+            "scenes": 1,
+            "nodes": 1,
+            "meshes": 1,
+            "primitives": 1,
+            "vertices": 70100,
+            "triangles": 102838,
+            "materials": 1,
+            "textures": 3,
+            "normalAccessors": 1,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.94510102,
+              -0.88845979,
+              -0.92144049
+            ],
+            "max": [
+              0.94266802,
+              0.89071082,
+              0.93487246
+            ],
+            "size": [
+              1.88776904,
+              1.77917062,
+              1.85631295
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "8d4313860501844d09bb821a87274bf7cead757043c42de791a69ada1899dd46",
+          "materialSignature": "b42d00f8ebda5e6818ecb183a882f68cdef07625f02c26a017d23c05aef85379",
+          "textures": [
+            {
+              "index": 1,
+              "name": "base_color",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 2048,
+              "height": 2048,
+              "bytes": 1414342,
+              "sha256": "01b88f7ccc2d5d910e7dee4e864e27d8dda8e8982f657962618e267d0a9f264f"
+            },
+            {
+              "index": 2,
+              "name": "metallic_roughness",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 2048,
+              "height": 2048,
+              "bytes": 4412082,
+              "sha256": "cbe78b77ac955fc1a8a70e32529f99da6770bc11eeb42c7acc9ac48116834298"
+            },
+            {
+              "index": 0,
+              "name": "normal",
+              "uri": "",
+              "slots": [
+                "normalTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 2048,
+              "height": 2048,
+              "bytes": 8324992,
+              "sha256": "40a66eec0c246f2d671bdecd451bd4e5af3f5d0232abe6c8fd0e8b9d5a1a93e4"
+            }
+          ],
+          "transferReductionPercent": 21.5225099,
+          "validation": {
+            "errors": 0,
+            "warnings": 1,
+            "infos": 1,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE",
+                "severity": 1,
+                "pointer": "/meshes/0/primitives/0/material",
+                "message": "Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/westcose_designs.web-full.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 1,
+            "materialAssignments": 1,
+            "bounds": {
+              "min": [
+                -0.94510102,
+                -0.88845979,
+                -0.92144049
+              ],
+              "max": [
+                0.94266802,
+                0.89071082,
+                0.93487246
+              ],
+              "size": [
+                1.88776904,
+                1.77917062,
+                1.85631295
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        },
+        "compact": {
+          "path": "public/experience/orbit/models/westcose_designs.web-compact.glb",
+          "bytes": 4982356,
+          "sha256": "4e754c7491266c0d09936ca68f2ad2f81da190f8565ee8839ce7a3691f2264d4",
+          "counts": {
+            "scenes": 1,
+            "nodes": 1,
+            "meshes": 1,
+            "primitives": 1,
+            "vertices": 70100,
+            "triangles": 102838,
+            "materials": 1,
+            "textures": 3,
+            "normalAccessors": 1,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.94510102,
+              -0.88845979,
+              -0.92144049
+            ],
+            "max": [
+              0.94266802,
+              0.89071082,
+              0.93487246
+            ],
+            "size": [
+              1.88776904,
+              1.77917062,
+              1.85631295
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "8d4313860501844d09bb821a87274bf7cead757043c42de791a69ada1899dd46",
+          "materialSignature": "b42d00f8ebda5e6818ecb183a882f68cdef07625f02c26a017d23c05aef85379",
+          "textures": [
+            {
+              "index": 1,
+              "name": "base_color",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 345788,
+              "sha256": "5ebe9d6442fbbb9bfb6459ca8002053edecdbd5e9a263742f624e2acc84fa1a0"
+            },
+            {
+              "index": 2,
+              "name": "metallic_roughness",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 1236130,
+              "sha256": "aa07b703c09fee2453895e174f67729053cd6552518745f13a171bafdb58ba3f"
+            },
+            {
+              "index": 0,
+              "name": "normal",
+              "uri": "",
+              "slots": [
+                "normalTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 2335872,
+              "sha256": "8949b82552b0454e8e9770e46479d4af58b58feabeeeeb9c089f368bd46d8e2c"
+            }
+          ],
+          "transferReductionPercent": 74.30316101,
+          "validation": {
+            "errors": 0,
+            "warnings": 1,
+            "infos": 1,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE",
+                "severity": 1,
+                "pointer": "/meshes/0/primitives/0/material",
+                "message": "Material requires a tangent space but the mesh primitive does not provide it. Runtime-generated tangent space may be non-portable across implementations."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/westcose_designs.web-compact.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 1,
+            "materialAssignments": 1,
+            "bounds": {
+              "min": [
+                -0.94510102,
+                -0.88845979,
+                -0.92144049
+              ],
+              "max": [
+                0.94266802,
+                0.89071082,
+                0.93487246
+              ],
+              "size": [
+                1.88776904,
+                1.77917062,
+                1.85631295
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        }
+      },
+      "sourceHashUnchanged": true
+    },
+    {
+      "id": "labs",
+      "source": {
+        "path": "public/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.glb",
+        "bytes": 5984952,
+        "sha256": "7e3f4de0e1e643720b4b5ecc7691f8080d122a070c6532c33545ad0f6e257c06",
+        "counts": {
+          "scenes": 1,
+          "nodes": 286,
+          "meshes": 286,
+          "primitives": 286,
+          "vertices": 83431,
+          "triangles": 72736,
+          "materials": 29,
+          "textures": 3,
+          "normalAccessors": 286,
+          "tangentAccessors": 0
+        },
+        "bounds": {
+          "min": [
+            -0.5,
+            0,
+            -0.48845375
+          ],
+          "max": [
+            0.5,
+            0.9834612,
+            0.48845375
+          ],
+          "size": [
+            1,
+            0.9834612,
+            0.97690749
+          ]
+        },
+        "extensions": {
+          "used": [
+            "KHR_materials_emissive_strength",
+            "KHR_materials_specular"
+          ],
+          "required": []
+        },
+        "topologySignature": "11917875bf3ca61628bd5a30cfdfdb3adee493af956d859a15dcd42f889f19f6",
+        "materialSignature": "24ba1e2cdcdb24c812661591e8b6d132c799818ddae7c1e6ba91e43800865b09",
+        "textures": [
+          {
+            "index": 0,
+            "name": "Image_0",
+            "uri": "",
+            "slots": [
+              "baseColorTexture"
+            ],
+            "role": "color-q90",
+            "mimeType": "image/png",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 1840224,
+            "sha256": "3d1ab4460c1a7f20f1478973b314dd0469c45c85c7abf46d672d51943c5d2c27"
+          },
+          {
+            "index": 2,
+            "name": "wc_labs_portal_v7_radial_glow_512",
+            "uri": "",
+            "slots": [
+              "emissiveTexture"
+            ],
+            "role": "color-q90",
+            "mimeType": "image/png",
+            "width": 512,
+            "height": 512,
+            "bytes": 52032,
+            "sha256": "93f41dd7695a821031d4c1c341560fefb1840ac9728158b6ca7174dcb48e7739"
+          },
+          {
+            "index": 1,
+            "name": "Image_1",
+            "uri": "",
+            "slots": [
+              "metallicRoughnessTexture"
+            ],
+            "role": "data-lossless",
+            "mimeType": "image/png",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 944744,
+            "sha256": "97953e731d63ad1e12fc0a62cd479e132ea7f91596514792216a92e93e7d0ad9"
+          }
+        ],
+        "validation": {
+          "errors": 0,
+          "warnings": 0,
+          "infos": 6,
+          "hints": 0,
+          "messages": [
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/128/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/129/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/178/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/179/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/203/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/204/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            }
+          ]
+        },
+        "sha256After": "7e3f4de0e1e643720b4b5ecc7691f8080d122a070c6532c33545ad0f6e257c06"
+      },
+      "derivatives": {
+        "full": {
+          "path": "public/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.web-full.glb",
+          "bytes": 2295860,
+          "sha256": "3acecfe79d163226671af3d31e76d7800dc1f52522da77505fe4214e4caf3902",
+          "counts": {
+            "scenes": 1,
+            "nodes": 286,
+            "meshes": 286,
+            "primitives": 286,
+            "vertices": 83431,
+            "triangles": 72736,
+            "materials": 29,
+            "textures": 3,
+            "normalAccessors": 286,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.5,
+              -0.00000173,
+              -0.48844874
+            ],
+            "max": [
+              0.5,
+              0.98346103,
+              0.48844874
+            ],
+            "size": [
+              1,
+              0.98346276,
+              0.97689749
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_materials_emissive_strength",
+              "KHR_materials_specular",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "11917875bf3ca61628bd5a30cfdfdb3adee493af956d859a15dcd42f889f19f6",
+          "materialSignature": "24ba1e2cdcdb24c812661591e8b6d132c799818ddae7c1e6ba91e43800865b09",
+          "textures": [
+            {
+              "index": 0,
+              "name": "Image_0",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 283910,
+              "sha256": "cd666f6d7333dfbe994d1e9fed0c7f8a87a73245090ce4275535dbdb1991d730"
+            },
+            {
+              "index": 2,
+              "name": "wc_labs_portal_v7_radial_glow_512",
+              "uri": "",
+              "slots": [
+                "emissiveTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 512,
+              "height": 512,
+              "bytes": 2520,
+              "sha256": "95c8c489c0bf38aaf59ea0eee609a90e2c81d3fc70b859393067e0e270e688fd"
+            },
+            {
+              "index": 1,
+              "name": "Image_1",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 690468,
+              "sha256": "ec9f5bf5e371fd5ef8eaa6dc34df00de923a20ba7155500cc2343b1cabb8d11f"
+            }
+          ],
+          "transferReductionPercent": 61.63945843,
+          "validation": {
+            "errors": 0,
+            "warnings": 0,
+            "infos": 7,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/128/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/129/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/178/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/179/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/203/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/204/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.web-full.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 286,
+            "materialAssignments": 286,
+            "bounds": {
+              "min": [
+                -0.5,
+                -0.00000173,
+                -0.48844874
+              ],
+              "max": [
+                0.5,
+                0.98346103,
+                0.48844874
+              ],
+              "size": [
+                1,
+                0.98346276,
+                0.97689749
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        },
+        "compact": {
+          "path": "public/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.web-compact.glb",
+          "bytes": 2295860,
+          "sha256": "3acecfe79d163226671af3d31e76d7800dc1f52522da77505fe4214e4caf3902",
+          "counts": {
+            "scenes": 1,
+            "nodes": 286,
+            "meshes": 286,
+            "primitives": 286,
+            "vertices": 83431,
+            "triangles": 72736,
+            "materials": 29,
+            "textures": 3,
+            "normalAccessors": 286,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.5,
+              -0.00000173,
+              -0.48844874
+            ],
+            "max": [
+              0.5,
+              0.98346103,
+              0.48844874
+            ],
+            "size": [
+              1,
+              0.98346276,
+              0.97689749
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_materials_emissive_strength",
+              "KHR_materials_specular",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "11917875bf3ca61628bd5a30cfdfdb3adee493af956d859a15dcd42f889f19f6",
+          "materialSignature": "24ba1e2cdcdb24c812661591e8b6d132c799818ddae7c1e6ba91e43800865b09",
+          "textures": [
+            {
+              "index": 0,
+              "name": "Image_0",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 283910,
+              "sha256": "cd666f6d7333dfbe994d1e9fed0c7f8a87a73245090ce4275535dbdb1991d730"
+            },
+            {
+              "index": 2,
+              "name": "wc_labs_portal_v7_radial_glow_512",
+              "uri": "",
+              "slots": [
+                "emissiveTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 512,
+              "height": 512,
+              "bytes": 2520,
+              "sha256": "95c8c489c0bf38aaf59ea0eee609a90e2c81d3fc70b859393067e0e270e688fd"
+            },
+            {
+              "index": 1,
+              "name": "Image_1",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 690468,
+              "sha256": "ec9f5bf5e371fd5ef8eaa6dc34df00de923a20ba7155500cc2343b1cabb8d11f"
+            }
+          ],
+          "transferReductionPercent": 61.63945843,
+          "validation": {
+            "errors": 0,
+            "warnings": 0,
+            "infos": 7,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/128/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/129/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/178/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/179/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/203/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/204/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.web-compact.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 286,
+            "materialAssignments": 286,
+            "bounds": {
+              "min": [
+                -0.5,
+                -0.00000173,
+                -0.48844874
+              ],
+              "max": [
+                0.5,
+                0.98346103,
+                0.48844874
+              ],
+              "size": [
+                1,
+                0.98346276,
+                0.97689749
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        }
+      },
+      "sourceHashUnchanged": true
+    },
+    {
+      "id": "shop",
+      "source": {
+        "path": "public/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.glb",
+        "bytes": 24040684,
+        "sha256": "fea373a50c48790c9fb5ba68d46a77e5a585b6ee16835654acbd78d1e07af46d",
+        "counts": {
+          "scenes": 1,
+          "nodes": 26,
+          "meshes": 26,
+          "primitives": 37,
+          "vertices": 331519,
+          "triangles": 276682,
+          "materials": 20,
+          "textures": 2,
+          "normalAccessors": 37,
+          "tangentAccessors": 0
+        },
+        "bounds": {
+          "min": [
+            -0.47706991,
+            0,
+            -0.48687959
+          ],
+          "max": [
+            0.47706991,
+            1.01900005,
+            0.48687959
+          ],
+          "size": [
+            0.95413983,
+            1.01900005,
+            0.97375917
+          ]
+        },
+        "extensions": {
+          "used": [],
+          "required": []
+        },
+        "topologySignature": "5c293dc36327ae0ef0f5af93b7702f87c9f7ab50c1dcb7dde48cfc6e29c0a536",
+        "materialSignature": "399de409c068c45620592b07b5a5d4547294b837315c3b3b7ed188d4fa390197",
+        "textures": [
+          {
+            "index": 0,
+            "name": "wc_building_westcose_shop_01_base_color_2048",
+            "uri": "",
+            "slots": [
+              "baseColorTexture"
+            ],
+            "role": "color-q90",
+            "mimeType": "image/png",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 6889528,
+            "sha256": "9ac33a65b8c198a31e5490aa4f7daec2da2d2889badafb9cdac009d362504137"
+          },
+          {
+            "index": 1,
+            "name": "wc_building_westcose_shop_01_metallic_roughness_2048",
+            "uri": "",
+            "slots": [
+              "metallicRoughnessTexture"
+            ],
+            "role": "data-lossless",
+            "mimeType": "image/png",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 4849304,
+            "sha256": "b7ad9ddafa8452bfec26c5c2cf3d9e2f17451d83b5c1e90b6bede312ded2905f"
+          }
+        ],
+        "validation": {
+          "errors": 0,
+          "warnings": 0,
+          "infos": 5,
+          "hints": 0,
+          "messages": [
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/6/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/7/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/8/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/11/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            },
+            {
+              "code": "UNUSED_OBJECT",
+              "severity": 2,
+              "pointer": "/meshes/13/primitives/0/attributes/TEXCOORD_0",
+              "message": "This object may be unused."
+            }
+          ]
+        },
+        "sha256After": "fea373a50c48790c9fb5ba68d46a77e5a585b6ee16835654acbd78d1e07af46d"
+      },
+      "derivatives": {
+        "full": {
+          "path": "public/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.web-full.glb",
+          "bytes": 8688720,
+          "sha256": "1bd828c97848b914597d43f66f0d77de0fdc05eea90e46784a2a5917b3ac2084",
+          "counts": {
+            "scenes": 1,
+            "nodes": 26,
+            "meshes": 26,
+            "primitives": 37,
+            "vertices": 331519,
+            "triangles": 276682,
+            "materials": 20,
+            "textures": 2,
+            "normalAccessors": 37,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.47706534,
+              0,
+              -0.48687704
+            ],
+            "max": [
+              0.47706534,
+              1.01900374,
+              0.48687704
+            ],
+            "size": [
+              0.95413068,
+              1.01900374,
+              0.97375408
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "5c293dc36327ae0ef0f5af93b7702f87c9f7ab50c1dcb7dde48cfc6e29c0a536",
+          "materialSignature": "399de409c068c45620592b07b5a5d4547294b837315c3b3b7ed188d4fa390197",
+          "textures": [
+            {
+              "index": 0,
+              "name": "wc_building_westcose_shop_01_base_color_2048",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 2048,
+              "height": 2048,
+              "bytes": 1228388,
+              "sha256": "17d5392f1be48dc4fa76690d833819b74489115ec6d59dba1482c1b8d15bdae9"
+            },
+            {
+              "index": 1,
+              "name": "wc_building_westcose_shop_01_metallic_roughness_2048",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 2048,
+              "height": 2048,
+              "bytes": 3714460,
+              "sha256": "02c37b0ed12b24eb5859f89914b7625040629197d35898d95e4bd4fe9955765a"
+            }
+          ],
+          "transferReductionPercent": 63.85826626,
+          "validation": {
+            "errors": 0,
+            "warnings": 0,
+            "infos": 6,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/6/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/7/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/8/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/11/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/13/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.web-full.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 37,
+            "materialAssignments": 37,
+            "bounds": {
+              "min": [
+                -0.47706534,
+                0,
+                -0.48687704
+              ],
+              "max": [
+                0.47706534,
+                1.01900374,
+                0.48687704
+              ],
+              "size": [
+                0.95413068,
+                1.01900374,
+                0.97375408
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        },
+        "compact": {
+          "path": "public/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.web-compact.glb",
+          "bytes": 5344160,
+          "sha256": "c6497a498d6ff85bb7762e9b1f191d0e4562a90ad8f4bfb536f2a1f10261c55b",
+          "counts": {
+            "scenes": 1,
+            "nodes": 26,
+            "meshes": 26,
+            "primitives": 37,
+            "vertices": 331519,
+            "triangles": 276682,
+            "materials": 20,
+            "textures": 2,
+            "normalAccessors": 37,
+            "tangentAccessors": 0
+          },
+          "bounds": {
+            "min": [
+              -0.47706534,
+              0,
+              -0.48687704
+            ],
+            "max": [
+              0.47706534,
+              1.01900374,
+              0.48687704
+            ],
+            "size": [
+              0.95413068,
+              1.01900374,
+              0.97375408
+            ]
+          },
+          "extensions": {
+            "used": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ],
+            "required": [
+              "EXT_meshopt_compression",
+              "EXT_texture_webp",
+              "KHR_mesh_quantization"
+            ]
+          },
+          "topologySignature": "5c293dc36327ae0ef0f5af93b7702f87c9f7ab50c1dcb7dde48cfc6e29c0a536",
+          "materialSignature": "399de409c068c45620592b07b5a5d4547294b837315c3b3b7ed188d4fa390197",
+          "textures": [
+            {
+              "index": 0,
+              "name": "wc_building_westcose_shop_01_base_color_2048",
+              "uri": "",
+              "slots": [
+                "baseColorTexture"
+              ],
+              "role": "color-q90",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 378390,
+              "sha256": "a8e56702b9ac00da7fdcc520e3327701db831923c70e7c2e121cebdb1b9b7de7"
+            },
+            {
+              "index": 1,
+              "name": "wc_building_westcose_shop_01_metallic_roughness_2048",
+              "uri": "",
+              "slots": [
+                "metallicRoughnessTexture"
+              ],
+              "role": "data-lossless",
+              "mimeType": "image/webp",
+              "width": 1024,
+              "height": 1024,
+              "bytes": 1219900,
+              "sha256": "4d19981bb5bcb94550faee759ba07bffdb9d52c1b242648be5a03ce90c65d10c"
+            }
+          ],
+          "transferReductionPercent": 77.77034963,
+          "validation": {
+            "errors": 0,
+            "warnings": 0,
+            "infos": 6,
+            "hints": 0,
+            "messages": [
+              {
+                "code": "UNSUPPORTED_EXTENSION",
+                "severity": 2,
+                "pointer": "/extensionsUsed/0",
+                "message": "Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/6/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/7/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/8/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/11/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              },
+              {
+                "code": "UNUSED_OBJECT",
+                "severity": 2,
+                "pointer": "/meshes/13/primitives/0/attributes/TEXCOORD_0",
+                "message": "This object may be unused."
+              }
+            ]
+          },
+          "cliValidation": {
+            "passed": true,
+            "command": "gltf-transform validate public/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.web-compact.glb --format csv",
+            "exitCode": 0
+          },
+          "threeLoad": {
+            "passed": true,
+            "loader": "three/examples/jsm/loaders/GLTFLoader.js",
+            "meshoptDecoder": "three/examples/jsm/libs/meshopt_decoder.module.js",
+            "meshObjects": 37,
+            "materialAssignments": 37,
+            "bounds": {
+              "min": [
+                -0.47706534,
+                0,
+                -0.48687704
+              ],
+              "max": [
+                0.47706534,
+                1.01900374,
+                0.48687704
+              ],
+              "size": [
+                0.95413068,
+                1.01900374,
+                0.97375408
+              ]
+            }
+          },
+          "checks": {
+            "topologyCountsPreserved": true,
+            "topologySignaturePreserved": true,
+            "materialSignaturePreserved": true,
+            "textureSlotsPreserved": true,
+            "textureResolutionPolicyPassed": true,
+            "boundsWithinQuantizationTolerance": true
+          }
+        }
+      },
+      "sourceHashUnchanged": true
+    }
+  ],
+  "aggregate": {
+    "sourceBytes": 49414620,
+    "fullBytes": 26200568,
+    "compactBytes": 12622376,
+    "fullTransferReductionPercent": 46.97810486,
+    "compactTransferReductionPercent": 74.45619131,
+    "targetTransferReductionPercent": 50,
+    "fullTargetMet": false,
+    "compactTargetMet": true
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "version": "2.17",
+  "version": "2.20",
   "children": [
     {
       "type": "frame",
@@ -3665,7 +3665,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -3748,7 +3748,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -3831,7 +3831,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -3914,7 +3914,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4197,7 +4197,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -4276,7 +4276,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4359,7 +4359,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4442,7 +4442,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4726,7 +4726,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4808,7 +4808,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -4887,7 +4887,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -4970,7 +4970,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5254,7 +5254,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5337,7 +5337,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5419,7 +5419,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -5498,7 +5498,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5782,7 +5782,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5865,7 +5865,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -5948,7 +5948,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -6030,7 +6030,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -6310,7 +6310,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -6393,7 +6393,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -6476,7 +6476,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -6559,7 +6559,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 330,
               "height": 450,
@@ -6840,7 +6840,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-01.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -6923,7 +6923,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-02.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -7006,7 +7006,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-03.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 280,
               "height": 382,
@@ -7090,7 +7090,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/illustrations/illustration-04.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 300,
               "height": 410,
@@ -7266,7 +7266,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -7498,7 +7498,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -7702,7 +7702,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/identity-hillbilly.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 390,
               "height": 220,
@@ -7721,7 +7721,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/identity-vested.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 450,
               "height": 254,
@@ -7819,7 +7819,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -8023,7 +8023,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/illustration-crows.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 270,
               "height": 338,
@@ -8042,7 +8042,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/illustration-underwater.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 320,
               "height": 400,
@@ -8140,7 +8140,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -8344,7 +8344,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/apparel-westcose-or-nothing.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 270,
               "height": 338,
@@ -8363,7 +8363,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/apparel-usps.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 320,
               "height": 400,
@@ -8461,7 +8461,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -8665,7 +8665,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/system-nineteenth-hole.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 390,
               "height": 220,
@@ -8684,7 +8684,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/system-eightysixd.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 450,
               "height": 254,
@@ -8782,7 +8782,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/falling-placeholder-still-50.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -8988,7 +8988,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/system-nineteenth-hole.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 390,
               "height": 220,
@@ -9007,7 +9007,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/falling-studio/artwork/system-eightysixd.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 450,
               "height": 254,
@@ -9104,7 +9104,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/vested-lockups.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 1440,
               "height": 900
@@ -9973,7 +9973,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/vested-lockups.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -10452,7 +10452,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/performance-type-system.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -10931,7 +10931,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/full-cycle-colorways.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -11410,7 +11410,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/hillbilly-architecture.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -11889,7 +11889,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/eightysixd-applications.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -12368,7 +12368,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/nineteenth-hole-system.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -12848,7 +12848,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/brand-development/nineteenth-hole-system.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 760,
               "height": 428,
@@ -14082,7 +14082,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/impala-green.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -14909,7 +14909,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/impala-green.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -15740,7 +15740,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/impala-red.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -16554,7 +16554,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/magic-shoes.webp",
-                "mode": "fill"
+                "mode": "cover"
               },
               "width": 344,
               "height": 430
@@ -17381,7 +17381,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/hillbilly-studies.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -18191,7 +18191,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/hillbilly-studies.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -19005,7 +19005,7 @@
                 "type": "image",
                 "enabled": true,
                 "url": "../public/experience/sketchbook/hillbilly-studies.webp",
-                "mode": "fit"
+                "mode": "contain"
               },
               "width": 344,
               "height": 430
@@ -33492,7 +33492,7 @@
                     "type": "image",
                     "enabled": true,
                     "url": "images/generated-1786728409089.png",
-                    "mode": "fill"
+                    "mode": "cover"
                   },
                   "width": 660,
                   "height": 660
@@ -35721,294 +35721,1193 @@
               "letterSpacing": 1.6
             }
           ]
-        }
-      ]
-    },
-    {
-      "type": "frame",
-      "id": "sS7GM",
-      "x": 7096,
-      "y": 6126,
-      "name": "scene-01 / HOLD / HERO VARIATION D / KINETIC_FIELD",
-      "clip": true,
-      "width": 1440,
-      "height": 900,
-      "fill": [
-        "$wc-black",
-        {
-          "type": "shader",
-          "enabled": true,
-          "url": "mercury-shape.glsl",
-          "uniforms": {
-            "u_speed": 0.82,
-            "u_color1": "#000000",
-            "u_color2": "#7a140d",
-            "u_color3": "#ff3b3b",
-            "u_color4": "#ffd9d9",
-            "u_gradientAngle": 198,
-            "u_scale": 1.387,
-            "u_turbAmp": 1.02,
-            "u_turbFreq": 0.997,
-            "u_waveFreq": 2.362,
-            "u_edgeDistance": 0.023000000000000003,
-            "u_reflection": 0.64,
-            "u_contourStrength": 0.81
-          }
-        }
-      ],
-      "layout": "none",
-      "children": [
-        {
-          "type": "rectangle",
-          "id": "udQ9y",
-          "x": 0,
-          "y": 0,
-          "name": "KINETIC FIELD / SHADER",
-          "fill": {
-            "type": "shader",
-            "enabled": true,
-            "url": "hero-liquid-field.glsl",
-            "uniforms": {
-              "u_speed": 0.085,
-              "u_scale": 1.9,
-              "u_warp": 3.4,
-              "u_base": "#0c0c0b",
-              "u_cold": "#315b7d",
-              "u_warm": "#b9572f",
-              "u_hot": "#e18453",
-              "u_seam": 0.6,
-              "u_seamGlow": 0.6,
-              "u_grain": 0.05
-            }
-          },
-          "width": 1440,
-          "height": 900,
-          "stroke": "#000000ff",
-          "strokeWidth": 1,
-          "strokeAlignment": "inner",
-          "effect": [
-            {
-              "type": "shadow",
-              "shadowType": "outer",
-              "color": "#00000040",
-              "offset": {
-                "x": 0,
-                "y": 4
-              },
-              "blur": 4
-            },
-            {
-              "type": "shadow",
-              "shadowType": "outer",
-              "color": "#00000040",
-              "offset": {
-                "x": 0,
-                "y": 4
-              },
-              "blur": 4
-            }
-          ]
-        },
-        {
-          "type": "rectangle",
-          "id": "V1vKK",
-          "x": 40,
-          "y": 0,
-          "name": "KINETIC FIELD / SCRIM",
-          "fill": {
-            "type": "gradient",
-            "gradientType": "linear",
-            "enabled": true,
-            "rotation": 90,
-            "size": {
-              "height": 1
-            },
-            "colors": [
-              {
-                "color": "#0c0c0be6",
-                "position": 0
-              },
-              {
-                "color": "#0c0c0b3d",
-                "position": 0.4
-              },
-              {
-                "color": "#0c0c0b57",
-                "position": 0.62
-              },
-              {
-                "color": "#0c0c0bf2",
-                "position": 1
-              }
-            ]
-          },
-          "width": 1440,
-          "height": 900
-        },
-        {
-          "type": "rectangle",
-          "id": "WppLo",
-          "x": 40,
-          "y": 40,
-          "name": "KINETIC FIELD / VIEWPORT RULE",
-          "fill": "#00000000",
-          "width": 1360,
-          "height": 820,
-          "stroke": "$wc-dark-border",
-          "strokeWidth": 1
-        },
-        {
-          "type": "text",
-          "id": "Th1t8",
-          "x": 860,
-          "y": 46,
-          "name": "KEYFRAME / PHASE",
-          "fill": "$wc-stone-300",
-          "textGrowth": "fixed-width",
-          "width": 516,
-          "content": "HOLD / VARIATION D / KINETIC FIELD",
-          "lineHeight": 1,
-          "textAlign": "right",
-          "fontFamily": "$wc-font-mono",
-          "fontSize": 13,
-          "fontWeight": "500",
-          "letterSpacing": 2
         },
         {
           "type": "frame",
-          "id": "J0fJK",
-          "x": 0,
-          "y": 127,
-          "name": "KINETIC FIELD / TYPE STACK",
+          "id": "sS7GM",
+          "x": 4464,
+          "y": 64,
+          "name": "scene-01 / HOLD / HERO VARIATION D / KINETIC_FIELD",
+          "clip": true,
           "width": 1440,
-          "fill": "#00000000",
-          "layout": "vertical",
-          "alignItems": "center",
+          "height": 900,
+          "fill": [
+            "$wc-black",
+            {
+              "type": "shader",
+              "enabled": true,
+              "url": "mercury-shape.glsl",
+              "uniforms": {
+                "u_speed": 0.82,
+                "u_color1": "#000000",
+                "u_color2": "#7a140d",
+                "u_color3": "#ff3b3b",
+                "u_color4": "#ffd9d9",
+                "u_gradientAngle": 198,
+                "u_scale": 1.387,
+                "u_turbAmp": 1.02,
+                "u_turbFreq": 0.997,
+                "u_waveFreq": 2.362,
+                "u_edgeDistance": 0.023000000000000003,
+                "u_reflection": 0.64,
+                "u_contourStrength": 0.81
+              }
+            }
+          ],
+          "layout": "none",
           "children": [
             {
+              "type": "rectangle",
+              "id": "udQ9y",
+              "x": 0,
+              "y": 0,
+              "name": "KINETIC FIELD / SHADER",
+              "fill": {
+                "type": "shader",
+                "enabled": true,
+                "url": "hero-liquid-field.glsl",
+                "uniforms": {
+                  "u_speed": 0.085,
+                  "u_scale": 1.9,
+                  "u_warp": 3.4,
+                  "u_base": "#0c0c0b",
+                  "u_cold": "#315b7d",
+                  "u_warm": "#b9572f",
+                  "u_hot": "#e18453",
+                  "u_seam": 0.6,
+                  "u_seamGlow": 0.6,
+                  "u_grain": 0.05
+                }
+              },
+              "width": 1440,
+              "height": 900,
+              "stroke": "#000000ff",
+              "strokeWidth": 1,
+              "strokeAlignment": "inner",
+              "effect": [
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000040",
+                  "offset": {
+                    "x": 0,
+                    "y": 4
+                  },
+                  "blur": 4
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000040",
+                  "offset": {
+                    "x": 0,
+                    "y": 4
+                  },
+                  "blur": 4
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "V1vKK",
+              "x": 40,
+              "y": 0,
+              "name": "KINETIC FIELD / SCRIM",
+              "fill": {
+                "type": "gradient",
+                "gradientType": "linear",
+                "enabled": true,
+                "rotation": 90,
+                "size": {
+                  "height": 1
+                },
+                "colors": [
+                  {
+                    "color": "#0c0c0be6",
+                    "position": 0
+                  },
+                  {
+                    "color": "#0c0c0b3d",
+                    "position": 0.4
+                  },
+                  {
+                    "color": "#0c0c0b57",
+                    "position": 0.62
+                  },
+                  {
+                    "color": "#0c0c0bf2",
+                    "position": 1
+                  }
+                ]
+              },
+              "width": 1440,
+              "height": 900
+            },
+            {
+              "type": "rectangle",
+              "id": "WppLo",
+              "x": 40,
+              "y": 40,
+              "name": "KINETIC FIELD / VIEWPORT RULE",
+              "fill": "#00000000",
+              "width": 1360,
+              "height": 820,
+              "stroke": "$wc-dark-border",
+              "strokeWidth": 1
+            },
+            {
               "type": "text",
-              "id": "C7v7H",
-              "name": "CONTENT / SCENE LABEL",
+              "id": "Th1t8",
+              "x": 860,
+              "y": 46,
+              "name": "KEYFRAME / PHASE",
               "fill": "$wc-stone-300",
               "textGrowth": "fixed-width",
-              "width": 520,
-              "content": "SCENE 01  /  KINETIC FIELD",
+              "width": 516,
+              "content": "HOLD / VARIATION D / KINETIC FIELD",
               "lineHeight": 1,
-              "textAlign": "center",
+              "textAlign": "right",
               "fontFamily": "$wc-font-mono",
               "fontSize": 13,
-              "fontWeight": "600",
+              "fontWeight": "500",
               "letterSpacing": 2
             },
             {
               "type": "frame",
-              "id": "iHeaT",
-              "name": "SPACER",
-              "width": 8,
-              "height": 38,
-              "fill": "#00000000"
-            },
-            {
-              "type": "text",
-              "id": "naOa1",
-              "name": "TITLE / LINE 01 GHOST",
-              "fill": "#ece8dc38",
-              "content": "WE DON’T",
-              "lineHeight": 0.86,
-              "fontFamily": "$wc-font-display",
-              "fontSize": 118,
-              "fontWeight": "700",
-              "letterSpacing": -4
-            },
-            {
-              "type": "text",
-              "id": "ICXSr",
-              "name": "TITLE / LINE 02 GHOST",
-              "fill": "#ece8dc38",
-              "content": "MAKE LOGOS.",
-              "lineHeight": 0.86,
-              "fontFamily": "$wc-font-display",
-              "fontSize": 118,
-              "fontWeight": "700",
-              "letterSpacing": -4
-            },
-            {
-              "type": "text",
-              "id": "Zp291",
-              "name": "TITLE / LINE 03 SOLID",
-              "fill": "$wc-bone",
-              "content": "WE BUILD THINGS",
-              "lineHeight": 0.86,
-              "fontFamily": "$wc-font-display",
-              "fontSize": 118,
-              "fontWeight": "700",
-              "letterSpacing": -4
-            },
-            {
-              "type": "text",
-              "id": "aVuCL",
-              "name": "TITLE / LINE 04 SOLID",
-              "fill": "$wc-orange-soft",
-              "content": "PEOPLE REMEMBER.",
-              "lineHeight": 0.86,
-              "fontFamily": "$wc-font-display",
-              "fontSize": 118,
-              "fontWeight": "700",
-              "letterSpacing": -4
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "zo83k",
-          "x": 0,
-          "y": 648,
-          "name": "KINETIC FIELD / FOOTER",
-          "width": 1440,
-          "fill": "#00000000",
-          "layout": "vertical",
-          "gap": 28,
-          "alignItems": "center",
-          "children": [
-            {
-              "type": "text",
-              "id": "o0jGz6",
-              "name": "FOOTER / DESCRIPTION",
-              "fill": "$wc-stone-300",
-              "textGrowth": "fixed-width",
-              "width": 620,
-              "content": "Independent multidisciplinary design studio creating identities, illustration, apparel graphics, and visual systems.",
-              "lineHeight": 1.3,
-              "textAlign": "center",
-              "fontFamily": "$wc-font-body",
-              "fontSize": 18,
-              "fontWeight": "normal",
-              "letterSpacing": -0.2
-            },
-            {
-              "type": "frame",
-              "id": "W2Xtd2",
-              "name": "CTA / HIGH CONTRAST",
-              "width": 270,
-              "height": 56,
-              "cornerRadius": 2,
-              "justifyContent": "center",
+              "id": "J0fJK",
+              "x": 0,
+              "y": 127,
+              "name": "KINETIC FIELD / TYPE STACK",
+              "width": 1440,
+              "fill": "#00000000",
+              "layout": "vertical",
               "alignItems": "center",
               "children": [
                 {
                   "type": "text",
-                  "id": "j4vIk",
-                  "name": "CTA / LABEL",
-                  "fill": "$wc-black",
+                  "id": "C7v7H",
+                  "name": "CONTENT / SCENE LABEL",
+                  "fill": "$wc-stone-300",
                   "textGrowth": "fixed-width",
-                  "width": 222,
-                  "content": "VIEW SELECTED WORK  ↗",
+                  "width": 520,
+                  "content": "SCENE 01  /  KINETIC FIELD",
                   "lineHeight": 1,
                   "textAlign": "center",
                   "fontFamily": "$wc-font-mono",
                   "fontSize": 13,
                   "fontWeight": "600",
-                  "letterSpacing": 1.5
+                  "letterSpacing": 2
+                },
+                {
+                  "type": "frame",
+                  "id": "iHeaT",
+                  "name": "SPACER",
+                  "width": 8,
+                  "height": 38,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "naOa1",
+                  "name": "TITLE / LINE 01 GHOST",
+                  "fill": "#ece8dc38",
+                  "content": "WE DON’T",
+                  "lineHeight": 0.86,
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 118,
+                  "fontWeight": "700",
+                  "letterSpacing": -4
+                },
+                {
+                  "type": "text",
+                  "id": "ICXSr",
+                  "name": "TITLE / LINE 02 GHOST",
+                  "fill": "#ece8dc38",
+                  "content": "MAKE LOGOS.",
+                  "lineHeight": 0.86,
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 118,
+                  "fontWeight": "700",
+                  "letterSpacing": -4
+                },
+                {
+                  "type": "text",
+                  "id": "Zp291",
+                  "name": "TITLE / LINE 03 SOLID",
+                  "fill": "$wc-bone",
+                  "content": "WE BUILD THINGS",
+                  "lineHeight": 0.86,
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 118,
+                  "fontWeight": "700",
+                  "letterSpacing": -4
+                },
+                {
+                  "type": "text",
+                  "id": "aVuCL",
+                  "name": "TITLE / LINE 04 SOLID",
+                  "fill": "$wc-orange-soft",
+                  "content": "PEOPLE REMEMBER.",
+                  "lineHeight": 0.86,
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 118,
+                  "fontWeight": "700",
+                  "letterSpacing": -4
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zo83k",
+              "x": 0,
+              "y": 648,
+              "name": "KINETIC FIELD / FOOTER",
+              "width": 1440,
+              "fill": "#00000000",
+              "layout": "vertical",
+              "gap": 28,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "o0jGz6",
+                  "name": "FOOTER / DESCRIPTION",
+                  "fill": "$wc-stone-300",
+                  "textGrowth": "fixed-width",
+                  "width": 620,
+                  "content": "Independent multidisciplinary design studio creating identities, illustration, apparel graphics, and visual systems.",
+                  "lineHeight": 1.3,
+                  "textAlign": "center",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 18,
+                  "fontWeight": "normal",
+                  "letterSpacing": -0.2
+                },
+                {
+                  "type": "frame",
+                  "id": "W2Xtd2",
+                  "name": "CTA / HIGH CONTRAST",
+                  "width": 270,
+                  "height": 56,
+                  "cornerRadius": 2,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "j4vIk",
+                      "name": "CTA / LABEL",
+                      "fill": "$wc-black",
+                      "textGrowth": "fixed-width",
+                      "width": 222,
+                      "content": "VIEW SELECTED WORK  ↗",
+                      "lineHeight": 1,
+                      "textAlign": "center",
+                      "fontFamily": "$wc-font-mono",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.5
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "WFzgb",
+              "x": 410,
+              "y": 816,
+              "name": "KEYFRAME / MOTION NOTE",
+              "fill": "$wc-stone-500",
+              "textGrowth": "fixed-width",
+              "width": 620,
+              "content": "ENTER field drifts  →  HOLD outline fills on scroll  →  EXIT seam sweeps down.",
+              "lineHeight": 1,
+              "textAlign": "center",
+              "fontFamily": "$wc-font-mono",
+              "fontSize": 10,
+              "fontWeight": "500",
+              "letterSpacing": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "EfqQV",
+      "x": 4837,
+      "y": 1145,
+      "name": "scene-01 / HERO REDESIGN / COASTAL GLASS / 1920×1080",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "$wc-black",
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "Uy9Mw",
+          "x": 0,
+          "y": 0,
+          "name": "HERO / LIQUID SHADER FIELD",
+          "fill": {
+            "type": "shader",
+            "enabled": true,
+            "url": "hero-liquid-field.glsl",
+            "uniforms": {
+              "u_speed": 0.065,
+              "u_scale": 1.72,
+              "u_warp": 2.8,
+              "u_base": "#070706",
+              "u_cold": "#153d48",
+              "u_warm": "#b54316",
+              "u_hot": "#f07824",
+              "u_seam": 0.58,
+              "u_seamGlow": 0.92,
+              "u_grain": 0.045
+            }
+          },
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "type": "rectangle",
+          "id": "IBoU7",
+          "x": 0,
+          "y": 0,
+          "name": "HERO / AMBIENT COLOR WASH",
+          "fill": {
+            "type": "gradient",
+            "gradientType": "radial",
+            "enabled": true,
+            "rotation": 0,
+            "size": {
+              "width": 1.08,
+              "height": 1.16
+            },
+            "colors": [
+              {
+                "color": "#00a9b82b",
+                "position": 0
+              },
+              {
+                "color": "#dd4a1424",
+                "position": 0.42
+              },
+              {
+                "color": "#07070600",
+                "position": 1
+              }
+            ],
+            "center": {
+              "x": 0.78,
+              "y": 0.34
+            }
+          },
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "type": "rectangle",
+          "id": "I7dI7",
+          "x": 0,
+          "y": 164,
+          "name": "HERO / TRANSPARENT FEATURE ART",
+          "opacity": 0.9,
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "../portfolio/hero1.png",
+            "mode": "stretch",
+            "transform": [
+              1,
+              0,
+              0,
+              1,
+              0,
+              -0.139677
+            ]
+          },
+          "width": 1920,
+          "height": 916
+        },
+        {
+          "type": "rectangle",
+          "id": "Q4L0L",
+          "x": 0,
+          "y": 0,
+          "name": "HERO / LEFT CONTENT SCRIM",
+          "fill": {
+            "type": "gradient",
+            "gradientType": "linear",
+            "enabled": true,
+            "rotation": 270,
+            "size": {
+              "height": 1
+            },
+            "colors": [
+              {
+                "color": "#070706ff",
+                "position": 0
+              },
+              {
+                "color": "#070706f5",
+                "position": 0.38
+              },
+              {
+                "color": "#070706a8",
+                "position": 0.68
+              },
+              {
+                "color": "#07070600",
+                "position": 1
+              }
+            ]
+          },
+          "width": 805,
+          "height": 1080
+        },
+        {
+          "type": "frame",
+          "id": "hfNVG",
+          "x": 72,
+          "y": 218,
+          "name": "HERO / LEFT COPY",
+          "width": 720,
+          "height": 570,
+          "fill": "#00000000",
+          "layout": "none",
+          "children": [
+            {
+              "type": "text",
+              "id": "uRnRM",
+              "x": 0,
+              "y": 2,
+              "name": "HERO / EYEBROW SYMBOL",
+              "fill": "$wc-orange-soft",
+              "content": "✦",
+              "fontFamily": "Manrope",
+              "fontSize": 20,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "wkDvP",
+              "x": 34,
+              "y": 6,
+              "name": "HERO / EYEBROW",
+              "fill": "#35aab3",
+              "textGrowth": "fixed-width",
+              "width": 560,
+              "content": "COASTAL MISFITS. CREATIVE ENGINES.",
+              "fontFamily": "$wc-font-mono",
+              "fontSize": 12,
+              "fontWeight": "600",
+              "letterSpacing": 1.1
+            },
+            {
+              "type": "text",
+              "id": "yheY6",
+              "x": 0,
+              "y": 58,
+              "name": "HERO / TITLE LINE 01",
+              "fill": "$wc-bone",
+              "content": "WE BUILD",
+              "lineHeight": 0.92,
+              "fontFamily": "$wc-font-display",
+              "fontSize": 106,
+              "fontWeight": "700",
+              "letterSpacing": -3.1
+            },
+            {
+              "type": "text",
+              "id": "Jdj1J",
+              "x": 0,
+              "y": 157,
+              "name": "HERO / TITLE LINE 02",
+              "fill": "$wc-bone",
+              "content": "THINGS PEOPLE",
+              "lineHeight": 0.92,
+              "fontFamily": "$wc-font-display",
+              "fontSize": 98,
+              "fontWeight": "700",
+              "letterSpacing": -3
+            },
+            {
+              "type": "text",
+              "id": "DZJpX",
+              "x": 0,
+              "y": 248,
+              "name": "HERO / TITLE LINE 03",
+              "fill": "#f15a17",
+              "content": "REMEMBER.",
+              "lineHeight": 0.9,
+              "fontFamily": "$wc-font-display",
+              "fontSize": 112,
+              "fontWeight": "700",
+              "letterSpacing": -3.3
+            },
+            {
+              "type": "text",
+              "id": "pFdoa",
+              "x": 2,
+              "y": 374,
+              "name": "HERO / DESCRIPTION",
+              "fill": "#d7d2c6",
+              "textGrowth": "fixed-width",
+              "width": 520,
+              "content": "Branding, illustration, apparel, and visual systems—crafted in the WestCose style.",
+              "lineHeight": 1.4,
+              "fontFamily": "$wc-font-body",
+              "fontSize": 17,
+              "fontWeight": "500",
+              "letterSpacing": -0.15
+            },
+            {
+              "type": "frame",
+              "id": "iHnc7",
+              "x": 2,
+              "y": 468,
+              "name": "HERO / VIEW OUR WORK",
+              "height": 40,
+              "fill": "#00000000",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "UwMCi",
+                  "name": "HERO / CTA LABEL",
+                  "fill": "#f15a17",
+                  "content": "VIEW OUR WORK",
+                  "fontFamily": "$wc-font-mono",
+                  "fontSize": 13,
+                  "fontWeight": "700",
+                  "letterSpacing": 0.7
+                },
+                {
+                  "type": "rectangle",
+                  "id": "CyGza",
+                  "name": "HERO / CTA RULE",
+                  "fill": "#f15a17",
+                  "width": 76,
+                  "height": 1
+                },
+                {
+                  "type": "text",
+                  "id": "kLN11",
+                  "name": "HERO / CTA ARROW",
+                  "fill": "#f15a17",
+                  "content": "→",
+                  "fontFamily": "Manrope",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dWo3p",
+          "x": 64,
+          "y": 894,
+          "name": "HERO / GLASS SERVICE CARDS",
+          "width": 1792,
+          "height": 156,
+          "fill": "#00000000",
+          "gap": 20,
+          "children": [
+            {
+              "type": "frame",
+              "id": "lxY2U",
+              "name": "CARD / BRAND IDENTITY",
+              "clip": true,
+              "width": 433,
+              "height": 156,
+              "fill": [
+                "#11110fa8",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 145,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#2da2a52b",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ece8dc14",
+                      "position": 0.44
+                    },
+                    {
+                      "color": "#07070675",
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "cornerRadius": 12,
+              "stroke": "#ece8dc70",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 22
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#ffffff24",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  }
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000070",
+                  "offset": {
+                    "x": 0,
+                    "y": 14
+                  },
+                  "blur": 30
+                }
+              ],
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rlbcU",
+                  "x": 20,
+                  "y": 24,
+                  "name": "CARD / BRAND IDENTITY / ICON",
+                  "width": 54,
+                  "height": 54,
+                  "fill": "#07070666",
+                  "cornerRadius": 27,
+                  "stroke": "#2da2a5",
+                  "strokeWidth": 1.5,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "H4IzHP",
+                      "name": "CARD / BRAND IDENTITY / ICON GLYPH",
+                      "width": 26,
+                      "height": 26,
+                      "icon": "circle-dot",
+                      "library": "lucide",
+                      "weight": 1.8,
+                      "fill": "#2da2a5"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "IzHdl",
+                  "x": 22,
+                  "y": 112,
+                  "name": "CARD / BRAND IDENTITY / INDEX",
+                  "fill": "#2da2a5",
+                  "content": "01",
+                  "fontFamily": "$wc-font-mono",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.4
+                },
+                {
+                  "type": "text",
+                  "id": "Rcbdt",
+                  "x": 92,
+                  "y": 26,
+                  "name": "CARD / BRAND IDENTITY / TITLE",
+                  "fill": "$wc-bone",
+                  "textGrowth": "fixed-width",
+                  "width": 280,
+                  "content": "BRAND IDENTITY",
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.2
+                },
+                {
+                  "type": "text",
+                  "id": "ynXoL",
+                  "x": 92,
+                  "y": 60,
+                  "name": "CARD / BRAND IDENTITY / DESCRIPTION",
+                  "fill": "#d4d0c5",
+                  "textGrowth": "fixed-width",
+                  "width": 285,
+                  "content": "Logos, marks, and branding systems that leave a mark.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "vbfnX",
+                  "x": 392,
+                  "y": 112,
+                  "name": "CARD / BRAND IDENTITY / ARROW",
+                  "fill": "#2da2a5",
+                  "content": "→",
+                  "fontFamily": "Manrope",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LZzTe",
+              "name": "CARD / ILLUSTRATION",
+              "clip": true,
+              "width": 433,
+              "height": 156,
+              "fill": [
+                "#11110fa8",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 145,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#f15a172b",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ece8dc14",
+                      "position": 0.44
+                    },
+                    {
+                      "color": "#07070675",
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "cornerRadius": 12,
+              "stroke": "#ece8dc70",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 22
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#ffffff24",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  }
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000070",
+                  "offset": {
+                    "x": 0,
+                    "y": 14
+                  },
+                  "blur": 30
+                }
+              ],
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "K05Bvl",
+                  "x": 20,
+                  "y": 24,
+                  "name": "CARD / ILLUSTRATION / ICON",
+                  "width": 54,
+                  "height": 54,
+                  "fill": "#07070666",
+                  "cornerRadius": 27,
+                  "stroke": "#f15a17",
+                  "strokeWidth": 1.5,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "i7r6Km",
+                      "name": "CARD / ILLUSTRATION / ICON GLYPH",
+                      "width": 26,
+                      "height": 26,
+                      "icon": "pen-tool",
+                      "library": "lucide",
+                      "weight": 1.8,
+                      "fill": "#f15a17"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "W6VGc",
+                  "x": 22,
+                  "y": 112,
+                  "name": "CARD / ILLUSTRATION / INDEX",
+                  "fill": "#f15a17",
+                  "content": "02",
+                  "fontFamily": "$wc-font-mono",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.4
+                },
+                {
+                  "type": "text",
+                  "id": "B347tk",
+                  "x": 92,
+                  "y": 26,
+                  "name": "CARD / ILLUSTRATION / TITLE",
+                  "fill": "$wc-bone",
+                  "textGrowth": "fixed-width",
+                  "width": 280,
+                  "content": "ILLUSTRATION",
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.2
+                },
+                {
+                  "type": "text",
+                  "id": "mVZlo",
+                  "x": 92,
+                  "y": 60,
+                  "name": "CARD / ILLUSTRATION / DESCRIPTION",
+                  "fill": "#d4d0c5",
+                  "textGrowth": "fixed-width",
+                  "width": 285,
+                  "content": "Bold, detailed artwork with attitude and edge.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "s2DjqC",
+                  "x": 392,
+                  "y": 112,
+                  "name": "CARD / ILLUSTRATION / ARROW",
+                  "fill": "#f15a17",
+                  "content": "→",
+                  "fontFamily": "Manrope",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "W8X8v",
+              "name": "CARD / APPAREL DESIGN",
+              "clip": true,
+              "width": 433,
+              "height": 156,
+              "fill": [
+                "#11110fa8",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 145,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#2da2a52b",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ece8dc14",
+                      "position": 0.44
+                    },
+                    {
+                      "color": "#07070675",
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "cornerRadius": 12,
+              "stroke": "#ece8dc70",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 22
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#ffffff24",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  }
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000070",
+                  "offset": {
+                    "x": 0,
+                    "y": 14
+                  },
+                  "blur": 30
+                }
+              ],
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "AdkwK",
+                  "x": 20,
+                  "y": 24,
+                  "name": "CARD / APPAREL DESIGN / ICON",
+                  "width": 54,
+                  "height": 54,
+                  "fill": "#07070666",
+                  "cornerRadius": 27,
+                  "stroke": "#2da2a5",
+                  "strokeWidth": 1.5,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "CCjFq",
+                      "name": "CARD / APPAREL DESIGN / ICON GLYPH",
+                      "width": 26,
+                      "height": 26,
+                      "icon": "shirt",
+                      "library": "lucide",
+                      "weight": 1.8,
+                      "fill": "#2da2a5"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "hr7bC",
+                  "x": 22,
+                  "y": 112,
+                  "name": "CARD / APPAREL DESIGN / INDEX",
+                  "fill": "#2da2a5",
+                  "content": "03",
+                  "fontFamily": "$wc-font-mono",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.4
+                },
+                {
+                  "type": "text",
+                  "id": "evDHj",
+                  "x": 92,
+                  "y": 26,
+                  "name": "CARD / APPAREL DESIGN / TITLE",
+                  "fill": "$wc-bone",
+                  "textGrowth": "fixed-width",
+                  "width": 280,
+                  "content": "APPAREL DESIGN",
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.2
+                },
+                {
+                  "type": "text",
+                  "id": "h8o4m",
+                  "x": 92,
+                  "y": 60,
+                  "name": "CARD / APPAREL DESIGN / DESCRIPTION",
+                  "fill": "#d4d0c5",
+                  "textGrowth": "fixed-width",
+                  "width": 285,
+                  "content": "Streetwear graphics built to stand out.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "QCb3V",
+                  "x": 392,
+                  "y": 112,
+                  "name": "CARD / APPAREL DESIGN / ARROW",
+                  "fill": "#2da2a5",
+                  "content": "→",
+                  "fontFamily": "Manrope",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "UsCwj",
+              "name": "CARD / VISUAL SYSTEMS",
+              "clip": true,
+              "width": 433,
+              "height": 156,
+              "fill": [
+                "#11110fa8",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 145,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#f15a172b",
+                      "position": 0
+                    },
+                    {
+                      "color": "#ece8dc14",
+                      "position": 0.44
+                    },
+                    {
+                      "color": "#07070675",
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "cornerRadius": 12,
+              "stroke": "#ece8dc70",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 22
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#ffffff24",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  }
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#00000070",
+                  "offset": {
+                    "x": 0,
+                    "y": 14
+                  },
+                  "blur": 30
+                }
+              ],
+              "layout": "none",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "DSNK8",
+                  "x": 20,
+                  "y": 24,
+                  "name": "CARD / VISUAL SYSTEMS / ICON",
+                  "width": 54,
+                  "height": 54,
+                  "fill": "#07070666",
+                  "cornerRadius": 27,
+                  "stroke": "#f15a17",
+                  "strokeWidth": 1.5,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon",
+                      "id": "nTe5o",
+                      "name": "CARD / VISUAL SYSTEMS / ICON GLYPH",
+                      "width": 26,
+                      "height": 26,
+                      "icon": "layout-grid",
+                      "library": "lucide",
+                      "weight": 1.8,
+                      "fill": "#f15a17"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "blshs",
+                  "x": 22,
+                  "y": 112,
+                  "name": "CARD / VISUAL SYSTEMS / INDEX",
+                  "fill": "#f15a17",
+                  "content": "04",
+                  "fontFamily": "$wc-font-mono",
+                  "fontSize": 11,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.4
+                },
+                {
+                  "type": "text",
+                  "id": "VmBJt",
+                  "x": 92,
+                  "y": 26,
+                  "name": "CARD / VISUAL SYSTEMS / TITLE",
+                  "fill": "$wc-bone",
+                  "textGrowth": "fixed-width",
+                  "width": 280,
+                  "content": "VISUAL SYSTEMS",
+                  "fontFamily": "$wc-font-display",
+                  "fontSize": 20,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.2
+                },
+                {
+                  "type": "text",
+                  "id": "OMsW0",
+                  "x": 92,
+                  "y": 60,
+                  "name": "CARD / VISUAL SYSTEMS / DESCRIPTION",
+                  "fill": "#d4d0c5",
+                  "textGrowth": "fixed-width",
+                  "width": 285,
+                  "content": "Design systems and guidelines that scale with purpose.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 13,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "w52tE",
+                  "x": 392,
+                  "y": 112,
+                  "name": "CARD / VISUAL SYSTEMS / ARROW",
+                  "fill": "#f15a17",
+                  "content": "→",
+                  "fontFamily": "Manrope",
+                  "fontSize": 22,
+                  "fontWeight": "normal"
                 }
               ]
             }
@@ -36016,20 +36915,327 @@
         },
         {
           "type": "text",
-          "id": "WFzgb",
-          "x": 410,
-          "y": 816,
-          "name": "KEYFRAME / MOTION NOTE",
-          "fill": "$wc-stone-500",
+          "id": "zxz6g",
+          "x": 1580,
+          "y": 850,
+          "name": "HERO / ART CREDIT",
+          "fill": "#b7b3a780",
           "textGrowth": "fixed-width",
-          "width": 620,
-          "content": "ENTER field drifts  →  HOLD outline fills on scroll  →  EXIT seam sweeps down.",
-          "lineHeight": 1,
-          "textAlign": "center",
+          "width": 276,
+          "content": "WESTCOSE / HERO 01 / 2026",
+          "textAlign": "right",
           "fontFamily": "$wc-font-mono",
-          "fontSize": 10,
-          "fontWeight": "500",
-          "letterSpacing": 1
+          "fontSize": 9,
+          "fontWeight": "600",
+          "letterSpacing": 1.2
+        },
+        {
+          "type": "frame",
+          "id": "ziJ5S",
+          "x": 600,
+          "y": 42,
+          "name": "HERO / GLASS TOGGLE NAV",
+          "clip": true,
+          "width": 720,
+          "height": 64,
+          "fill": [
+            "#07131d7d",
+            {
+              "type": "gradient",
+              "gradientType": "linear",
+              "enabled": true,
+              "rotation": 0,
+              "size": {
+                "height": 1
+              },
+              "colors": [
+                {
+                  "color": "#e8fbff2e",
+                  "position": 0
+                },
+                {
+                  "color": "#60bfd824",
+                  "position": 0.34
+                },
+                {
+                  "color": "#0b24333d",
+                  "position": 0.72
+                },
+                {
+                  "color": "#07131d66",
+                  "position": 1
+                }
+              ]
+            },
+            {
+              "type": "gradient",
+              "gradientType": "radial",
+              "enabled": true,
+              "rotation": 0,
+              "size": {
+                "width": 0.62,
+                "height": 1.2
+              },
+              "colors": [
+                {
+                  "color": "#79dbea26",
+                  "position": 0
+                },
+                {
+                  "color": "#79dbea00",
+                  "position": 1
+                }
+              ],
+              "center": {
+                "x": 0.14,
+                "y": 0.18
+              }
+            }
+          ],
+          "cornerRadius": 32,
+          "stroke": "#ddf8ff80",
+          "strokeWidth": 1,
+          "effect": [
+            {
+              "type": "background_blur",
+              "radius": 34
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#ffffff52",
+              "offset": {
+                "x": 0,
+                "y": 1
+              }
+            },
+            {
+              "type": "shadow",
+              "shadowType": "outer",
+              "color": "#00000080",
+              "offset": {
+                "x": 0,
+                "y": 16
+              },
+              "blur": 38
+            }
+          ],
+          "padding": 7,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "W8T7bt",
+              "name": "TOGGLE NAV / HOME / ACTIVE",
+              "width": 110,
+              "height": 50,
+              "fill": [
+                "#dff8ff26",
+                {
+                  "type": "gradient",
+                  "gradientType": "linear",
+                  "enabled": true,
+                  "rotation": 0,
+                  "size": {
+                    "height": 1
+                  },
+                  "colors": [
+                    {
+                      "color": "#ffffff59",
+                      "position": 0
+                    },
+                    {
+                      "color": "#75d5e536",
+                      "position": 0.42
+                    },
+                    {
+                      "color": "#17465d26",
+                      "position": 1
+                    }
+                  ]
+                }
+              ],
+              "cornerRadius": 25,
+              "stroke": "#e7fbffad",
+              "strokeWidth": 1,
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 18
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#ffffff75",
+                  "offset": {
+                    "x": 0,
+                    "y": 1
+                  }
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#08131c66",
+                  "offset": {
+                    "x": 0,
+                    "y": 7
+                  },
+                  "blur": 16
+                }
+              ],
+              "gap": 8,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "py5Wa",
+                  "name": "TOGGLE NAV / ACTIVE DOT",
+                  "fill": "#55d6df",
+                  "width": 7,
+                  "height": 7,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#55d6dfb8",
+                    "blur": 8
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "wmKFC",
+                  "name": "TOGGLE NAV / HOME LABEL",
+                  "fill": "$wc-bone",
+                  "content": "Home",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "600",
+                  "letterSpacing": 0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "KFrB3",
+              "name": "TOGGLE NAV / ABOUT",
+              "width": 110,
+              "height": 50,
+              "fill": "#00000000",
+              "cornerRadius": 25,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dCQJ6",
+                  "name": "TOGGLE NAV / ABOUT LABEL",
+                  "fill": "#e5f1f3d1",
+                  "content": "About",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "QJZiC",
+              "name": "TOGGLE NAV / SERVICES",
+              "width": 130,
+              "height": 50,
+              "fill": "#00000000",
+              "cornerRadius": 25,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "uto6D",
+                  "name": "TOGGLE NAV / SERVICES LABEL",
+                  "fill": "#e5f1f3d1",
+                  "content": "Services",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PLrtT",
+              "name": "TOGGLE NAV / CONTACT",
+              "width": 120,
+              "height": 50,
+              "fill": "#00000000",
+              "cornerRadius": 25,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "BPVEa",
+                  "name": "TOGGLE NAV / CONTACT LABEL",
+                  "fill": "#e5f1f3d1",
+                  "content": "Contact",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NAu87",
+              "name": "TOGGLE NAV / SHOP",
+              "width": 100,
+              "height": 50,
+              "fill": "#00000000",
+              "cornerRadius": 25,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "yLkks",
+                  "name": "TOGGLE NAV / SHOP LABEL",
+                  "fill": "#e5f1f3d1",
+                  "content": "Shop",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "D17PU",
+              "name": "TOGGLE NAV / LABS",
+              "width": 100,
+              "height": 50,
+              "fill": "#00000000",
+              "cornerRadius": 25,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dlQEU",
+                  "name": "TOGGLE NAV / LABS LABEL",
+                  "fill": "#e5f1f3d1",
+                  "content": "Labs",
+                  "fontFamily": "$wc-font-body",
+                  "fontSize": 14,
+                  "fontWeight": "500",
+                  "letterSpacing": 0.1
+                }
+              ]
+            }
+          ]
         }
       ]
     }

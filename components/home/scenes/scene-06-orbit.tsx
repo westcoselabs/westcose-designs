@@ -32,14 +32,16 @@ export function Scene06Orbit() {
 
           <div className="wc-scene-orbit__fallback-worlds">
             {ORBIT_WORLDS.map((world) => (
-              <Link
+              <button
                 key={world.id}
+                type="button"
                 className="wc-scene-orbit__fallback-world"
-                href={world.href}
                 data-world={world.id}
                 data-orbit-world={world.id}
                 data-visual={world.visual}
-                aria-label={`Open ${world.label}`}
+                aria-label={`Inspect ${world.label}`}
+                aria-haspopup="dialog"
+                aria-controls="orbit-world-inspector"
               >
                 {"textureSrc" in world ? (
                   <Image
@@ -57,7 +59,7 @@ export function Scene06Orbit() {
                     <i />
                   </span>
                 )}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -76,19 +78,22 @@ export function Scene06Orbit() {
             </p>
           </div>
 
-          <nav
+          <div
             className="wc-scene-orbit__destinations"
-            aria-label="WestCose destinations"
+            role="group"
+            aria-label="WestCose worlds"
           >
             <ul>
               {ORBIT_WORLDS.map((world, index) => (
                 <li key={world.id} data-world={world.id}>
-                  <Link
+                  <button
+                    type="button"
                     className="wc-scene-orbit__node"
-                    href={world.href}
                     data-orbit-world={world.id}
                     aria-labelledby={`${world.id}-label`}
                     aria-describedby={`${world.id}-disciplines ${world.id}-summary`}
+                    aria-haspopup="dialog"
+                    aria-controls="orbit-world-inspector"
                   >
                     <span
                       className="wc-scene-orbit__node-number"
@@ -118,13 +123,13 @@ export function Scene06Orbit() {
                       className="wc-scene-orbit__node-action"
                       aria-hidden="true"
                     >
-                      Enter
+                      Inspect
                     </span>
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>
-          </nav>
+          </div>
         </div>
       </EcosystemOrbitRuntime>
 

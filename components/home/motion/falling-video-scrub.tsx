@@ -5,8 +5,8 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 import { useHomeExperience } from "@/lib/home/home-experience-context";
 import {
+  FALLING_STUDIO_ARTWORK,
   FALLING_STUDIO_CATEGORIES,
-  FALLING_STUDIO_HANDOFF,
 } from "@/lib/home/falling-studio-manifest";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { useReducedMotionPreference } from "@/lib/motion/use-reduced-motion";
@@ -32,12 +32,90 @@ type MediaState =
   | "fallback"
   | "reduced";
 
+type ArtworkMotion = {
+  artwork: (typeof FALLING_STUDIO_ARTWORK)[number];
+  centerRawX: number;
+};
+
 const STATIC_STORY_QUERY =
   "(max-width: 47.999rem), (prefers-reduced-motion: reduce)";
 const MIN_SEEK_DELTA = 1 / 60;
 const FINAL_FRAME_OFFSET = 1 / 30;
 const STALL_TIMEOUT_MS = 8000;
-const HANDOFF_START = 0.84;
+const CENTER_X = 0.5;
+const CENTER_Y = 0.5;
+const ENTRY_FADE_START_Y = 0.06;
+const POST_CENTER_DIM_END_Y = 0.94;
+const POST_CENTER_OPACITY = 0.28;
+const EXIT_FADE_START_Y = 1;
+const EXIT_FADE_END_Y = 1.16;
+const CENTER_CORRECTION_RADIUS_Y = 0.24;
+const CENTER_FOCUS_RADIUS_Y = 0.2;
+const TRANSITION_CLEAR_START = 0.86;
+const TRANSITION_CLEAR_END = 0.9;
+
+function quadraticBezier(
+  start: number,
+  control: number,
+  end: number,
+  progress: number,
+) {
+  const inverse = 1 - progress;
+
+  return (
+    inverse * inverse * start +
+    2 * inverse * progress * control +
+    progress * progress * end
+  );
+}
+
+function smootherstep(start: number, end: number, value: number) {
+  const progress = gsap.utils.clamp(0, 1, (value - start) / (end - start));
+
+  return progress ** 3 * (progress * (progress * 6 - 15) + 10);
+}
+
+function findBezierProgressAtValue(
+  start: number,
+  control: number,
+  end: number,
+  value: number,
+) {
+  let lower = 0;
+  let upper = 1;
+
+  for (let iteration = 0; iteration < 16; iteration += 1) {
+    const middle = (lower + upper) / 2;
+    const current = quadraticBezier(start, control, end, middle);
+
+    if (current < value) {
+      lower = middle;
+    } else {
+      upper = middle;
+    }
+  }
+
+  return (lower + upper) / 2;
+}
+
+const ARTWORK_MOTION_BY_ID = new Map<string, ArtworkMotion>(
+  FALLING_STUDIO_ARTWORK.map((artwork) => {
+    const centerPathProgress = findBezierProgressAtValue(
+      artwork.path[0][1],
+      artwork.path[1][1],
+      artwork.path[2][1],
+      CENTER_Y,
+    );
+    const centerRawX = quadraticBezier(
+      artwork.path[0][0],
+      artwork.path[1][0],
+      artwork.path[2][0],
+      centerPathProgress,
+    );
+
+    return [artwork.id, { artwork, centerRawX }] as const;
+  }),
+);
 
 function shouldUseStaticStory(preference: boolean) {
   return (
@@ -97,13 +175,41 @@ export function FallingVideoScrub({
         ".wc-scene-falling__legend li",
         scope ?? undefined,
       );
-      const endHandoff = scope?.querySelector<HTMLElement>(
-        "[data-falling-end-handoff]",
+      const entryReceiver = scope?.querySelector<HTMLElement>(
+        "[data-falling-entry-receiver]",
+      );
+      const artworkElements = gsap.utils.toArray<HTMLElement>(
+        "[data-falling-artwork]",
+        scope ?? undefined,
       );
 
       if (!scope || !video || !scene) {
         return;
       }
+
+      const artworkStates = artworkElements.flatMap((element) => {
+        const artworkId = element.dataset.fallingArtwork;
+        const motion = artworkId
+          ? ARTWORK_MOTION_BY_ID.get(artworkId)
+          : undefined;
+        const media = element.querySelector<HTMLElement>(
+          ".wc-refined-falling__artwork-media",
+        );
+
+        if (!motion || !media) {
+          return [];
+        }
+
+        return [
+          {
+            element,
+            media,
+            motion,
+            mediaAnchorX: 0,
+            mediaAnchorY: 0,
+          },
+        ];
+      });
 
       const setMediaState = (state: MediaState) => {
         scope.dataset.videoState = state;
@@ -125,6 +231,23 @@ export function FallingVideoScrub({
       let stallTimerId: number | null = null;
       let forceNextSeek = false;
       let activeLegendIndex = -1;
+      let scopeWidth = Math.max(scope.clientWidth, 1);
+      let scopeHeight = Math.max(scope.clientHeight, 1);
+      const pathEase = gsap.parseEase("power1.inOut");
+      const introEase = gsap.parseEase("power2.inOut");
+      const receiverEase = gsap.parseEase("power2.out");
+
+      const measureScope = () => {
+        scopeWidth = Math.max(scope.clientWidth, 1);
+        scopeHeight = Math.max(scope.clientHeight, 1);
+        artworkStates.forEach((state) => {
+          state.mediaAnchorX = state.media.offsetLeft + state.media.offsetWidth / 2;
+          state.mediaAnchorY = state.media.offsetTop + state.media.offsetHeight / 2;
+          gsap.set(state.element, {
+            transformOrigin: `${state.mediaAnchorX}px ${state.mediaAnchorY}px`,
+          });
+        });
+      };
 
       const clearStallTimer = () => {
         if (stallTimerId !== null) {
@@ -232,15 +355,16 @@ export function FallingVideoScrub({
         );
         setActiveLegend(targetProgress);
 
-        const introProgress = gsap.parseEase("power2.inOut")(
+        const introProgress = introEase(
           gsap.utils.clamp(0, 1, targetProgress / 0.2),
         );
-        const handoffProgress = gsap.parseEase("power2.inOut")(
-          gsap.utils.clamp(
-            0,
-            1,
-            (targetProgress - HANDOFF_START) / (1 - HANDOFF_START),
-          ),
+        const receiverProgress = receiverEase(
+          gsap.utils.clamp(0, 1, targetProgress / 0.1),
+        );
+        const transitionClear = smootherstep(
+          TRANSITION_CLEAR_START,
+          TRANSITION_CLEAR_END,
+          targetProgress,
         );
 
         if (copy) {
@@ -252,21 +376,125 @@ export function FallingVideoScrub({
 
         if (legend) {
           gsap.set(legend, {
-            opacity: 1 - handoffProgress,
-            y: handoffProgress * 18,
+            opacity: 1 - transitionClear,
+            y: transitionClear * 18,
           });
         }
 
-        if (endHandoff) {
-          gsap.set(endHandoff, {
-            autoAlpha: handoffProgress,
-            xPercent: -50,
-            yPercent: -50 + (1 - handoffProgress) * 58,
-            scale: 0.62 + handoffProgress * 0.38,
-            rotationZ: (1 - handoffProgress) * -5,
-            force3D: true,
+        if (entryReceiver) {
+          gsap.set(entryReceiver, {
+            autoAlpha: Math.max(0, 0.74 * (1 - receiverProgress)),
+            yPercent: receiverProgress * 55,
           });
         }
+
+        artworkStates.forEach((state) => {
+          const { artwork, centerRawX } = state.motion;
+
+          const localProgress = gsap.utils.clamp(
+            0,
+            1,
+            (targetProgress - artwork.progress[0]) /
+              (artwork.progress[1] - artwork.progress[0]),
+          );
+          const pathProgress = pathEase(localProgress);
+          const rawX = quadraticBezier(
+            artwork.path[0][0],
+            artwork.path[1][0],
+            artwork.path[2][0],
+            pathProgress,
+          );
+          const y = quadraticBezier(
+            artwork.path[0][1],
+            artwork.path[1][1],
+            artwork.path[2][1],
+            pathProgress,
+          );
+          const centerInfluence =
+            1 -
+            smootherstep(
+              0,
+              CENTER_CORRECTION_RADIUS_Y,
+              Math.abs(y - CENTER_Y),
+            );
+          const centerFocus =
+            1 -
+            smootherstep(
+              0,
+              CENTER_FOCUS_RADIUS_Y,
+              Math.abs(y - CENTER_Y),
+            );
+          const x = rawX + (CENTER_X - centerRawX) * centerInfluence;
+          const arrivalOpacity = smootherstep(
+            ENTRY_FADE_START_Y,
+            CENTER_Y,
+            y,
+          );
+          const departureOpacity = gsap.utils.interpolate(
+            1,
+            POST_CENTER_OPACITY,
+            smootherstep(CENTER_Y, POST_CENTER_DIM_END_Y, y),
+          );
+          const terminalOpacity =
+            1 - smootherstep(EXIT_FADE_START_Y, EXIT_FADE_END_Y, y);
+          const opacity =
+            arrivalOpacity *
+            departureOpacity *
+            terminalOpacity *
+            (1 - transitionClear);
+          const beforeCenterPose = smootherstep(
+            artwork.path[0][1],
+            CENTER_Y,
+            y,
+          );
+          const afterCenterPose = smootherstep(
+            CENTER_Y,
+            artwork.path[2][1],
+            y,
+          );
+          const rotation =
+            y <= CENTER_Y
+              ? gsap.utils.interpolate(
+                  artwork.rotation[0],
+                  0,
+                  beforeCenterPose,
+                )
+              : gsap.utils.interpolate(
+                  0,
+                  artwork.rotation[1],
+                  afterCenterPose,
+                );
+          const tiltPhase =
+            y <= CENTER_Y ? 1 - beforeCenterPose : afterCenterPose * -0.46;
+          const baseScale = gsap.utils.interpolate(
+            artwork.scale[0],
+            artwork.scale[1],
+            pathProgress,
+          );
+          const scale =
+            baseScale *
+            (1 + centerFocus * (artwork.depth === "foreground" ? 0.06 : 0.1));
+          const depthProgress =
+            artwork.depth === "foreground" ? pathProgress : pathProgress * 0.58;
+          const baseDepth =
+            artwork.depth === "foreground"
+              ? -110 + depthProgress * 260
+              : -260 + depthProgress * 150;
+
+          gsap.set(state.element, {
+            autoAlpha: opacity,
+            x: scopeWidth * x - state.mediaAnchorX,
+            y: scopeHeight * y - state.mediaAnchorY,
+            z:
+              baseDepth +
+              centerFocus * (artwork.depth === "foreground" ? 52 : 128),
+            rotationZ: rotation,
+            rotationX: artwork.tilt[0] * tiltPhase,
+            rotationY: artwork.tilt[1] * tiltPhase,
+            scale,
+            force3D: true,
+          });
+        });
 
         scheduleSeek();
       };
@@ -355,6 +583,7 @@ export function FallingVideoScrub({
         end: "bottom bottom",
         invalidateOnRefresh: true,
         onRefresh: (self) => {
+          measureScope();
           renderProgress(self.progress);
         },
         onUpdate: (self) => renderProgress(self.progress),
@@ -375,6 +604,7 @@ export function FallingVideoScrub({
       video.addEventListener("play", keepPaused);
       document.addEventListener("visibilitychange", onVisibilityChange);
 
+      measureScope();
       renderProgress(trigger.progress);
 
       if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
@@ -406,9 +636,12 @@ export function FallingVideoScrub({
           window.cancelAnimationFrame(seekFrameId);
         }
 
-        gsap.set([copy, legend, endHandoff], {
-          clearProps: "opacity,transform,visibility",
-        });
+        gsap.set(
+          [copy, legend, entryReceiver, ...artworkElements],
+          {
+            clearProps: "opacity,transform,transformOrigin,visibility",
+          },
+        );
         legendItems.forEach((item) => item.removeAttribute("data-active"));
         scope.style.removeProperty("--wc-falling-progress");
         scope.removeAttribute("data-video-presented");
@@ -461,24 +694,6 @@ export function FallingVideoScrub({
       </div>
 
       {children}
-
-      <div
-        className="wc-scene-falling__end-handoff"
-        data-falling-end-handoff
-        aria-hidden="true"
-      >
-        <figure className="wc-scene-falling__handoff-board">
-          <div className="wc-refined-falling__handoff-media">
-            <Image
-              src={FALLING_STUDIO_HANDOFF.src}
-              width={FALLING_STUDIO_HANDOFF.width}
-              height={FALLING_STUDIO_HANDOFF.height}
-              sizes="(min-width: 64rem) 54vw, 72vw"
-              alt=""
-            />
-          </div>
-        </figure>
-      </div>
 
       <div className="wc-scene-falling__reduced-stills">
         {stills.map((still, index) => (

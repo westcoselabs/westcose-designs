@@ -193,7 +193,7 @@ export const FALLING_STUDIO_ARTWORK = [
     height: 675,
     alt: "19th Hole Bar and Grill logo family with multiple lockup configurations.",
     depth: "midground",
-    progress: [0.67, 0.91],
+    progress: [0.65, 0.87],
     path: [
       [0.8, -0.22],
       [0.61, 0.39],
@@ -213,7 +213,7 @@ export const FALLING_STUDIO_ARTWORK = [
     height: 675,
     alt: "Eighty Six'd identity exploration with marks, lockups, and hat applications.",
     depth: "foreground",
-    progress: [0.72, 0.93],
+    progress: [0.74, 0.9],
     path: [
       [0.14, -0.23],
       [0.36, 0.37],

@@ -91,9 +91,11 @@
   overflow: clip;
   border: 1px solid rgb(236 232 220 / 22%);
   background: var(--wc-graphite);
+  backface-visibility: hidden;
   box-shadow:
-    0 1.75rem 4.5rem rgb(0 0 0 / 54%),
-    0 0 0 0.35rem rgb(12 12 11 / 16%);
+    0 2rem 5.5rem rgb(0 0 0 / 62%),
+    0 0 0 0.35rem rgb(12 12 11 / 18%),
+    inset 0 0 0 1px rgb(236 232 220 / 7%);
 }
 
 .wc-refined-falling__artwork-media img {
@@ -134,39 +136,106 @@
   z-index: 5;
 }
 
-.wc-scene-falling--refined .wc-scene-falling__end-handoff {
-  z-index: 6;
-  top: 50%;
-  left: 50%;
-  width: min(68vw, 55rem);
-  height: auto;
-  aspect-ratio: 16 / 9;
+/* Shared fixed sheet: Scene 02 folds it, Scene 03 receives it. */
+.wc-scene-02-03-handoff {
+  position: fixed;
+  z-index: calc(var(--wc-z-header) - 5);
+  inset: 0;
+  overflow: clip;
+  perspective: 90rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.wc-scene-falling--refined .wc-scene-falling__handoff-board {
-  position: relative;
+.wc-scene-02-03-handoff__sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(56vw, 44rem);
+  aspect-ratio: 16 / 9;
+  isolation: isolate;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.wc-scene-02-03-handoff__shadow {
+  position: absolute;
+  z-index: -1;
+  inset: 8% 3% -5%;
+  display: block;
+  background: rgb(0 0 0 / 74%);
+  filter: blur(1.8rem);
+  transform-origin: 50% 50%;
+}
+
+.wc-scene-02-03-handoff__fold {
+  position: absolute;
+  z-index: 1;
+  left: 0;
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  margin: 0;
-  overflow: clip;
+  height: calc(50% + 0.5px);
+  overflow: hidden;
   border: 1px solid rgb(236 232 220 / 32%);
   background: var(--wc-graphite);
-  box-shadow:
-    0 2.5rem 7rem rgb(0 0 0 / 62%),
-    0 0 0 0.5rem rgb(12 12 11 / 20%);
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 0 0.35rem rgb(225 132 83 / 18%);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-.wc-refined-falling__handoff-media,
-.wc-refined-falling__handoff-media img {
-  width: 100%;
-  height: 100%;
+.wc-scene-02-03-handoff__fold--top {
+  top: 0;
+  border-bottom: 0;
 }
 
-.wc-refined-falling__handoff-media img {
+.wc-scene-02-03-handoff__fold--bottom {
+  bottom: 0;
+  border-top: 0;
+}
+
+.wc-scene-02-03-handoff__fold img {
+  position: absolute;
+  left: 0;
   display: block;
+  width: 100%;
+  max-width: none;
+  height: 200%;
   object-fit: cover;
+}
+
+.wc-scene-02-03-handoff__fold--top img {
+  top: 0;
+}
+
+.wc-scene-02-03-handoff__fold--bottom img {
+  bottom: 0;
+}
+
+.wc-scene-02-03-handoff__crease {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  right: 4%;
+  left: 4%;
+  display: block;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(12 12 11 / 82%) 14% 86%,
+    transparent
+  );
+  box-shadow:
+    0 -1px 0 rgb(236 232 220 / 24%),
+    0 1px 0 rgb(0 0 0 / 58%);
+  transform-origin: 50% 50%;
+}
+
+[data-brand-development-handoff-receiver] {
+  transform-origin: 50% 50%;
+  will-change: opacity;
 }
 
 .wc-refined-falling__static-story {
@@ -449,6 +518,10 @@
     display: none;
   }
 
+  .wc-scene-02-03-handoff {
+    display: none;
+  }
+
   .wc-scene-falling--refined .wc-scene-falling__poster {
     display: block;
     opacity: 0.72 !important;
@@ -624,9 +697,12 @@
 }
 
 @media (forced-colors: active) {
+  .wc-scene-02-03-handoff {
+    display: none;
+  }
+
   .wc-refined-falling__artwork-media,
   .wc-refined-falling__static-media,
-  .wc-scene-falling--refined .wc-scene-falling__handoff-board,
   .wc-brand-development__media,
   .wc-brand-development__nav {
     border-color: CanvasText;
