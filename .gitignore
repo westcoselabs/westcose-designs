@@ -5,6 +5,7 @@
 
 # Testing and coverage
 /coverage
+/scrollcraft/builds/*/qa/
 
 # Next.js output
 /.next

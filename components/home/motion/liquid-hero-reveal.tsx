@@ -20,6 +20,8 @@ export function LiquidHeroReveal({ children }: { children: ReactNode }) {
         scope ?? undefined,
       );
       const artwork = scope?.querySelector<HTMLElement>("[data-hero-art]");
+      const atmosphere = scope?.querySelector<HTMLElement>(".wc-coastal-hero__atmosphere");
+      const services = scope?.querySelector<HTMLElement>(".wc-coastal-hero__services");
       const content = scope?.querySelector<HTMLElement>(
         ".wc-scene-liquid__content",
       );
@@ -82,6 +84,8 @@ export function LiquidHeroReveal({ children }: { children: ReactNode }) {
             scale: 1 - exit * 0.025,
             force3D: true,
           });
+          if (atmosphere) gsap.set(atmosphere, { yPercent: build * 4, scale: 1 + build * .04 });
+          if (services) gsap.set(services, { y: -build * 10 - exit * 35 });
 
           setLiquidEnergy(0.16 + build * 0.46 + hold * 0.08 - exit * 0.12);
         };
@@ -101,7 +105,7 @@ export function LiquidHeroReveal({ children }: { children: ReactNode }) {
           scope.style.removeProperty("--wc-hero-progress");
           scope.style.removeProperty("--wc-hero-build");
           scope.style.removeProperty("--wc-hero-exit");
-          gsap.set(artwork ? [content, artwork] : [content], {
+          gsap.set([content, artwork, atmosphere, services].filter(Boolean), {
             clearProps: "all",
           });
         };

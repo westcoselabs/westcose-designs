@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Manrope, Oswald } from "next/font/google";
+import localFont from "next/font/local";
 import type { ReactNode } from "react";
 
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -10,17 +10,17 @@ import { siteConfig } from "@/lib/seo/site";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
-const displayFont = Oswald({
-  subsets: ["latin"],
+const displayFont = localFont({
+  src: "./fonts/oswald-latin.woff2",
   variable: "--font-westcose-display",
-  weight: ["600", "700"],
+  weight: "600 700",
   display: "swap",
 });
 
-const bodyFont = Manrope({
-  subsets: ["latin"],
+const bodyFont = localFont({
+  src: "./fonts/manrope-latin.woff2",
   variable: "--font-westcose-body",
-  weight: ["400", "500", "600", "700"],
+  weight: "400 700",
   display: "swap",
 });
 

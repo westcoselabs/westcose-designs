@@ -301,9 +301,7 @@ export function HomeLiquidBackdrop() {
         !document.hidden &&
         !contextLost &&
         (openingPending ||
-          homeScene === "scene-01" ||
-          homeScene === "scene-01-5" ||
-          homeScene === "scene-02");
+          homeScene === "scene-01");
 
       if (root) root.dataset.rafActive = String(shouldAnimate);
 

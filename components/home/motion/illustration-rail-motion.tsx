@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useHomeExperience } from "@/lib/home/home-experience-context";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
@@ -24,6 +24,13 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
   const scopeRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(-1);
   const prefersReducedMotion = useReducedMotionPreference();
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    const media = matchMedia("(max-width: 767px)");
+    const update = () => setCompact(media.matches);
+    update(); media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
   const { setLiquidAccent, setLiquidEnergy } = useHomeExperience();
 
   useGSAP(
@@ -57,7 +64,7 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (prefersReducedMotion) {
+      if (prefersReducedMotion || compact) {
         gsap.set(track, { clearProps: "transform" });
         artworks.forEach((artwork) => {
           artwork.style.removeProperty("--wc-artwork-focus");
@@ -183,7 +190,7 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
           }
 
           gsap.set(artwork, {
-            opacity: Math.max(0, 0.28 * (1 - tiltProgress)),
+            opacity: Math.max(0, 1 - tiltProgress),
             scale: 1 - tiltProgress * 0.1,
             z: supportsSpatialTransition ? tiltProgress * -380 : 0,
             force3D: supportsSpatialTransition,
@@ -284,7 +291,7 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
     },
     {
       scope: scopeRef,
-      dependencies: [prefersReducedMotion, setLiquidAccent, setLiquidEnergy],
+      dependencies: [prefersReducedMotion, compact, setLiquidAccent, setLiquidEnergy],
       revertOnUpdate: true,
     },
   );

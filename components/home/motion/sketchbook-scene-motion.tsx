@@ -3,6 +3,7 @@
 import { useRef, type ReactNode } from "react";
 
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
+import { createFlexiblePage } from "@/lib/motion/flexible-page";
 
 const DESKTOP_MOTION_QUERY =
   "(min-width: 48rem) and (prefers-reduced-motion: no-preference)";
@@ -91,6 +92,7 @@ export function SketchbookSceneMotion({ children }: { children: ReactNode }) {
         if (!scene || !book || pages.length === 0) {
           return;
         }
+        const flexiblePages = pages.map(createFlexiblePage);
 
         const easeOut = gsap.parseEase("power3.out");
         const easeSoft = gsap.parseEase("power2.inOut");
@@ -201,6 +203,7 @@ export function SketchbookSceneMotion({ children }: { children: ReactNode }) {
               turnRange.end,
             );
             const turn = easeSoft(rawTurn);
+            flexiblePages[index]?.render(turn);
             const isTurning = rawTurn > 0 && rawTurn < 1;
             const hasTurned = rawTurn >= 1;
             const turnLift = Math.sin(rawTurn * Math.PI);
@@ -308,6 +311,7 @@ export function SketchbookSceneMotion({ children }: { children: ReactNode }) {
           invalidateOnRefresh: true,
           onRefresh: (self) => {
             scopeWidth = Math.max(scope.clientWidth, 1);
+            flexiblePages.forEach(page => page?.measure());
             render(self.progress);
           },
           onUpdate: (self) => render(self.progress),
@@ -339,6 +343,7 @@ export function SketchbookSceneMotion({ children }: { children: ReactNode }) {
         });
 
         return () => {
+          flexiblePages.forEach(page => page?.dispose());
           imageRefreshActive = false;
           trigger.kill();
           document.documentElement.removeAttribute(

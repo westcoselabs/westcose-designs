@@ -31,8 +31,10 @@ export type FallingStudioArtwork = {
 
 export const FALLING_STUDIO_MEDIA = {
   video:
-    "/experience/falling-studio/i_want_to_create_a_video_using_scrub.mp4",
-  poster: "/experience/falling-studio/falling-official-still-00.webp",
+    "/experience/falling-studio/falling-scrub-desktop.mp4",
+  mobileVideo: "/experience/falling-studio/falling-scrub-portrait.mp4",
+  poster: "/experience/falling-studio/falling-cinema-poster.webp",
+  mobilePoster: "/experience/falling-studio/falling-cinema-portrait.webp",
   stills: [
     {
       src: "/experience/falling-studio/falling-official-still-00.webp",
@@ -238,3 +240,27 @@ export const FALLING_STUDIO_HANDOFF = {
   height: 900,
   alt: "Vested Clothing Company lockup exploration entering the Brand Development sequence.",
 } as const;
+
+export type CinematicPaper = {
+  id: string; src: string; width: number; height: number;
+  progress: readonly [number, number];
+  path: readonly [readonly [number, number, number], readonly [number, number, number]];
+  paper: { width: number; bend: number; flutter: number; seed: number };
+  mobile: boolean;
+};
+
+const PAPER_SOURCES = [
+  { id: "sunshine-entry", src: "/experience/illustrations/illustration-04.webp", width: 1080, height: 1350 },
+  FALLING_STUDIO_ARTWORK[0], FALLING_STUDIO_ARTWORK[2], FALLING_STUDIO_ARTWORK[3],
+  FALLING_STUDIO_ARTWORK[4], FALLING_STUDIO_ARTWORK[5], FALLING_STUDIO_ARTWORK[6],
+  FALLING_STUDIO_ARTWORK[7], { id: "vested-handoff", ...FALLING_STUDIO_HANDOFF },
+];
+const PAPER_WINDOWS = [[0, .27], [.04, .36], [.17, .48], [.28, .59], [.39, .7], [.5, .81], [.62, .88], [.7, .93], [.78, 1]] as const;
+
+export const CINEMATIC_PAPERS: readonly CinematicPaper[] = PAPER_SOURCES.map((art, i) => ({
+  id: art.id, src: art.src, width: art.width, height: art.height,
+  progress: PAPER_WINDOWS[i],
+  path: [[i === 0 ? .42 : i % 2 ? .82 : .26, i === 0 ? .35 : -.32, -1.5], [i % 2 ? .36 : .72, 1.4, .45]],
+  paper: { width: i % 3 === 0 ? .46 : .28, bend: .13 + (i % 3) * .035, flutter: .035, seed: i * 1.71 },
+  mobile: [0, 3, 5, 8].includes(i),
+}));
