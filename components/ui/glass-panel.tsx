@@ -27,7 +27,7 @@ export function GlassPanel({
   );
 }
 
-export type GlassCardTone = "coastal" | "signal" | "signal-soft" | "neutral";
+export type GlassCardTone = "coastal" | "signal" | "signal-soft" | "neutral" | "warm";
 
 export type GlassCardProps = Omit<HTMLAttributes<HTMLElement>, "children"> & {
   as?: "div" | "section" | "article" | "li" | "header";

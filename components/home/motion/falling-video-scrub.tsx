@@ -110,8 +110,9 @@ export function FallingVideoScrub({ videoSrc, posterSrc, children }: Props) {
       const p = clamp01((window.scrollY - top) / Math.max(1, pinEnd - top));
       const galleryTop = gallery ? gallery.getBoundingClientRect().top + scrollY : top;
       const entryStart = gallery ? galleryTop + (gallery.offsetHeight - innerHeight) * .85 : top;
-      frame.current.entry = mobile ? 1 : clamp01((scrollY - entryStart) / Math.max(1, top - entryStart));
-      if (printImage && gallery && !mobile) {
+      // Phones pin the rail too, so its last card peels into the fall on every width.
+      frame.current.entry = clamp01((scrollY - entryStart) / Math.max(1, top - entryStart));
+      if (printImage && gallery) {
         let offset = 0;
         let element: HTMLElement | null = printImage;
         const stage = gallery.querySelector(".wc-home-scene__stage");
@@ -120,19 +121,18 @@ export function FallingVideoScrub({ videoSrc, posterSrc, children }: Props) {
         if (print) print.style.opacity = String(paperReady ? 1 - phase(frame.current.entry, .04, .1) : 1);
       }
       const hStart = top + (pinEnd - top) * PAPER_HANDOFF_START;
-      const h = mobile ? phase(p, .88, 1) : clamp01((window.scrollY - hStart) / Math.max(1, nextTop - hStart));
+      const h = clamp01((window.scrollY - hStart) / Math.max(1, nextTop - hStart));
       frame.current.progress = p;
       frame.current.handoff = h;
       frame.current.mobile = mobile;
-      frame.current.active = window.scrollY >= (mobile ? top : entryStart) && window.scrollY < (mobile ? pinEnd : nextTop);
-      if (receiver && !mobile) {
+      frame.current.active = window.scrollY >= entryStart && window.scrollY < nextTop;
+      if (receiver) {
         const rect = (receiver.querySelector("img") ?? receiver).getBoundingClientRect();
         frame.current.receiver = { x: (rect.left + rect.width / 2) / viewportWidth, y: (rect.top + rect.height / 2) / innerHeight, width: rect.width / viewportWidth };
         // Reveal the aligned receiver underneath the opaque sheet, then fade only
         // the sheet. Fading both surfaces would briefly darken the artwork.
         receiver.style.opacity = frame.current.active && h > 0 && h < .97 ? "0" : "1";
       }
-      if (mobile) frame.current.receiver = { x: .5, y: .5, width: .82 };
       layerRef.current?.style.setProperty("visibility", frame.current.active && paperReady ? "visible" : "hidden");
       frame.current.invalidate?.();
       scope.style.setProperty("--wc-falling-progress", p.toFixed(4));
@@ -160,7 +160,7 @@ export function FallingVideoScrub({ videoSrc, posterSrc, children }: Props) {
     document.addEventListener("visibilitychange", render);
     const trigger = ScrollTrigger.create({
       trigger: gallery ?? scene,
-      start: () => gallery && innerWidth >= 768 ? `top+=${(gallery.offsetHeight - innerHeight) * .85} top` : "top bottom",
+      start: () => gallery ? `top+=${(gallery.offsetHeight - innerHeight) * .85} top` : "top bottom",
       endTrigger: scene, end: "bottom top", onUpdate: render, onRefresh: render,
     });
     render();

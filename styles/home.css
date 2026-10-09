@@ -1544,8 +1544,11 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
   }
 }
 
-/* Mobile is an intentional normal-flow composition, not a miniature pin. */
-@media (max-width: 47.999rem) {
+/* Phones keep pinned scenes when motion runs (see mobile-scenes.css). Without
+   scripting or with forced colours they fall back to normal flow; reduced
+   motion has its own block below. */
+@media (max-width: 47.999rem) and (scripting: none),
+  (max-width: 47.999rem) and (forced-colors: active) {
   .wc-home-scene {
     min-height: auto;
   }
@@ -1554,7 +1557,9 @@ body:has(.wc-home-experience[data-active-scene="scene-00"])
     position: relative;
     min-height: max(42rem, 100svh);
   }
+}
 
+@media (max-width: 47.999rem) {
   .wc-home-progress {
     top: auto;
     right: max(var(--wc-space-3), env(safe-area-inset-right));

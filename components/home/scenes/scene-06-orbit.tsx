@@ -1,9 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 import { EcosystemOrbitRuntime } from "@/components/home/motion/ecosystem-orbit-runtime";
 import { SceneShell } from "@/components/home/scene-shell";
-import { ORBIT_WORLDS } from "@/lib/home/orbit-worlds";
+import { StudioArt, StudioTransitionCopy } from "@/components/home/scenes/scene-05-studio";
+import { DestinationCard } from "@/components/ui/destination-card";
+import { DisplayHeading, Eyebrow, Lede, MetaLabel } from "@/components/ui/typography";
+import { ORBIT_BRIDGE_SCALE, ORBIT_WORLDS } from "@/lib/home/orbit-worlds";
 
 export function Scene06Orbit() {
   return (
@@ -38,44 +42,37 @@ export function Scene06Orbit() {
                 className="wc-scene-orbit__fallback-world"
                 data-world={world.id}
                 data-orbit-world={world.id}
+                data-orbit-trigger
                 data-visual={world.visual}
                 aria-label={`Inspect ${world.label}`}
                 aria-haspopup="dialog"
                 aria-controls="orbit-world-inspector"
               >
-                {"textureSrc" in world ? (
-                  <Image
-                    src={world.textureSrc}
-                    alt=""
-                    width={world.id === "designs" ? 1350 : 1080}
-                    height={world.id === "designs" ? 1080 : 1080}
-                    sizes="(max-width: 1023px) 28vw, 11rem"
-                    unoptimized={world.textureSrc.endsWith(".svg")}
-                  />
-                ) : (
-                  <span className="wc-scene-orbit__interface-glyph">
-                    <i />
-                    <i />
-                    <i />
-                  </span>
-                )}
+                <Image
+                  src={world.previewSrc}
+                  alt=""
+                  width={640}
+                  height={640}
+                  sizes="(max-width: 1023px) 40vw, 25vw"
+                />
               </button>
             ))}
           </div>
         </div>
 
+        {/* Opening frame twin of the studio's last frame; the runtime carries it into orbit. */}
+        <StudioArt
+          className="wc-scene-orbit__bridge-art"
+          data-orbit-bridge-art
+          style={{ "--wc-bridge-scale": ORBIT_BRIDGE_SCALE } as CSSProperties}
+        />
+        <StudioTransitionCopy className="wc-scene-orbit__bridge-copy" aria-hidden="true" />
+
         <div className="wc-scene-orbit__editorial">
           <div className="wc-scene-orbit__copy">
-            <p className="wc-home-scene__label">
-              Scene 06 / WestCose Ecosystem
-            </p>
-            <h2 id="scene-06-title" className="wc-heading-1">
-              One signal. Three worlds.
-            </h2>
-            <p className="wc-body">
-              Design, digital products, and goods connected by one independent
-              creative philosophy.
-            </p>
+            <Eyebrow mark={null}>Three destinations / One WestCose</Eyebrow>
+            <DisplayHeading id="scene-06-title" lines={["Explore", "WestCose."]} />
+            <Lede>Browse the portfolio, explore websites and development, or shop official WestCose merch.</Lede>
           </div>
 
           <div
@@ -84,52 +81,29 @@ export function Scene06Orbit() {
             aria-label="WestCose worlds"
           >
             <ul>
-              {ORBIT_WORLDS.map((world, index) => (
-                <li key={world.id} data-world={world.id}>
-                  <button
-                    type="button"
-                    className="wc-scene-orbit__node"
-                    data-orbit-world={world.id}
-                    aria-labelledby={`${world.id}-label`}
-                    aria-describedby={`${world.id}-disciplines ${world.id}-summary`}
-                    aria-haspopup="dialog"
-                    aria-controls="orbit-world-inspector"
-                  >
-                    <span
-                      className="wc-scene-orbit__node-number"
-                      aria-hidden="true"
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      id={`${world.id}-label`}
-                      className="wc-scene-orbit__node-label"
-                    >
-                      {world.label}
-                    </span>
-                    <span
-                      id={`${world.id}-disciplines`}
-                      className="wc-scene-orbit__node-disciplines"
-                    >
-                      {world.disciplines}
-                    </span>
-                    <span
-                      id={`${world.id}-summary`}
-                      className="wc-scene-orbit__node-summary"
-                    >
-                      {world.summary}
-                    </span>
-                    <span
-                      className="wc-scene-orbit__node-action"
-                      aria-hidden="true"
-                    >
-                      Inspect
-                    </span>
-                  </button>
-                </li>
+              {ORBIT_WORLDS.map((world) => (
+                <DestinationCard
+                  key={world.id}
+                  data-world={world.id}
+                  data-orbit-world={world.id}
+                  title={world.label}
+                  description={world.summary}
+                  href={world.href}
+                  actionLabel={world.cardLabel}
+                  actionSymbol={world.id === "designs" ? "→" : "↗"}
+                  // Designs keeps the studio's warm glass; Labs and Shop wear their planet's light.
+                  accent={world.id === "designs" ? undefined : world.accent}
+                  previewAction={{
+                    "aria-label": `Inspect ${world.label}`,
+                    "aria-haspopup": "dialog",
+                    "aria-controls": "orbit-world-inspector",
+                    ...{ "data-orbit-trigger": "", "data-orbit-world": world.id },
+                  }}
+                />
               ))}
             </ul>
           </div>
+          <MetaLabel className="wc-scene-orbit__helper">Click a planet for details. Use a card to visit.</MetaLabel>
         </div>
       </EcosystemOrbitRuntime>
 

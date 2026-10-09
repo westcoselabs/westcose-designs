@@ -19,11 +19,16 @@ import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import {
+  ORBIT_BRIDGE_CONTENT_HEIGHT,
+  ORBIT_BRIDGE_FADE,
+  renderOrbitBridgeArt,
+} from "@/lib/home/orbit-bridge";
+import { ORBIT_PALETTE } from "@/lib/home/orbit-palette";
 
 import {
   ORBIT_CENTER_MODEL_SRC,
   ORBIT_WORLDS,
-  getOrbitEditorialProgress,
   getOrbitModelSrc,
   getOrbitMotionProgress,
   type OrbitQualityTier,
@@ -35,13 +40,20 @@ export type EcosystemOrbitCanvasProps = {
   hoveredWorldId: OrbitWorldId | null;
   activeWorldId: OrbitWorldId | null;
   quality: OrbitQualityTier;
+  /** Split frames the system beside the editorial column; stacked centres it. */
+  layout: "split" | "stacked";
   resetViewToken: number;
   progressRef: RefObject<number>;
   handoffProgressRef: RefObject<number>;
+  /** 0 on the studio's final frame, 1 once every world is in orbit. */
+  arrivalProgressRef: RefObject<number>;
+  /** The studio still that the canvas lands on the Designs world. */
+  bridgeArtRef: RefObject<HTMLElement | null>;
   motionActive: boolean;
   onWorldEnter: (worldId: OrbitWorldId) => void;
   onWorldLeave: () => void;
   onWorldActivate: (worldId: OrbitWorldId) => void;
+  onDismiss: () => void;
   onReady: () => void;
   onFailure: () => void;
 };
@@ -60,6 +72,8 @@ type InspectionControls = {
 type OrbitWorldAnchorProps = {
   world: OrbitWorld;
   model: THREE.Group;
+  opacityRef?: RefObject<number>;
+  boundsRef?: RefObject<THREE.Vector3 | null>;
   active: boolean;
   resetViewToken: number;
   inspectionControlsRef: RefObject<InspectionControls>;
@@ -68,12 +82,113 @@ type OrbitWorldAnchorProps = {
   onWorldActivate: (worldId: OrbitWorldId) => void;
 };
 
-const CENTER_MODEL_TARGET_SIZE = 0.96;
+const CENTER_MODEL_TARGET_SIZE = 1.66;
 const INSPECTION_ZOOM_MIN = 0.85;
 const INSPECTION_ZOOM_MAX = 1.35;
 const DRAG_ROTATION_SPEED = 0.0075;
-const ORBIT_COLLISION_MIN_DISTANCE = 2.72;
 const ORBIT_COLLISION_PASSES = 3;
+const CAMERA_HALF_FOV_TAN = Math.tan(THREE.MathUtils.degToRad(21.5));
+
+type OrbitFraming = {
+  /** Horizontal principal point, as a fraction of the canvas width. */
+  lens: number;
+  /** Orbiting worlds read larger than their inspection framing. */
+  worldScale: number;
+  emblemScale: number;
+  /** Orbit shape multipliers; portrait canvases stretch the system taller. */
+  stretch: readonly [number, number];
+  /** Minimum on-screen spacing between worlds, and around the emblem. */
+  collision: number;
+  emblemClearance: number;
+  /** World-space half extents the camera keeps in frame. */
+  halfExtent: readonly [number, number];
+  minCameraZ: number;
+  /** Aiming above the origin settles the system lower in the frame. */
+  lookHeight: number;
+};
+
+const ORBIT_FRAMING: Record<"split" | "stacked", OrbitFraming> = {
+  // Beside the editorial column: the lens sits at 70% of the viewport.
+  split: {
+    lens: 0.7,
+    worldScale: 1.26,
+    emblemScale: 1,
+    stretch: [1, 1],
+    collision: 2.8,
+    emblemClearance: 2.35,
+    halfExtent: [4.9, 3.8],
+    minCameraZ: 12.4,
+    lookHeight: 0.55,
+  },
+  // Above the cards on phones and tablets: taller orbits, larger worlds.
+  stacked: {
+    lens: 0.46,
+    worldScale: 1.45,
+    emblemScale: 1.2,
+    stretch: [0.72, 1.7],
+    collision: 3.7,
+    emblemClearance: 2.6,
+    halfExtent: [5.25, 5.2],
+    minCameraZ: 12.8,
+    lookHeight: 0,
+  },
+};
+
+/**
+ * Arrival choreography, in arrival progress. The studio still lands on the
+ * Designs world first, then the two crossfade; Labs and Shop grow in from deep
+ * space and the emblem turns to face the camera last.
+ */
+const WORLD_ARRIVALS: Record<
+  OrbitWorldId,
+  { start: number; end: number; offset: THREE.Vector3 }
+> = {
+  designs: {
+    start: ORBIT_BRIDGE_FADE[0],
+    end: ORBIT_BRIDGE_FADE[1],
+    offset: new THREE.Vector3(),
+  },
+  labs: { start: 0.08, end: 0.6, offset: new THREE.Vector3(-1.6, -0.5, -8.5) },
+  shop: { start: 0.2, end: 0.72, offset: new THREE.Vector3(1.4, -1.3, -8.5) },
+};
+const EMBLEM_ARRIVAL = { start: 0.36, end: 0.9, turn: -1.5 };
+const PATH_ARRIVAL = { start: 0.18, stagger: 0.08, length: 0.6 };
+
+function smoothstep(value: number, start: number, end: number) {
+  return THREE.MathUtils.smoothstep(value, start, end);
+}
+
+/** Shifts the principal point so the system frames right of the editorial
+ * column without a separate canvas column that could clip a planet. */
+function applyLens(
+  camera: THREE.Camera,
+  width: number,
+  height: number,
+  center: number,
+) {
+  if (!(camera instanceof THREE.PerspectiveCamera) || height <= 0) {
+    return;
+  }
+
+  const fullWidth = width * 2 * Math.max(center, 1 - center);
+  const offsetX = center >= 0.5 ? 0 : fullWidth - width;
+  const aspect = fullWidth / height;
+  const view = camera.view;
+
+  if (
+    view?.enabled &&
+    camera.aspect === aspect &&
+    view.fullWidth === fullWidth &&
+    view.offsetX === offsetX &&
+    view.width === width &&
+    view.height === height
+  ) {
+    return;
+  }
+
+  camera.aspect = aspect;
+  camera.setViewOffset(fullWidth, height, offsetX, 0, width, height);
+}
 
 const ORBIT_PLANE_ROTATIONS = Object.fromEntries(
   ORBIT_WORLDS.map((world) => [
@@ -195,7 +310,7 @@ function SceneEnvironment() {
   return (
     <>
       <primitive attach="environment" object={environment.texture} />
-      <fogExp2 attach="fog" args={["#080b0a", 0.026]} />
+      <fogExp2 attach="fog" args={[ORBIT_PALETTE.canvas, 0.026]} />
     </>
   );
 }
@@ -206,13 +321,22 @@ function NormalizedModel({
   targetSize,
   envMapIntensity = 1.18,
   colorMultiplier = "#ffffff",
+  metallic = false,
+  opacityRef,
+  boundsRef,
 }: {
   model: THREE.Group;
   rotation?: readonly [number, number, number];
   targetSize: number;
   envMapIntensity?: number;
   colorMultiplier?: `#${string}`;
+  metallic?: boolean;
+  /** Fades the model with ordinary transparency while below 1. */
+  opacityRef?: RefObject<number>;
+  /** Receives the normalized bounding-box size, centred on the origin. */
+  boundsRef?: RefObject<THREE.Vector3 | null>;
 }) {
+  const appliedFadeRef = useRef<{ materials: THREE.Material[]; opacity: number } | null>(null);
   const prepared = useMemo(() => {
     const object = model.clone(true);
     const materials: THREE.Material[] = [];
@@ -228,7 +352,14 @@ function NormalizedModel({
         if (clone instanceof THREE.MeshStandardMaterial) {
           clone.envMapIntensity = envMapIntensity;
           clone.color.multiply(new THREE.Color(colorMultiplier));
+          if (metallic) {
+            clone.metalness = 0.82;
+            clone.roughness = 0.32;
+          }
         }
+
+        clone.userData.baseOpacity = clone.opacity;
+        clone.userData.baseTransparent = clone.transparent;
 
         clone.needsUpdate = true;
         materials.push(clone);
@@ -252,6 +383,7 @@ function NormalizedModel({
         materials,
         position: [0, 0, 0] as [number, number, number],
         scale: 1,
+        size: new THREE.Vector3(),
       };
     }
 
@@ -263,8 +395,21 @@ function NormalizedModel({
       materials,
       position: center.toArray() as [number, number, number],
       scale,
+      size: size.multiplyScalar(scale),
     };
-  }, [colorMultiplier, envMapIntensity, model, targetSize]);
+  }, [colorMultiplier, envMapIntensity, metallic, model, targetSize]);
+
+  useEffect(() => {
+    if (!boundsRef) {
+      return;
+    }
+
+    boundsRef.current = prepared.size;
+
+    return () => {
+      boundsRef.current = null;
+    };
+  }, [boundsRef, prepared]);
 
   useEffect(
     () => () => {
@@ -272,6 +417,31 @@ function NormalizedModel({
     },
     [prepared],
   );
+
+  useFrame((state) => {
+    const opacity = opacityRef?.current ?? 1;
+    const applied = appliedFadeRef.current;
+
+    if (applied?.materials === prepared.materials && applied.opacity === opacity) {
+      return;
+    }
+
+    // The fade is written by the universe later in this frame; with an
+    // on-demand loop, ask for one more frame so the newest value lands.
+    state.invalidate();
+
+    appliedFadeRef.current = { materials: prepared.materials, opacity };
+    prepared.materials.forEach((material) => {
+      const transparent = material.userData.baseTransparent === true || opacity < 1;
+
+      if (material.transparent !== transparent) {
+        material.transparent = transparent;
+        material.needsUpdate = true;
+      }
+
+      material.opacity = (material.userData.baseOpacity ?? 1) * opacity;
+    });
+  });
 
   return (
     <group rotation={[rotation[0], rotation[1], rotation[2]]}>
@@ -283,46 +453,51 @@ function NormalizedModel({
 }
 
 function CentralMark({ model }: { model: THREE.Group }) {
-  return <NormalizedModel model={model} targetSize={CENTER_MODEL_TARGET_SIZE} />;
+  return <NormalizedModel model={model} targetSize={CENTER_MODEL_TARGET_SIZE} colorMultiplier={ORBIT_PALETTE.tan} metallic />;
 }
 
 function OrbitPath({
   world,
+  index,
   quality,
   activeWorldId,
+  arrivalProgressRef,
 }: {
   world: OrbitWorld;
+  index: number;
   quality: OrbitQualityTier;
   activeWorldId: OrbitWorldId | null;
+  arrivalProgressRef: RefObject<number>;
 }) {
-  const lineRef = useRef<THREE.LineLoop>(null);
+  const lineRef = useRef<THREE.Line>(null);
+  const opacityRef = useRef(0.15);
   const line = useMemo(() => {
     const segmentCount = quality === "full" ? 144 : 72;
-    const points = Array.from({ length: segmentCount }, (_, index) =>
+    // Drawn from the world's starting phase so the path traces its travel.
+    const points = Array.from({ length: segmentCount + 1 }, (_, pointIndex) =>
       getOrbitPoint(
         world,
-        (index / segmentCount) * Math.PI * 2,
+        world.orbit.phase + (pointIndex / segmentCount) * Math.PI * 2,
         new THREE.Vector3(),
       ),
     );
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
     const material = new THREE.LineBasicMaterial({
-      color: world.accent.primary,
+      color: ORBIT_PALETTE.tan,
       depthWrite: false,
       opacity: 0.16,
       transparent: true,
       toneMapped: false,
     });
 
-    return new THREE.LineLoop(geometry, material);
+    return new THREE.Line(geometry, material);
   }, [quality, world]);
 
   useFrame((_, delta) => {
-    const material = lineRef.current?.material as
-      | THREE.LineBasicMaterial
-      | undefined;
+    const path = lineRef.current;
+    const material = path?.material as THREE.LineBasicMaterial | undefined;
 
-    if (!material) {
+    if (!path || !material) {
       return;
     }
 
@@ -331,13 +506,20 @@ function OrbitPath({
         ? 0.24
         : 0.045
       : 0.15;
+    const arrival = activeWorldId ? 1 : arrivalProgressRef.current;
+    const drawStart = PATH_ARRIVAL.start + index * PATH_ARRIVAL.stagger;
+    const draw = smoothstep(arrival, drawStart, drawStart + PATH_ARRIVAL.length);
+    const pointCount = path.geometry.getAttribute("position").count;
 
-    material.opacity = THREE.MathUtils.damp(
-      material.opacity,
+    opacityRef.current = THREE.MathUtils.damp(
+      opacityRef.current,
       targetOpacity,
       5,
       delta,
     );
+    material.opacity = opacityRef.current * Math.min(1, draw * 1.6);
+    path.geometry.setDrawRange(0, draw >= 1 ? Infinity : Math.ceil(draw * pointCount));
+    path.visible = draw > 0;
   });
 
   useEffect(
@@ -351,8 +533,15 @@ function OrbitPath({
   return <primitive ref={lineRef} object={line} />;
 }
 
-function DepthParticles({ quality }: { quality: OrbitQualityTier }) {
+function DepthParticles({
+  quality,
+  arrivalProgressRef,
+}: {
+  quality: OrbitQualityTier;
+  arrivalProgressRef: RefObject<number>;
+}) {
   const pointsRef = useRef<THREE.Points>(null);
+  const baseOpacity = quality === "full" ? 0.34 : 0.27;
   const positions = useMemo(() => {
     const count = quality === "full" ? 190 : 86;
     const values = new Float32Array(count * 3);
@@ -380,10 +569,14 @@ function DepthParticles({ quality }: { quality: OrbitQualityTier }) {
   }, [quality]);
 
   useFrame((state, delta) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.0035;
-      pointsRef.current.rotation.x =
+    const points = pointsRef.current;
+
+    if (points) {
+      points.rotation.y += delta * 0.0035;
+      points.rotation.x =
         Math.sin(state.clock.elapsedTime * 0.04) * 0.025;
+      (points.material as THREE.PointsMaterial).opacity =
+        baseOpacity * smoothstep(arrivalProgressRef.current, 0, 0.7);
     }
   });
 
@@ -393,9 +586,9 @@ function DepthParticles({ quality }: { quality: OrbitQualityTier }) {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        color="#b9c9c0"
+        color={ORBIT_PALETTE.tanLight}
         depthWrite={false}
-        opacity={quality === "full" ? 0.34 : 0.27}
+        opacity={baseOpacity}
         size={quality === "full" ? 0.026 : 0.032}
         sizeAttenuation
         toneMapped={false}
@@ -410,6 +603,8 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
     {
       world,
       model,
+      opacityRef,
+      boundsRef,
       active,
       resetViewToken,
       inspectionControlsRef,
@@ -546,6 +741,10 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
     const handlePointerEnd = (event: ThreeEvent<PointerEvent>) => {
       const controls = inspectionControlsRef.current;
       controls.pointers.delete(event.pointerId);
+      const captureTarget = event.target as unknown as {
+        releasePointerCapture?: (pointerId: number) => void;
+      };
+      captureTarget.releasePointerCapture?.(event.pointerId);
       updatePinch(controls);
     };
 
@@ -594,6 +793,8 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
             colorMultiplier={world.presentation.colorMultiplier}
             envMapIntensity={world.presentation.envMapIntensity}
             model={model}
+            opacityRef={opacityRef}
+            boundsRef={boundsRef}
             rotation={world.presentation.rotation}
             targetSize={world.presentation.targetSize}
           />
@@ -613,13 +814,35 @@ const OrbitWorldAnchor = forwardRef<THREE.Group, OrbitWorldAnchorProps>(
   },
 );
 
+type OrbitWorldPose = {
+  position: THREE.Vector3;
+  scale: number;
+};
+
+const DESIGNS_WORLD = ORBIT_WORLDS.find((world) => world.id === "designs")!;
+const DESIGNS_ROTATION = new THREE.Matrix4().makeRotationFromEuler(
+  new THREE.Euler(...DESIGNS_WORLD.presentation.rotation),
+);
+const BOX_CORNERS = Array.from(
+  { length: 8 },
+  (_, index) =>
+    new THREE.Vector3(
+      index & 1 ? 0.5 : -0.5,
+      index & 2 ? 0.5 : -0.5,
+      index & 4 ? 0.5 : -0.5,
+    ),
+);
+
 function OrbitUniverse({
   hoveredWorldId,
   activeWorldId,
   quality,
+  layout,
   resetViewToken,
   progressRef,
   handoffProgressRef,
+  arrivalProgressRef,
+  bridgeArtRef,
   motionActive,
   onWorldEnter,
   onWorldLeave,
@@ -659,6 +882,23 @@ function OrbitUniverse({
     labs: 0,
     shop: 0,
   });
+  // Damped resting poses. Arrival offsets and fades are layered on per frame,
+  // so scrubbing the arrival never fights the hover and inspection damping.
+  const worldPosesRef = useRef<Record<OrbitWorldId, OrbitWorldPose> | null>(
+    null,
+  );
+  // Only Designs fades: it crossfades with the studio still it replaces.
+  const designsOpacityRef = useRef(0);
+  const designsBoundsRef = useRef<THREE.Vector3 | null>(null);
+  const pathsRef = useRef<THREE.Group>(null);
+  const centerScaleRef = useRef(1);
+  const framing = ORBIT_FRAMING[layout];
+  const lensRef = useRef(framing.lens);
+  const bridgeMatrixRef = useRef(new THREE.Matrix4());
+  const bridgeQuaternionRef = useRef(new THREE.Quaternion());
+  const bridgeScaleRef = useRef(new THREE.Vector3());
+  const bridgeCornerRef = useRef(new THREE.Vector3());
+  const lastBridgeArrivalRef = useRef<number | null>(null);
   const inspectionControlsRef = useRef<InspectionControls>({
     pitch: 0,
     targetPitch: 0,
@@ -669,6 +909,7 @@ function OrbitUniverse({
     pinchDistance: null,
     pointers: new Map(),
   });
+  const gl = useThree((state) => state.gl);
   const invalidate = useThree((state) => state.invalidate);
 
   useEffect(() => {
@@ -677,15 +918,14 @@ function OrbitUniverse({
     activeWorldId,
     hoveredWorldId,
     invalidate,
+    layout,
     quality,
     resetViewToken,
   ]);
 
   useFrame((state, delta) => {
     const documentVisible = document.visibilityState !== "hidden";
-    const editorialProgress = activeWorldId
-      ? 0
-      : getOrbitEditorialProgress(progressRef.current);
+
     const handoffMotionScale = activeWorldId
       ? 1
       : 1 - THREE.MathUtils.smoothstep(handoffProgressRef.current, 0, 1);
@@ -693,15 +933,15 @@ function OrbitUniverse({
     if (
       motionActive &&
       documentVisible &&
-      !activeWorldId &&
-      !hoveredWorldId
+      !activeWorldId
     ) {
       orbitElapsedRef.current += Math.min(delta, 0.05) * handoffMotionScale;
     }
 
-    const scrollPhase = getOrbitMotionProgress(progressRef.current) * 0.66;
+    const scrollPhase = getOrbitMotionProgress(progressRef.current) * 0.08;
 
     const hasActiveWorld = activeWorldId !== null;
+    const arrival = hasActiveWorld ? 1 : arrivalProgressRef.current;
 
     ORBIT_WORLDS.forEach((world, index) => {
       const angle =
@@ -718,6 +958,8 @@ function OrbitUniverse({
         orbitTarget.set(focusPosition[0], focusPosition[1], focusPosition[2]);
       } else {
         getOrbitPoint(world, angle, orbitTarget);
+        orbitTarget.x *= framing.stretch[0];
+        orbitTarget.y *= framing.stretch[1];
         orbitTarget.y +=
           Math.sin(orbitElapsedRef.current * 0.42 + index) * world.orbit.bob;
         orbitTarget.z -= hasActiveWorld ? 2.4 : 0;
@@ -738,12 +980,12 @@ function OrbitUniverse({
             const deltaY = second.y - first.y;
             const distance = Math.hypot(deltaX, deltaY);
 
-            if (distance >= ORBIT_COLLISION_MIN_DISTANCE) {
+            if (distance >= framing.collision) {
               continue;
             }
 
             const safeDistance = Math.max(distance, 0.001);
-            const push = (ORBIT_COLLISION_MIN_DISTANCE - safeDistance) * 0.5;
+            const push = (framing.collision - safeDistance) * 0.5;
             const directionX = distance > 0.001 ? deltaX / safeDistance : 1;
             const directionY = distance > 0.001 ? deltaY / safeDistance : 0;
 
@@ -753,8 +995,33 @@ function OrbitUniverse({
             second.y += directionY * push;
           }
         }
+
+        // Keep every world clear of the emblem at the centre.
+        ORBIT_WORLDS.forEach((world) => {
+          const target = orbitTargetsRef.current[world.id];
+          const distance = Math.hypot(target.x, target.y);
+
+          if (distance < framing.emblemClearance) {
+            const push = framing.emblemClearance / Math.max(distance, 0.001);
+            target.x = distance > 0.001 ? target.x * push : framing.emblemClearance;
+            target.y *= distance > 0.001 ? push : 1;
+          }
+        });
       }
     }
+
+    // The first frame starts every world in orbit rather than flying out of the centre.
+    worldPosesRef.current ??= Object.fromEntries(
+      ORBIT_WORLDS.map((world) => [
+        world.id,
+        {
+          position: orbitTargetsRef.current[world.id].clone(),
+          scale: framing.worldScale,
+        },
+      ]),
+    ) as Record<OrbitWorldId, OrbitWorldPose>;
+
+    const worldPoses = worldPosesRef.current;
 
     ORBIT_WORLDS.forEach((world) => {
       const group = worldRefs.current[world.id];
@@ -763,6 +1030,7 @@ function OrbitUniverse({
         return;
       }
 
+      const pose = worldPoses[world.id];
       const angle = orbitAnglesRef.current[world.id];
       const isActive = activeWorldId === world.id;
       const isHovered = hoveredWorldId === world.id;
@@ -771,31 +1039,45 @@ function OrbitUniverse({
         ? world.presentation.focusScale * inspectionControlsRef.current.zoom
         : hasActiveWorld
           ? 0.58
-          : isHovered
-            ? 1.14
-            : 1;
+          : (isHovered ? 1.08 : 1) * framing.worldScale;
+      const entrance = WORLD_ARRIVALS[world.id];
+      const reveal = smoothstep(arrival, entrance.start, entrance.end);
+      const isDesigns = world.id === "designs";
+      // Designs keeps full size beneath the still and fades instead; the others
+      // grow out of the distance.
+      const growth = isDesigns ? 1 : reveal;
 
-      group.position.x = THREE.MathUtils.damp(
-        group.position.x,
+      pose.position.x = THREE.MathUtils.damp(
+        pose.position.x,
         orbitTarget.x,
         isActive ? 6.8 : 4.3,
         delta,
       );
-      group.position.y = THREE.MathUtils.damp(
-        group.position.y,
+      pose.position.y = THREE.MathUtils.damp(
+        pose.position.y,
         orbitTarget.y,
         isActive ? 6.8 : 4.3,
         delta,
       );
-      group.position.z = THREE.MathUtils.damp(
-        group.position.z,
+      pose.position.z = THREE.MathUtils.damp(
+        pose.position.z,
         orbitTarget.z,
         isActive ? 7.4 : 4.9,
         delta,
       );
-      group.scale.setScalar(
-        THREE.MathUtils.damp(group.scale.x, targetScale, 7.2, delta),
-      );
+      pose.scale = THREE.MathUtils.damp(pose.scale, targetScale, 7.2, delta);
+
+      group.position
+        .copy(pose.position)
+        .addScaledVector(entrance.offset, 1 - reveal);
+      group.scale.setScalar(reveal > 0 ? pose.scale * growth : 0.0001);
+      // Hidden Designs still renders at a speck so its fade shader compiles
+      // before the crossfade, not during it.
+      group.visible = isDesigns || reveal > 0;
+
+      if (isDesigns) {
+        designsOpacityRef.current = reveal;
+      }
       group.rotation.y = THREE.MathUtils.damp(
         group.rotation.y,
         isActive
@@ -823,18 +1105,14 @@ function OrbitUniverse({
     if (universe) {
       universe.position.x = THREE.MathUtils.damp(
         universe.position.x,
-        activeWorldId
-          ? 0
-          : editorialProgress * (quality === "full" ? 3.75 : 0.65),
+        0,
         5.4,
         delta,
       );
       universe.scale.setScalar(
         THREE.MathUtils.damp(
           universe.scale.x,
-          activeWorldId
-            ? 1
-            : THREE.MathUtils.lerp(1, 0.88, editorialProgress),
+          1,
           5.4,
           delta,
         ),
@@ -842,29 +1120,58 @@ function OrbitUniverse({
     }
 
     if (center) {
+      const emblem = smoothstep(
+        arrival,
+        EMBLEM_ARRIVAL.start,
+        EMBLEM_ARRIVAL.end,
+      );
+
       center.position.z = THREE.MathUtils.damp(
         center.position.z,
         activeWorldId ? -2 : 0,
         5.2,
         delta,
       );
-      center.scale.setScalar(
-        THREE.MathUtils.damp(
-          center.scale.x,
-          activeWorldId ? 0.52 : 1,
-          5.2,
-          delta,
-        ),
+      centerScaleRef.current = THREE.MathUtils.damp(
+        centerScaleRef.current,
+        activeWorldId ? 0.52 : framing.emblemScale,
+        5.2,
+        delta,
       );
+      center.scale.setScalar(
+        emblem > 0 ? centerScaleRef.current * emblem : 0.0001,
+      );
+      center.rotation.y = (1 - emblem) * EMBLEM_ARRIVAL.turn;
+      center.visible = emblem > 0;
     }
 
+    pathsRef.current?.scale.set(framing.stretch[0], framing.stretch[1], 1);
+
+    const lensTarget = activeWorldId ? 0.5 : framing.lens;
+
+    lensRef.current = THREE.MathUtils.damp(lensRef.current, lensTarget, 4.2, delta);
+
+    if (Math.abs(lensRef.current - lensTarget) < 0.0005) {
+      lensRef.current = lensTarget;
+    }
+
+    applyLens(state.camera, state.size.width, state.size.height, lensRef.current);
+
+    // The system is framed into the column the lens centres on.
+    const frameAspect =
+      (state.size.width * 2 * (1 - Math.max(lensRef.current, 1 - lensRef.current))) /
+      state.size.height;
     const pointerParallax = quality === "full" && !activeWorldId ? 1 : 0;
     const targetCameraX = state.pointer.x * 0.2 * pointerParallax;
     const targetCameraY =
-      0.18 + state.pointer.y * 0.12 * pointerParallax + editorialProgress * 0.06;
+      0.18 + state.pointer.y * 0.12 * pointerParallax;
     const targetCameraZ = activeWorldId
       ? 8.72
-      : THREE.MathUtils.lerp(8.9, 11.4, editorialProgress);
+      : Math.max(
+          framing.minCameraZ,
+          framing.halfExtent[0] / (CAMERA_HALF_FOV_TAN * frameAspect) + 1.2,
+          framing.halfExtent[1] / CAMERA_HALF_FOV_TAN + 1.2,
+        );
 
     state.camera.position.x = THREE.MathUtils.damp(
       state.camera.position.x,
@@ -886,11 +1193,73 @@ function OrbitUniverse({
     );
 
     cameraTargetRef.current.set(
-      activeWorldId ? 0 : editorialProgress * 0.28,
-      activeWorldId ? (quality === "compact" ? 0.28 : 0.02) : 0,
+      0,
+      activeWorldId
+        ? (quality === "compact" ? 0.28 : 0.02)
+        : framing.lookHeight,
       activeWorldId ? 0.18 : -0.08,
     );
     state.camera.lookAt(cameraTargetRef.current);
+    state.camera.updateMatrixWorld();
+
+    // Land the studio still on the Designs world's resting pose. The final
+    // write (arrival 1) hides it; later frames skip the DOM entirely.
+    const bridgeArt = bridgeArtRef.current;
+    const bridgeArrival = arrivalProgressRef.current;
+
+    if (
+      bridgeArt &&
+      !activeWorldId &&
+      (bridgeArrival < 1 || lastBridgeArrivalRef.current !== bridgeArrival)
+    ) {
+      const bounds = designsBoundsRef.current;
+      const designsGroup = worldRefs.current.designs;
+
+      lastBridgeArrivalRef.current = bridgeArrival;
+
+      if (bounds && designsGroup) {
+        // Project the model's resting bounding box (its full size, ignoring the
+        // speck it is drawn at while hidden) and land the still on it.
+        const matrix = bridgeMatrixRef.current
+          .compose(
+            worldPoses.designs.position,
+            bridgeQuaternionRef.current.setFromEuler(designsGroup.rotation),
+            bridgeScaleRef.current.setScalar(worldPoses.designs.scale),
+          )
+          .multiply(DESIGNS_ROTATION);
+
+        if (universe) {
+          matrix.premultiply(universe.matrixWorld);
+        }
+
+        const canvasRect = gl.domElement.getBoundingClientRect();
+        let minX = Infinity;
+        let maxX = -Infinity;
+        let minY = Infinity;
+        let maxY = -Infinity;
+
+        BOX_CORNERS.forEach((corner) => {
+          const point = bridgeCornerRef.current
+            .copy(corner)
+            .multiply(bounds)
+            .applyMatrix4(matrix)
+            .project(state.camera);
+          const x = canvasRect.left + ((point.x + 1) / 2) * canvasRect.width;
+          const y = canvasRect.top + ((1 - point.y) / 2) * canvasRect.height;
+
+          minX = Math.min(minX, x);
+          maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y);
+          maxY = Math.max(maxY, y);
+        });
+
+        renderOrbitBridgeArt(bridgeArt, bridgeArrival, {
+          x: (minX + maxX) / 2,
+          y: (minY + maxY) / 2,
+          width: (maxY - minY) / ORBIT_BRIDGE_CONTENT_HEIGHT,
+        });
+      }
+    }
 
     const focusWorldId = activeWorldId ?? hoveredWorldId;
     const focusGroup = focusWorldId ? worldRefs.current[focusWorldId] : null;
@@ -955,58 +1324,63 @@ function OrbitUniverse({
         onReady={onReady}
       />
       <SceneEnvironment />
-      <ambientLight color="#d8e0da" intensity={0.72} />
+      <ambientLight color={ORBIT_PALETTE.ambient} intensity={0.72} />
       <hemisphereLight
-        color="#eef4ef"
-        groundColor="#151b18"
+        color={ORBIT_PALETTE.tanLight}
+        groundColor={ORBIT_PALETTE.surface}
         intensity={1.9}
       />
       <directionalLight
-        color="#fff1df"
+        color={ORBIT_PALETTE.key}
         intensity={4.4}
         position={[4.8, 7.2, 6.5]}
       />
       <directionalLight
-        color="#72a9d0"
+        color={ORBIT_PALETTE.fill}
         intensity={2.45}
         position={[-5.5, 2.2, 4.2]}
       />
       <directionalLight
-        color="#d9e6d8"
+        color={ORBIT_PALETTE.rim}
         intensity={2.9}
         position={[0.6, -4.8, -3.5]}
       />
       <pointLight
         ref={focusLightRef}
-        color="#a7c2aa"
+        color={ORBIT_PALETTE.tan}
         decay={1.7}
         distance={10}
         intensity={9}
         position={[1.8, 1.25, 3.7]}
       />
       <pointLight
-        color="#e18453"
+        color={ORBIT_PALETTE.ember}
         decay={1.8}
         distance={9}
         intensity={7.5}
         position={[-3.2, -1.8, 4.1]}
       />
 
-      <DepthParticles quality={quality} />
+      <DepthParticles quality={quality} arrivalProgressRef={arrivalProgressRef} />
 
       <group ref={universeRef}>
         <group ref={centerRef}>
           <CentralMark model={centerModel.scene} />
         </group>
 
-        {ORBIT_WORLDS.map((world) => (
-          <OrbitPath
-            key={`path-${world.id}`}
-            world={world}
-            quality={quality}
-            activeWorldId={activeWorldId}
-          />
-        ))}
+        {/* Paths share the worlds' layout stretch; lines tolerate the scale. */}
+        <group ref={pathsRef}>
+          {ORBIT_WORLDS.map((world, index) => (
+            <OrbitPath
+              key={`path-${world.id}`}
+              world={world}
+              index={index}
+              quality={quality}
+              activeWorldId={activeWorldId}
+              arrivalProgressRef={arrivalProgressRef}
+            />
+          ))}
+        </group>
 
         {ORBIT_WORLDS.map((world, index) => (
           <OrbitWorldAnchor
@@ -1016,6 +1390,8 @@ function OrbitUniverse({
             }}
             world={world}
             model={worldModels[index].scene}
+            opacityRef={world.id === "designs" ? designsOpacityRef : undefined}
+            boundsRef={world.id === "designs" ? designsBoundsRef : undefined}
             active={activeWorldId === world.id}
             resetViewToken={resetViewToken}
             inspectionControlsRef={inspectionControlsRef}
@@ -1035,7 +1411,7 @@ export function EcosystemOrbitCanvas(props: EcosystemOrbitCanvasProps) {
   return (
     <Canvas
       className="wc-scene-orbit__canvas"
-      camera={{ fov: 43, near: 0.1, far: 48, position: [0, 0.18, 8.9] }}
+      camera={{ fov: 43, near: 0.1, far: 48, position: [0, 0.18, 12.8] }}
       dpr={dpr}
       frameloop="demand"
       gl={{
@@ -1046,11 +1422,12 @@ export function EcosystemOrbitCanvas(props: EcosystemOrbitCanvasProps) {
         preserveDrawingBuffer: false,
       }}
       performance={{ min: 0.5 }}
+      onPointerMissed={props.onDismiss}
       onCreated={({ gl }) => {
         gl.outputColorSpace = THREE.SRGBColorSpace;
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.toneMappingExposure = 1.28;
-        gl.setClearColor(0x080b0a, 0);
+        gl.setClearColor(ORBIT_PALETTE.canvas, 0);
       }}
     >
       <Suspense fallback={null}>

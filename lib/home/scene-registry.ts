@@ -79,12 +79,12 @@ export const HOME_SCENES = [
   {
     id: "scene-05",
     number: "05",
-    label: "Corporate Identity",
-    shortLabel: "Corporate",
+    label: "Built Here / The Studio",
+    shortLabel: "Studio",
     layout: "pinned",
-    scrollHeight: "200svh",
-    environmentTheme: "light",
-    navTheme: "light",
+    scrollHeight: "220svh",
+    environmentTheme: "dark",
+    navTheme: "glass",
     cursorMode: "view",
   },
   {
@@ -93,7 +93,8 @@ export const HOME_SCENES = [
     label: "WestCose Ecosystem Orbit",
     shortLabel: "Orbit",
     layout: "pinned",
-    scrollHeight: "200svh",
+    // Desktop motion overlaps the studio's last 100svh (see studio-worlds.css).
+    scrollHeight: "280svh",
     environmentTheme: "dark",
     navTheme: "glass",
     cursorMode: "enter",

@@ -1,9 +1,17 @@
 export type OrbitWorldId = "designs" | "labs" | "shop";
 export type OrbitQualityTier = "compact" | "full";
 
-export const ORBIT_EDITORIAL_START = 0.2;
-export const ORBIT_EDITORIAL_END = 0.5;
-export const ORBIT_HANDOFF_START = 0.84;
+/** Scene 06 progress map. The stage pins on the studio's final frame, so the
+ * first stretch is the arrival: the Designs still recedes into its orbit while
+ * the other worlds assemble. Editorial copy lands as the arrival completes. */
+export const ORBIT_ARRIVAL_END = 0.3;
+export const ORBIT_EDITORIAL_START = 0.15;
+export const ORBIT_EDITORIAL_END = 0.3;
+export const ORBIT_HANDOFF_START = 0.86;
+/** Flow layouts have no scroll choreography; they render this resting state. */
+export const ORBIT_REST_PROGRESS = 0.5;
+/** Shared by the studio pullback's last frame and the orbit bridge's first. */
+export const ORBIT_BRIDGE_SCALE = 0.72;
 
 function clamp01(value: number) {
   return Math.min(1, Math.max(0, value));
@@ -13,6 +21,10 @@ function smoothstep(value: number, start: number, end: number) {
   const progress = clamp01((value - start) / (end - start));
 
   return progress * progress * (3 - 2 * progress);
+}
+
+export function getOrbitArrivalProgress(progress: number) {
+  return clamp01(progress / ORBIT_ARRIVAL_END);
 }
 
 export function getOrbitEditorialProgress(progress: number) {
@@ -44,8 +56,10 @@ export function getOrbitMotionProgress(progress: number) {
 export type OrbitWorld = {
   readonly id: OrbitWorldId;
   readonly label: string;
-  readonly href: "/work" | "/westcose-labs" | "/shop";
-  readonly ctaLabel: `Enter ${string}`;
+  readonly href: "/work" | `https://${string}`;
+  readonly ctaLabel: string;
+  readonly cardLabel: string;
+  readonly previewSrc: `/experience/orbit/stills/${string}.webp`;
   readonly assets: {
     readonly source: `/experience/${string}.${"glb" | "gltf"}`;
     readonly full: `/experience/${string}.${"glb" | "gltf"}`;
@@ -97,7 +111,9 @@ export const ORBIT_WORLDS = [
     id: "designs",
     label: "WestCose Designs",
     href: "/work",
-    ctaLabel: "Enter Designs",
+    ctaLabel: "View portfolio →",
+    cardLabel: "Portfolio",
+    previewSrc: "/experience/orbit/stills/designs.webp",
     assets: {
       source: "/experience/pen/westcose_designs.glb",
       full: "/experience/orbit/models/westcose_designs.web-full.glb",
@@ -105,7 +121,7 @@ export const ORBIT_WORLDS = [
         "/experience/orbit/models/westcose_designs.web-compact.glb",
     },
     presentation: {
-      targetSize: 2.28,
+      targetSize: 2.7,
       rotation: [0.08, -0.24, -0.06],
       envMapIntensity: 0.78,
       colorMultiplier: "#d0c5b8",
@@ -121,22 +137,22 @@ export const ORBIT_WORLDS = [
       },
     },
     orbit: {
-      radiusX: 3.2,
-      radiusY: 1.68,
-      depth: 1.08,
+      radiusX: 2.88,
+      radiusY: 1.77,
+      depth: 0.97,
       inclination: 0.38,
       yaw: -0.2,
       roll: -0.08,
-      phase: 0.38,
-      speed: 0.082,
+      phase: 0.92,
+      speed: 0.04,
       bob: 0.075,
     },
     disciplines: "Identity / Illustration / Apparel",
     summary:
-      "Brand systems, illustration, and graphic work built to hold together across every application.",
+      "Explore our portfolio of brand identities, illustration, and apparel graphics.",
     accent: {
-      primary: "#a7c2aa",
-      soft: "#d9e6d8",
+      primary: "#d4b48e",
+      soft: "#efdbc3",
     },
     visual: "identity",
     textureSrc: "/experience/sketchbook/impala-green.webp",
@@ -145,8 +161,10 @@ export const ORBIT_WORLDS = [
   {
     id: "labs",
     label: "WestCose Labs",
-    href: "/westcose-labs",
-    ctaLabel: "Enter Labs",
+    href: "https://westcoselabs.com",
+    ctaLabel: "Visit WestCose Labs ↗",
+    cardLabel: "Visit Labs",
+    previewSrc: "/experience/orbit/stills/labs.webp",
     assets: {
       source:
         "/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.glb",
@@ -156,7 +174,7 @@ export const ORBIT_WORLDS = [
         "/experience/orbit/models/wc_building_westcose_labs_01_server_satellite_refined.web-compact.glb",
     },
     presentation: {
-      targetSize: 2.4,
+      targetSize: 2.7,
       rotation: [-0.04, 0.3, 0.025],
       envMapIntensity: 1.24,
       colorMultiplier: "#ffffff",
@@ -172,19 +190,19 @@ export const ORBIT_WORLDS = [
       },
     },
     orbit: {
-      radiusX: 3.52,
-      radiusY: 1.94,
-      depth: 1.3,
+      radiusX: 3.17,
+      radiusY: 1.57,
+      depth: 1.17,
       inclination: -0.46,
       yaw: 0.42,
       roll: 0.16,
-      phase: 2.42,
-      speed: 0.066,
+      phase: 2.6,
+      speed: 0.032,
       bob: 0.09,
     },
-    disciplines: "Websites / Software / Experiments",
+    disciplines: "Website design / Development",
     summary:
-      "Websites, software, and experiments shaped with the same clear visual thinking.",
+      "Explore our website design and development work, services, and approach.",
     accent: {
       primary: "#72a9d0",
       soft: "#c8dfef",
@@ -194,8 +212,10 @@ export const ORBIT_WORLDS = [
   {
     id: "shop",
     label: "WestCose Shop",
-    href: "/shop",
-    ctaLabel: "Enter Shop",
+    href: "https://shop.westcose.com",
+    ctaLabel: "Shop WestCose merch ↗",
+    cardLabel: "Shop merch",
+    previewSrc: "/experience/orbit/stills/shop.webp",
     assets: {
       source:
         "/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.glb",
@@ -205,7 +225,7 @@ export const ORBIT_WORLDS = [
         "/experience/orbit/models/wc_building_westcose_shop_01_apparel_exterior.web-compact.glb",
     },
     presentation: {
-      targetSize: 2.32,
+      targetSize: 2.7,
       rotation: [0.06, -0.2, 0.045],
       envMapIntensity: 1.12,
       colorMultiplier: "#ffffff",
@@ -221,19 +241,19 @@ export const ORBIT_WORLDS = [
       },
     },
     orbit: {
-      radiusX: 3.34,
-      radiusY: 1.78,
-      depth: 1.18,
+      radiusX: 3.01,
+      radiusY: 1.82,
+      depth: 1.06,
       inclination: 0.58,
       yaw: 0.2,
       roll: -0.22,
-      phase: 4.52,
-      speed: 0.074,
+      phase: 5.22,
+      speed: 0.036,
       bob: 0.08,
     },
-    disciplines: "Streetwear / Merch / Objects",
+    disciplines: "Official apparel / Merchandise",
     summary:
-      "Apparel, merchandise, and physical objects made for the WestCose world.",
+      "Shop official WestCose apparel and merchandise.",
     accent: {
       primary: "#e18453",
       soft: "#f0c0a4",

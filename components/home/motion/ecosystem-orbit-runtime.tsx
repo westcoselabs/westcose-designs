@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import dynamic from "next/dynamic";
 import {
   Component,
@@ -22,6 +24,12 @@ import {
 import { Button, ButtonLink } from "@/components/ui/button";
 import { GlassPanel } from "@/components/ui/glass-panel";
 import {
+  ORBIT_BRIDGE_QUERY,
+  renderOrbitBridgeArt,
+} from "@/lib/home/orbit-bridge";
+import {
+  ORBIT_REST_PROGRESS,
+  getOrbitArrivalProgress,
   getOrbitEditorialProgress,
   getOrbitHandoffProgress,
   getOrbitMotionProgress,
@@ -47,6 +55,7 @@ const MOTION_ALLOWED_QUERY = "(prefers-reduced-motion: no-preference)";
 const FORCED_COLORS_QUERY = "(forced-colors: active)";
 const FULL_QUALITY_QUERY =
   "(min-width: 64rem) and (hover: hover) and (pointer: fine)";
+const SPLIT_LAYOUT_QUERY = "(min-width: 64rem)";
 const FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
@@ -235,11 +244,16 @@ export function EcosystemOrbitRuntime({
   const shouldReturnFocusRef = useRef(true);
   const progressRef = useRef(0);
   const handoffProgressRef = useRef(0);
+  const arrivalProgressRef = useRef(1);
+  const bridgeArtRef = useRef<HTMLElement | null>(null);
+  const rendererRef = useRef<OrbitRendererState>("checking");
+  const syncLayoutRef = useRef<(() => void) | null>(null);
   const [hoveredWorldId, setHoveredWorldId] =
     useState<OrbitWorldId | null>(null);
   const [activeWorldId, setActiveWorldId] =
     useState<OrbitWorldId | null>(null);
   const [quality, setQuality] = useState<OrbitQualityTier>("compact");
+  const [splitLayout, setSplitLayout] = useState(false);
   const [resetViewToken, setResetViewToken] = useState(0);
   const [enhancementAllowed, setEnhancementAllowed] = useState(false);
   const [webglSupported, setWebglSupported] = useState<boolean | null>(null);
@@ -260,6 +274,7 @@ export function EcosystemOrbitRuntime({
     const motionAllowedQuery = window.matchMedia(MOTION_ALLOWED_QUERY);
     const forcedColorsQuery = window.matchMedia(FORCED_COLORS_QUERY);
     const fullQualityQuery = window.matchMedia(FULL_QUALITY_QUERY);
+    const splitLayoutQuery = window.matchMedia(SPLIT_LAYOUT_QUERY);
     const connection = (navigator as NavigatorWithConnection).connection;
     const updateEnvironment = () => {
       const canEnhance =
@@ -269,6 +284,7 @@ export function EcosystemOrbitRuntime({
 
       setEnhancementAllowed(canEnhance);
       setQuality(fullQualityQuery.matches ? "full" : "compact");
+      setSplitLayout(splitLayoutQuery.matches);
       setDocumentVisible(!document.hidden);
 
       if (!canEnhance) {
@@ -297,6 +313,7 @@ export function EcosystemOrbitRuntime({
     motionAllowedQuery.addEventListener("change", updateEnvironment);
     forcedColorsQuery.addEventListener("change", updateEnvironment);
     fullQualityQuery.addEventListener("change", updateEnvironment);
+    splitLayoutQuery.addEventListener("change", updateEnvironment);
     connection?.addEventListener("change", updateEnvironment);
     document.addEventListener("visibilitychange", updateEnvironment);
 
@@ -306,6 +323,7 @@ export function EcosystemOrbitRuntime({
       motionAllowedQuery.removeEventListener("change", updateEnvironment);
       forcedColorsQuery.removeEventListener("change", updateEnvironment);
       fullQualityQuery.removeEventListener("change", updateEnvironment);
+      splitLayoutQuery.removeEventListener("change", updateEnvironment);
       connection?.removeEventListener("change", updateEnvironment);
       document.removeEventListener("visibilitychange", updateEnvironment);
     };
@@ -325,6 +343,12 @@ export function EcosystemOrbitRuntime({
           : "loading"
         : "checking";
 
+  useEffect(() => {
+    rendererRef.current = renderer;
+    // Static artwork on a stacked layout drops to normal flow.
+    syncLayoutRef.current?.();
+  }, [renderer]);
+
   useGSAP(
     () => {
       const scope = scopeRef.current;
@@ -336,17 +360,66 @@ export function EcosystemOrbitRuntime({
         return;
       }
 
-      const updateProgress = (progress: number) => {
+      const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const stackedQuery = window.matchMedia("(max-width: 63.999rem)");
+      const bridgeQuery = window.matchMedia(ORBIT_BRIDGE_QUERY);
+      const editorial = section.querySelector<HTMLElement>(".wc-scene-orbit__editorial");
+      // Flow layouts show all destinations without scroll choreography: reduced
+      // motion everywhere, and stacked screens that fall back to static art.
+      const isFlowLayout = () =>
+        reducedMotionQuery.matches ||
+        (stackedQuery.matches && rendererRef.current === "fallback");
+      const bridgeArt = section.querySelector<HTMLElement>("[data-orbit-bridge-art]");
+      const fallbackDesigns = section.querySelector<HTMLElement>(
+        '.wc-scene-orbit__fallback-world[data-world="designs"]',
+      );
+
+      bridgeArtRef.current = bridgeArt;
+
+      // The canvas steers the still while WebGL renders; otherwise it lands on
+      // the static Designs artwork.
+      const renderFallbackBridge = (arrival: number) => {
+        if (!bridgeArt || rendererRef.current === "webgl") {
+          return;
+        }
+
+        const rect = fallbackDesigns?.getBoundingClientRect();
+
+        renderOrbitBridgeArt(
+          bridgeArt,
+          arrival,
+          rect && rect.width > 0
+            ? {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+                width: rect.width,
+              }
+            : null,
+        );
+      };
+      const updateProgress = (rawProgress: number, entered: boolean) => {
+        // The inspector's scroll lock pins the body at scroll 0; keep the
+        // last real state rather than reading that as leaving the scene.
+        if (document.documentElement.hasAttribute(INTERACTION_SCROLL_LOCK_ATTRIBUTE)) {
+          return;
+        }
+
+        const flow = isFlowLayout();
+        const progress = flow ? ORBIT_REST_PROGRESS : rawProgress;
+        const bridgeActive = bridgeQuery.matches && !flow;
+        const arrival = bridgeActive ? getOrbitArrivalProgress(progress) : 1;
         const editorialProgress = getOrbitEditorialProgress(progress);
         const handoffProgress = getOrbitHandoffProgress(progress);
 
         progressRef.current = progress;
         handoffProgressRef.current = handoffProgress;
+        arrivalProgressRef.current = arrival;
         section.style.setProperty("--wc-orbit-progress", progress.toFixed(4));
         section.style.setProperty(
           "--wc-orbit-motion-progress",
           getOrbitMotionProgress(progress).toFixed(4),
         );
+        section.style.setProperty("--wc-orbit-arrival", arrival.toFixed(4));
         section.style.setProperty(
           "--wc-orbit-editorial-progress",
           editorialProgress.toFixed(4),
@@ -355,6 +428,12 @@ export function EcosystemOrbitRuntime({
           "--wc-orbit-handoff-progress",
           handoffProgress.toFixed(4),
         );
+        // While the stage slides over the studio it stays hidden; it appears
+        // only once pinned, on the studio's identical final frame.
+        section.dataset.orbitFlow = String(flow);
+        section.dataset.orbitBridge = bridgeActive ? "on" : "off";
+        section.dataset.orbitEntered = String(!bridgeActive || entered);
+        section.dataset.orbitArrival = arrival >= 1 ? "complete" : "active";
         section.dataset.orbitPhase =
           handoffProgress > 0.001
             ? "handoff"
@@ -367,24 +446,83 @@ export function EcosystemOrbitRuntime({
             : handoffProgress > 0.001
               ? "active"
               : "idle";
-      };
 
-      updateProgress(0);
+        if (bridgeActive) {
+          renderFallbackBridge(arrival);
+        }
+      };
+      // Read from the trigger, which stays correct while ScrollTrigger.refresh()
+      // momentarily moves the page; scroll locks are skipped above.
+      const hasEntered = (self: ScrollTrigger) => self.isActive || self.progress > 0;
+
+      // Apply the overlap before measuring, so the trigger starts where it pins.
+      section.dataset.orbitBridge =
+        bridgeQuery.matches && !isFlowLayout() ? "on" : "off";
 
       const trigger = ScrollTrigger.create({
         trigger: section,
         start: "top top",
         end: "bottom bottom",
         invalidateOnRefresh: true,
-        onUpdate: (self) => updateProgress(self.progress),
+        onUpdate: (self) => updateProgress(self.progress, hasEntered(self)),
+        onToggle: (self) => updateProgress(self.progress, hasEntered(self)),
+        onRefresh: (self) => updateProgress(self.progress, hasEntered(self)),
       });
+      // Stacked layouts frame the planets above the card block.
+      const measureEditorial = () => {
+        if (!editorial || !stackedQuery.matches || isFlowLayout()) {
+          section.style.removeProperty("--wc-orbit-editorial-space");
+          return;
+        }
+
+        const stageHeight = editorial.offsetParent?.clientHeight ?? window.innerHeight;
+
+        section.style.setProperty(
+          "--wc-orbit-editorial-space",
+          `${Math.round(stageHeight - editorial.offsetTop + 12)}px`,
+        );
+      };
+      const editorialObserver = new ResizeObserver(measureEditorial);
+      let lastBridge: string | undefined = section.dataset.orbitBridge;
+      const updateLayout = () => {
+        updateProgress(trigger.progress, hasEntered(trigger));
+        measureEditorial();
+
+        // The bridge overlap moves every later scene; re-measure them.
+        if (lastBridge !== undefined && lastBridge !== section.dataset.orbitBridge) {
+          ScrollTrigger.refresh();
+        }
+
+        lastBridge = section.dataset.orbitBridge;
+      };
+
+      updateLayout();
+      syncLayoutRef.current = updateLayout;
+      if (editorial) editorialObserver.observe(editorial);
+      reducedMotionQuery.addEventListener("change", updateLayout);
+      stackedQuery.addEventListener("change", updateLayout);
+      bridgeQuery.addEventListener("change", updateLayout);
 
       return () => {
+        syncLayoutRef.current = null;
+        editorialObserver.disconnect();
+        reducedMotionQuery.removeEventListener("change", updateLayout);
+        stackedQuery.removeEventListener("change", updateLayout);
+        bridgeQuery.removeEventListener("change", updateLayout);
         trigger.kill();
+        bridgeArtRef.current = null;
+        bridgeArt?.style.removeProperty("transform");
+        bridgeArt?.style.removeProperty("opacity");
         section.removeAttribute("data-orbit-handoff");
         section.removeAttribute("data-orbit-phase");
+        section.removeAttribute("data-orbit-bridge");
+        section.removeAttribute("data-orbit-flow");
+        section.style.removeProperty("--wc-orbit-editorial-space");
+        section.removeAttribute("data-orbit-entered");
+        section.removeAttribute("data-orbit-arrival");
         section.style.removeProperty("--wc-orbit-progress");
         section.style.removeProperty("--wc-orbit-motion-progress");
+        section.style.removeProperty("--wc-orbit-arrival");
         section.style.removeProperty("--wc-orbit-editorial-progress");
         section.style.removeProperty("--wc-orbit-handoff-progress");
       };
@@ -408,7 +546,7 @@ export function EcosystemOrbitRuntime({
       activatingControlRef.current =
         activatingControl ??
         scopeRef.current?.querySelector<HTMLElement>(
-          `.wc-scene-orbit__node[data-orbit-world="${worldId}"]`,
+          `.wc-destination-card__preview[data-orbit-world="${worldId}"]`,
         ) ??
         null;
       shouldReturnFocusRef.current = true;
@@ -486,7 +624,7 @@ export function EcosystemOrbitRuntime({
 
       const focusableElements = Array.from(
         dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      ).filter((element) => element.getClientRects().length > 0);
+      ).filter((element) => element.tabIndex >= 0 && element.getClientRects().length > 0);
 
       if (focusableElements.length === 0) {
         event.preventDefault();
@@ -588,6 +726,10 @@ export function EcosystemOrbitRuntime({
 
   const handleSemanticActivation = useCallback(
     (event: MouseEvent<HTMLDivElement>) => {
+      const trigger = event.target instanceof Element
+        ? event.target.closest<HTMLElement>("[data-orbit-trigger]")
+        : null;
+      if (!trigger) return;
       const worldId = readWorldId(event.target);
 
       if (!worldId) {
@@ -595,7 +737,7 @@ export function EcosystemOrbitRuntime({
       }
 
       event.preventDefault();
-      openInspector(worldId, readWorldElement(event.target));
+      openInspector(worldId, trigger);
     },
     [openInspector],
   );
@@ -623,7 +765,7 @@ export function EcosystemOrbitRuntime({
   const handleCanvasWorldActivate = useCallback(
     (worldId: OrbitWorldId) => {
       const semanticControl = scopeRef.current?.querySelector<HTMLElement>(
-        `.wc-scene-orbit__node[data-orbit-world="${worldId}"]`,
+        `.wc-destination-card__preview[data-orbit-world="${worldId}"]`,
       );
 
       openInspector(worldId, semanticControl);
@@ -671,12 +813,16 @@ export function EcosystemOrbitRuntime({
               activeWorldId={activeWorldId}
               quality={quality}
               resetViewToken={resetViewToken}
+              layout={splitLayout ? "split" : "stacked"}
               progressRef={progressRef}
               handoffProgressRef={handoffProgressRef}
+              arrivalProgressRef={arrivalProgressRef}
+              bridgeArtRef={bridgeArtRef}
               motionActive={(isVisible || isInspecting) && documentVisible}
               onWorldEnter={handleCanvasWorldEnter}
               onWorldLeave={handleWorldLeave}
               onWorldActivate={handleCanvasWorldActivate}
+              onDismiss={closeInspector}
               onReady={handleCanvasReady}
               onFailure={handleCanvasFailure}
             />
@@ -689,6 +835,7 @@ export function EcosystemOrbitRuntime({
       {activeWorld ? (
         <div
           className="wc-scene-orbit__inspector"
+          data-preview-mode={renderer === "webgl" ? "interactive" : "static"}
           data-world={activeWorld.id}
           style={
             {
@@ -707,6 +854,25 @@ export function EcosystemOrbitRuntime({
             aria-describedby={`orbit-inspector-disciplines-${activeWorld.id} orbit-inspector-summary-${activeWorld.id} orbit-inspector-controls-${activeWorld.id}`}
             tabIndex={-1}
           >
+            {renderer !== "webgl" ? (
+              <>
+                <button
+                  type="button"
+                  className="wc-scene-orbit__inspector-backdrop"
+                  aria-label="Close planet details"
+                  tabIndex={-1}
+                  onClick={closeInspector}
+                />
+                <Image
+                  className="wc-scene-orbit__inspector-preview"
+                  src={activeWorld.previewSrc}
+                  alt={`${activeWorld.label} planet`}
+                  width={640}
+                  height={640}
+                  sizes="(max-width: 1023px) 70vw, 48vw"
+                />
+              </>
+            ) : null}
             <GlassPanel
               as="aside"
               className="wc-scene-orbit__inspector-panel"

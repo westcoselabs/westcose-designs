@@ -17,8 +17,10 @@ void main() {
 
 const VARIATION_D_WARM = [185 / 255, 87 / 255, 47 / 255] as const;
 
+// Phones render the same field with one fewer octave (see createFragmentShader).
 const FRAGMENT_SHADER = `#version 300 es
 precision highp float;
+#define OCTAVES 5
 
 uniform vec2 u_resolution;
 uniform float u_time;
@@ -47,7 +49,7 @@ float fbm(vec2 p) {
   float v = 0.0;
   float amp = 0.5;
   mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < OCTAVES; i++) {
     v += amp * noise(p);
     p = rot * p * 2.02;
     amp *= 0.5;
@@ -112,6 +114,17 @@ void main() {
   out_color = vec4(color, 1.0);
 }`;
 
+function createFragmentShader(compact: boolean) {
+  return compact
+    ? FRAGMENT_SHADER.replace("#define OCTAVES 5", "#define OCTAVES 4")
+    : FRAGMENT_SHADER;
+}
+
+// The field is soft, so phones draw it at half the CSS resolution and let the
+// browser upscale it; desktop keeps up to 1.5x device pixels.
+const COMPACT_QUERY = "(hover: none), (pointer: coarse), (max-width: 47.999rem)";
+const COMPACT_RENDER_SCALE = 0.5;
+
 function compileShader(
   gl: WebGL2RenderingContext,
   type: number,
@@ -157,15 +170,9 @@ export function HomeLiquidBackdrop() {
     const reducedMotionQuery = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     );
-    const coarsePointerQuery = window.matchMedia(
-      "(hover: none), (pointer: coarse), (max-width: 47.999rem)",
-    );
+    const compact = window.matchMedia(COMPACT_QUERY).matches;
 
-    if (
-      prefersReducedMotion ||
-      reducedMotionQuery.matches ||
-      coarsePointerQuery.matches
-    ) {
+    if (prefersReducedMotion || reducedMotionQuery.matches) {
       setRendererMode("fallback");
       reportHeroVisualReady();
       return;
@@ -190,7 +197,7 @@ export function HomeLiquidBackdrop() {
     const fragmentShader = compileShader(
       gl,
       gl.FRAGMENT_SHADER,
-      FRAGMENT_SHADER,
+      createFragmentShader(compact),
     );
 
     if (!vertexShader || !fragmentShader) {
@@ -259,7 +266,9 @@ export function HomeLiquidBackdrop() {
     let contextLost = false;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = compact
+        ? COMPACT_RENDER_SCALE
+        : Math.min(window.devicePixelRatio || 1, 1.5);
       const width = Math.max(1, Math.round(canvas.clientWidth * dpr));
       const height = Math.max(1, Math.round(canvas.clientHeight * dpr));
 

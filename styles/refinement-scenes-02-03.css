@@ -446,7 +446,9 @@
   text-align: right;
 }
 
-/* Small screens and reduced motion become an authored, normal-flow story. */
+/* Small screens and reduced motion become an authored, normal-flow story.
+   Phones with motion keep the cinematic Falling Studio (cinematic-home.css,
+   mobile-scenes.css); Brand Development stays a stacked story on phones. */
 @media (max-width: 47.999rem), (prefers-reduced-motion: reduce) {
   .wc-scene-falling--refined,
   .wc-scene-brand-development {

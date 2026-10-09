@@ -42,12 +42,12 @@ function Paper({ art, texture, frame }: { art: CinematicPaper; texture: THREE.Te
     let opacity = phase(t, 0, .09) * (1 - phase(t, .88, 1));
     if (art.id === "sunshine-entry") {
       opacity = phase(state.entry, .04, .1) * (1 - phase(t, .88, 1));
-      if (p === 0 && !state.mobile) {
+      if (p === 0) {
         const peel = phase(state.entry, .04, 1);
-        x = mix(state.entryRect.x, .42, peel);
+        x = mix(state.entryRect.x, state.mobile ? .5 : .42, peel);
         y = mix(state.entryRect.y, .35, peel);
         z = mix(0, -1.5, peel);
-        width = mix(state.entryRect.width, art.paper.width, peel);
+        width = mix(state.entryRect.width, width, peel);
         bend *= Math.sin(peel * Math.PI) * .8 + peel;
         rx = Math.sin(peel * Math.PI) * -.4;
         ry = Math.sin(peel * Math.PI) * .3;

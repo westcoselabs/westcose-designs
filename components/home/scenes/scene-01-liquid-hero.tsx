@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,6 +14,31 @@ import { IconBadge } from "@/components/ui/icon-badge";
 import { DisplayHeading, Eyebrow, Lede } from "@/components/ui/typography";
 import { LiquidHeroReveal } from "@/components/home/motion/liquid-hero-reveal";
 import heroArtwork from "@/portfolio/hero4.png";
+import heroMobileArtwork from "@/public/experience/hero/coastal-hero-mobile.webp";
+
+const HERO_ART_ALT =
+  "WestCose coastal illustration with a tattooed woman, ocean waves, palms, and a vintage motel.";
+const HERO_MOBILE_QUERY = "(max-width: 47.999rem)";
+
+/** Wide coastal panorama on desktop; the cut-out portrait on phones. */
+function HeroArtwork() {
+  const shared = { alt: HERO_ART_ALT, fill: true, priority: true } as const;
+  const {
+    props: { srcSet: mobileSrcSet },
+  } = getImageProps({ ...shared, src: heroMobileArtwork, sizes: "112vw" });
+  const { props: desktopProps } = getImageProps({
+    ...shared,
+    src: heroArtwork,
+    sizes: "100vw",
+  });
+
+  return (
+    <picture>
+      <source media={HERO_MOBILE_QUERY} srcSet={mobileSrcSet} sizes="112vw" />
+      <img {...desktopProps} alt={HERO_ART_ALT} />
+    </picture>
+  );
+}
 
 const heroServices = [
   {
@@ -56,13 +81,7 @@ export function Scene01LiquidHero() {
       <LiquidHeroReveal>
         <div className="wc-coastal-hero__atmosphere" aria-hidden="true" />
         <div className="wc-coastal-hero__art" data-hero-art>
-          <Image
-            src={heroArtwork}
-            alt="WestCose coastal illustration with a tattooed woman, ocean waves, palms, and a vintage motel."
-            fill
-            sizes="(max-width: 767px) 180vw, 100vw"
-            priority
-          />
+          <HeroArtwork />
         </div>
         <div className="wc-coastal-hero__scrim" aria-hidden="true" />
 

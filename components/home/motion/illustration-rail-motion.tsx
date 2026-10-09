@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 import { LIQUID_HANDOFF_DRIFT } from "@/lib/home/cinematic-motion";
 import { useHomeExperience } from "@/lib/home/home-experience-context";
@@ -29,13 +29,6 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
   const scopeRef = useRef<HTMLDivElement>(null);
   const activeIndexRef = useRef(-1);
   const prefersReducedMotion = useReducedMotionPreference();
-  const [compact, setCompact] = useState(false);
-  useEffect(() => {
-    const media = matchMedia("(max-width: 767px)");
-    const update = () => setCompact(media.matches);
-    update(); media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
   const { setLiquidAccent, setLiquidDrift, setLiquidEnergy } =
     useHomeExperience();
 
@@ -70,7 +63,7 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (prefersReducedMotion || compact) {
+      if (prefersReducedMotion) {
         gsap.set(track, { clearProps: "transform" });
         artworks.forEach((artwork) => {
           artwork.style.removeProperty("--wc-artwork-focus");
@@ -332,7 +325,6 @@ export function IllustrationRailMotion({ children }: { children: ReactNode }) {
       scope: scopeRef,
       dependencies: [
         prefersReducedMotion,
-        compact,
         setLiquidAccent,
         setLiquidDrift,
         setLiquidEnergy,

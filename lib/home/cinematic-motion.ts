@@ -18,3 +18,7 @@ export type PaperFrame = {
   receiver: { x: number; y: number; width: number };
   invalidate?: () => void;
 };
+// Phones with motion allowed get pinned, scroll-driven scenes too. Keep in
+// step with styles/mobile-scenes.css.
+export const MOBILE_MOTION_QUERY =
+  "(max-width: 47.999rem) and (prefers-reduced-motion: no-preference) and (forced-colors: none)";

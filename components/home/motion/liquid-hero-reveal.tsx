@@ -2,7 +2,10 @@
 
 import { useRef, type ReactNode } from "react";
 
-import { LIQUID_HANDOFF_DRIFT } from "@/lib/home/cinematic-motion";
+import {
+  LIQUID_HANDOFF_DRIFT,
+  MOBILE_MOTION_QUERY,
+} from "@/lib/home/cinematic-motion";
 import { useHomeExperience } from "@/lib/home/home-experience-context";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/motion/gsap";
 import { useReducedMotionPreference } from "@/lib/motion/use-reduced-motion";
@@ -70,10 +73,9 @@ export function LiquidHeroReveal({ children }: { children: ReactNode }) {
         },
       );
 
-      // Mobile is a normal-flow composition: keep its service links visible
-      // throughout scrolling instead of applying the desktop scene exit.
+      // Phones share the pinned exit when motion is allowed.
       const media = gsap.matchMedia();
-      media.add("(min-width: 48rem)", () => {
+      media.add(`(min-width: 48rem), ${MOBILE_MOTION_QUERY}`, () => {
         const render = (progress: number) => {
           const build = span(progress, BUILD_START, BUILD_END, "power2.inOut");
           const hold = span(progress, BUILD_END, HOLD_END);

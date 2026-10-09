@@ -9,7 +9,8 @@ type BrandDevelopmentSceneMotionProps = {
   children: ReactNode;
 };
 
-const DESKTOP_MOTION_QUERY =
+// Phones keep the stacked story; the paper still lands on its first board.
+const MOTION_QUERY =
   "(min-width: 48rem) and (prefers-reduced-motion: no-preference)";
 const BEAT_BY_ID = new Map<
   string,
@@ -36,7 +37,7 @@ export function BrandDevelopmentSceneMotion({
 
       const media = gsap.matchMedia();
 
-      media.add(DESKTOP_MOTION_QUERY, () => {
+      media.add(MOTION_QUERY, () => {
         const intro = scope.querySelector<HTMLElement>(
           "[data-brand-development-intro]",
         );

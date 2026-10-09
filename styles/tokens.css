@@ -5,6 +5,24 @@
  */
 
 :root {
+  /* Warm studio palette: shared by surfaces, controls and scene lighting. */
+  --wc-tan: #d4b48e;
+  --wc-tan-light: #efdbc3;
+  --wc-tan-muted: #c3b29e;
+  --wc-brown-deep: #201a14;
+  --wc-brown: #292219;
+  --wc-brown-light: #443524;
+  --wc-warm-accent: var(--wc-tan);
+  --wc-warm-foreground: var(--wc-bone);
+  --wc-warm-muted: var(--wc-tan-muted);
+  --wc-warm-surface: var(--wc-brown-deep);
+  --wc-warm-border: color-mix(in srgb, var(--wc-tan) 28%, transparent);
+  --wc-warm-atmosphere: radial-gradient(ellipse at 76% 49%, var(--wc-brown-light), var(--wc-brown) 48%, var(--wc-black) 85%);
+  --wc-destination-radius: 0.75rem;
+  --wc-destination-padding: 0.75rem 0.875rem 0.75rem 1rem;
+  --wc-destination-gap: 0.25rem;
+  --wc-destination-hover-lift: -3px;
+  --wc-destination-duration: 180ms;
   /* Primitive color system */
   --wc-black: #0c0c0b;
   --wc-charcoal: #181817;

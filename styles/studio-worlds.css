@@ -1,0 +1,259 @@
+/* Scene composition uses the shared type, glass and destination recipes. */
+.wc-scene-studio,
+.wc-scene-orbit {
+  --wc-accent: var(--wc-warm-accent);
+  --wc-accent-foreground: var(--wc-black);
+  --wc-signal: var(--wc-warm-foreground);
+  --wc-orbit-line: var(--wc-warm-border);
+  --wc-orbit-line-strong: color-mix(in srgb, var(--wc-tan) 40%, transparent);
+}
+.wc-scene-studio .wc-home-scene__stage,
+.wc-scene-orbit .wc-home-scene__stage { background: var(--wc-warm-atmosphere); }
+:is(.wc-scene-studio, .wc-scene-orbit) .wc-eyebrow { color: var(--wc-tan); gap: 0; font-size: 0.625rem; }
+:is(.wc-scene-studio, .wc-scene-orbit) .wc-eyebrow__mark:empty { display: none; }
+:is(.wc-scene-studio, .wc-scene-orbit) .wc-meta-label { color: var(--wc-warm-muted); }
+
+.wc-studio { position: relative; width: 100%; height: 100svh; isolation: isolate; overflow: clip; background: var(--wc-warm-atmosphere); }
+.wc-studio__art {
+  position: absolute; top: 50%; left: 40%; width: min(78vw, 110svh); aspect-ratio: 1;
+  margin-top: max(-39vw, -55svh); mix-blend-mode: screen;
+  transform-origin: center; will-change: transform;
+}
+.wc-studio__art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.wc-studio__copy, .wc-studio__transition-placement {
+  position: absolute; z-index: 2; top: 50%; left: max(var(--wc-page-gutter), 6.5rem);
+  display: grid; width: min(31vw, 27rem); gap: var(--wc-space-6); translate: 0 -50%;
+}
+.wc-studio__copy .wc-display { font-size: clamp(4.5rem, 8.5vw, 9rem); }
+.wc-studio__copy .wc-lede { max-width: 27rem; }
+.wc-studio__principles { display: flex; gap: var(--wc-space-8); padding-top: var(--wc-space-6); margin-top: var(--wc-space-6); border-top: 1px solid var(--wc-warm-border); }
+.wc-studio__transition { display: grid; gap: var(--wc-space-6); opacity: 0; visibility: hidden; }
+.wc-studio__transition .wc-display { font-size: clamp(3rem, 4.4vw, 5.5rem); }
+.wc-studio__caption { position: absolute; bottom: var(--wc-space-8); left: max(var(--wc-page-gutter), 6.5rem); }
+
+/* Scene 05 -> 06 handover. With motion the orbit section overlaps the
+   studio's last screen, so its sticky stage pins on the very frame the studio
+   releases. Until then it stays hidden; once pinned it opens on a twin of the
+   studio's final frame (same still, same copy) and the arrival takes over.
+   The runtime sets data-orbit-bridge (see ORBIT_BRIDGE_QUERY). */
+.wc-scene-orbit[data-orbit-bridge="on"] { margin-top: -100svh; }
+.wc-scene-orbit[data-orbit-entered="false"] .wc-home-scene__stage { visibility: hidden; }
+.wc-scene-orbit {
+  --wc-orbit-arrival: 1;
+  --wc-bridge-copy-exit: clamp(0, calc((var(--wc-orbit-arrival) - 0.3) * 4), 1);
+}
+.wc-scene-orbit__bridge-art,
+.wc-scene-orbit__bridge-copy { display: none; }
+.wc-scene-orbit[data-orbit-bridge="on"] .wc-scene-orbit__bridge-art {
+  display: block; z-index: 3; pointer-events: none;
+  transform: scale(var(--wc-bridge-scale));
+}
+.wc-scene-orbit[data-orbit-bridge="on"] .wc-scene-orbit__bridge-copy { display: grid; z-index: 3; pointer-events: none; }
+.wc-scene-orbit__bridge-copy .wc-studio__transition {
+  opacity: calc(1 - var(--wc-bridge-copy-exit)); visibility: inherit;
+  transform: translateY(calc(var(--wc-bridge-copy-exit) * -1.5rem));
+}
+.wc-scene-orbit[data-orbit-arrival="complete"] :is(.wc-scene-orbit__bridge-art, .wc-scene-orbit__bridge-copy),
+.wc-scene-orbit__system[data-orbit-inspecting="true"] :is(.wc-scene-orbit__bridge-art, .wc-scene-orbit__bridge-copy) { visibility: hidden; }
+/* Static artwork assembles with the same timing when WebGL is unavailable. */
+.wc-scene-orbit[data-orbit-bridge="on"] .wc-scene-orbit__system:not([data-orbit-renderer="webgl"]) .wc-scene-orbit__fallback { opacity: var(--wc-orbit-arrival); }
+.wc-scene-orbit[data-orbit-bridge="on"] .wc-scene-orbit__fallback-world[data-world="designs"] img {
+  opacity: clamp(0, calc((var(--wc-orbit-arrival) - 0.66) / 0.24), 1);
+}
+.wc-scene-orbit__system { background: var(--wc-warm-atmosphere); }
+.wc-scene-orbit__editorial {
+  top: 50%; left: max(var(--wc-page-gutter), 6.5rem); width: min(30vw, 28.5rem);
+  max-width: none; gap: var(--wc-space-4); padding: 0; border: 0; border-radius: 0;
+  background: none; box-shadow: none; backdrop-filter: none;
+}
+.wc-scene-orbit__editorial { scroll-margin-top: calc(var(--wc-header-height) + var(--wc-space-6)); }
+.wc-scene-orbit__copy { gap: var(--wc-space-3); }
+.wc-scene-orbit__copy .wc-display { font-size: clamp(2.75rem, 3.8vw, 4rem); }
+.wc-scene-orbit__copy .wc-lede { font-size: 0.875rem; line-height: 1.5; }
+.wc-scene-orbit__destinations ul { display: grid; gap: var(--wc-space-2); border: 0; }
+.wc-scene-orbit__destinations .wc-destination-card { opacity: 1; transform: none; }
+.wc-scene-orbit__helper { padding-top: var(--wc-space-3); border-top: 1px solid var(--wc-warm-border); font-size: 0.5625rem; letter-spacing: 0.02em; text-transform: none; }
+.wc-scene-orbit__system[data-orbit-selected="designs"] [data-world="designs"].wc-destination-card,
+.wc-scene-orbit__system[data-orbit-selected="labs"] [data-world="labs"].wc-destination-card,
+.wc-scene-orbit__system[data-orbit-selected="shop"] [data-world="shop"].wc-destination-card {
+  --wc-card-lit: 1;
+  transform: translateY(var(--wc-destination-hover-lift));
+}
+.wc-scene-orbit__system[data-orbit-selected="designs"] [data-world="designs"] .wc-destination-card__action,
+.wc-scene-orbit__system[data-orbit-selected="labs"] [data-world="labs"] .wc-destination-card__action,
+.wc-scene-orbit__system[data-orbit-selected="shop"] [data-world="shop"] .wc-destination-card__action { border-color: var(--wc-card-accent); }
+.wc-scene-orbit__fallback { left: 38%; transform: none; mix-blend-mode: screen; }
+.wc-scene-orbit__tracks span { max-width: 100%; }
+.wc-scene-orbit__core { width: 18%; border: 0; border-radius: 0; box-shadow: none; }
+.wc-scene-orbit__core img { filter: invert(80%) sepia(20%) saturate(380%); }
+.wc-scene-orbit__fallback-world, .wc-scene-orbit__fallback-world[data-world] {
+  width: 36%; border: 0; border-radius: 0; background: transparent; box-shadow: none; opacity: 1; overflow: visible;
+  mix-blend-mode: screen;
+  --wc-orbit-world-rotation: 0deg;
+}
+.wc-scene-orbit__fallback-world[data-world="designs"] { top: 5%; right: 3%; left: auto; }
+.wc-scene-orbit__fallback-world[data-world="labs"] { top: 31%; left: 0; right: auto; }
+.wc-scene-orbit__fallback-world[data-world="shop"] { bottom: 2%; right: 8%; }
+.wc-scene-orbit__fallback-world img, .wc-scene-orbit__fallback-world[data-world="designs"] img { width: 100%; height: 100%; object-fit: contain; }
+.wc-scene-orbit__system[data-orbit-selected] .wc-scene-orbit__fallback-world { box-shadow: none; }
+.wc-scene-orbit__system[data-orbit-selected="designs"] .wc-scene-orbit__fallback-world[data-world="designs"],
+.wc-scene-orbit__system[data-orbit-selected="labs"] .wc-scene-orbit__fallback-world[data-world="labs"],
+.wc-scene-orbit__system[data-orbit-selected="shop"] .wc-scene-orbit__fallback-world[data-world="shop"] { transform: scale(1.08); filter: brightness(1.18); }
+
+.wc-scene-orbit__inspector-panel {
+  --wc-orbit-inspector-accent: var(--wc-tan);
+  --wc-glass-border: var(--wc-warm-border);
+  --wc-glass-fill: color-mix(in srgb, var(--wc-brown-deep) 92%, transparent);
+  --wc-background: var(--wc-brown-deep);
+}
+.wc-scene-orbit__inspector-cta[data-variant="solid"] { color: var(--wc-black); }
+.wc-scene-orbit__inspector-backdrop { position: absolute; inset: 0; border: 0; background: none; cursor: default; pointer-events: auto; }
+.wc-scene-orbit__inspector-preview { position: absolute; top: 20%; left: 4%; width: 48%; height: 60%; object-fit: contain; mix-blend-mode: screen; pointer-events: none; }
+.wc-scene-orbit__system[data-orbit-inspecting="true"]::before { position: fixed; z-index: 5; inset: 0; content: ""; background: var(--wc-warm-atmosphere); }
+.wc-scene-orbit__inspector[data-preview-mode="static"] { background: var(--wc-warm-atmosphere); }
+.wc-scene-orbit__system[data-orbit-inspecting="true"] .wc-scene-orbit__editorial { opacity: 0; visibility: hidden; pointer-events: none; }
+body:has(.wc-scene-orbit__system[data-orbit-inspecting="true"]) .wc-site-header { visibility: hidden; pointer-events: none; }
+
+@media (min-width: 64rem) and (max-height: 760px) {
+  .wc-scene-orbit__editorial { top: calc(50% + 2rem); gap: var(--wc-space-3); }
+  .wc-scene-orbit__copy .wc-display { font-size: 2.75rem; }
+  .wc-scene-orbit__copy { gap: var(--wc-space-2); }
+  .wc-scene-orbit__destinations .wc-destination-card { --wc-destination-padding: 0.625rem 0.75rem 0.625rem 0.875rem; --wc-destination-gap: 0.125rem; }
+  .wc-scene-orbit__helper { display: none; }
+}
+
+/* Small screens without the pinned orbit (static artwork in place of WebGL)
+   use a generous planet stage followed by readable cards. */
+@media (max-width: 63.999rem) {
+  .wc-scene-orbit[data-orbit-flow="true"] { min-height: auto; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-home-scene__stage { position: relative; display: block; min-height: auto; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__system { display: grid; min-height: auto; gap: 0; padding: 0 0 var(--wc-space-12); opacity: 1; transform: none; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__canvas-layer { inset: 0 0 auto; height: clamp(25rem, 75vw, 38rem); }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__fallback-world[data-world="designs"] { top: 20%; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__fallback { position: relative; inset: auto; width: 100%; height: clamp(25rem, 75vw, 38rem); min-height: 0; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__editorial { position: relative; inset: auto; width: calc(100% - var(--wc-page-gutter) * 2); max-width: 34rem; max-height: none; margin: 0 auto; overflow: visible; gap: var(--wc-space-5); opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__copy .wc-display { font-size: clamp(3rem, 8vw, 4rem); }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__destinations { pointer-events: auto; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__handoff { position: relative; min-height: 65svh; padding: var(--wc-space-20) var(--wc-page-gutter); background: var(--wc-off-white); pointer-events: auto; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__handoff::before { display: none; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__handoff-copy { opacity: 1; transform: none; visibility: visible; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__handoff > img { opacity: 0.045; }
+  .wc-scene-orbit[data-orbit-flow="true"] .wc-scene-orbit__start { visibility: visible; pointer-events: auto; }
+  .wc-scene-orbit__system[data-orbit-inspecting="true"] .wc-scene-orbit__canvas-layer { height: 100svh; }
+  .wc-scene-orbit__inspector-preview { top: 5%; left: 15%; width: 70%; height: 43%; }
+  .wc-scene-orbit__inspector-panel { max-height: 54svh; }
+}
+
+/* Phones and tablets with motion: the orbit pins like desktop, stacked. The
+   planets frame above the cards; the runtime measures the card block into
+   --wc-orbit-editorial-space. */
+@media (max-width: 63.999rem) and (prefers-reduced-motion: no-preference) and (forced-colors: none) and (scripting: enabled) {
+  .wc-scene-orbit:not([data-orbit-flow="true"]) {
+    --wc-orbit-stack-top: calc(var(--wc-header-height) + 0.25rem);
+    --wc-orbit-stack-height: calc(100svh - var(--wc-orbit-stack-top) - var(--wc-orbit-editorial-space, 22rem));
+  }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__system:not([data-orbit-inspecting="true"]) .wc-scene-orbit__canvas-layer,
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__fallback {
+    inset: var(--wc-orbit-stack-top) 0 auto;
+    height: var(--wc-orbit-stack-height);
+  }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__editorial {
+    top: auto;
+    right: var(--wc-page-gutter);
+    bottom: max(var(--wc-space-4), env(safe-area-inset-bottom));
+    left: var(--wc-page-gutter);
+    width: auto;
+    max-width: 34rem;
+    max-height: none;
+    margin-inline: auto;
+    overflow: visible;
+    gap: var(--wc-space-3);
+    transform: translate3d(0, calc((1 - var(--wc-orbit-editorial-progress)) * 1.5rem), 0);
+  }
+  /* One-line title; the cards already say what each world is. */
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__copy .wc-display { font-size: clamp(1.9rem, 8.4vw, 2.6rem); }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__copy .wc-display__line { display: inline; }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__copy .wc-display__line:first-child { margin-right: 0.22em; }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__copy .wc-lede,
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__helper { display: none; }
+}
+/* Phones: compact title-and-button rows leave the planets room to read large.
+   Descriptions stay for screen readers and in each planet's detail panel. */
+@media (max-width: 47.999rem) and (prefers-reduced-motion: no-preference) and (forced-colors: none) and (scripting: enabled) {
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-destination-card {
+    grid-template-areas: "title action";
+    --wc-destination-padding: 0.625rem 0.625rem 0.625rem 1rem;
+  }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-destination-card__description {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-destination-card__title { align-self: center; }
+}
+
+/* Phones with motion: Built Here pins too. The art sits up top where the
+   planets will be and the copy at the bottom where the cards will land, so
+   the final frame matches the orbit's stacked layout. */
+@media (max-width: 47.999rem) and (prefers-reduced-motion: no-preference) and (forced-colors: none) and (scripting: enabled) {
+  .wc-studio__art {
+    top: calc(var(--wc-header-height) * 0.8 + (100svh - var(--wc-header-height) * 0.8 - 22rem) / 2);
+    left: 50%;
+    width: min(112vw, 62svh);
+    margin-top: calc(min(112vw, 62svh) / -2);
+    margin-left: calc(min(112vw, 62svh) / -2);
+  }
+  /* The same scrim sits over the orbit's bridge twin, so the frames match. */
+  .wc-studio::after,
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__system::after {
+    position: absolute;
+    z-index: 1;
+    inset: 45% 0 0;
+    background: linear-gradient(180deg, transparent, rgb(12 12 11 / 78%) 48%);
+    content: "";
+    pointer-events: none;
+  }
+  .wc-scene-orbit:not([data-orbit-flow="true"]) .wc-scene-orbit__system::after { z-index: 3; }
+  .wc-scene-orbit[data-orbit-bridge="on"] .wc-scene-orbit__bridge-copy { z-index: 4; }
+  .wc-studio__copy, .wc-studio__transition-placement {
+    top: auto;
+    right: var(--wc-page-gutter);
+    bottom: max(var(--wc-space-6), env(safe-area-inset-bottom));
+    left: var(--wc-page-gutter);
+    width: auto;
+    gap: var(--wc-space-4);
+    translate: none;
+  }
+  .wc-studio__copy .wc-display { font-size: clamp(3.25rem, min(17vw, 8svh), 4.5rem); }
+  .wc-studio__copy .wc-lede { font-size: 0.875rem; }
+  .wc-studio__principles { gap: var(--wc-space-6); padding-top: var(--wc-space-4); margin-top: 0; }
+  .wc-studio__transition { gap: var(--wc-space-3); }
+  .wc-studio__transition .wc-display { font-size: clamp(2.4rem, min(11vw, 6svh), 3.4rem); }
+  .wc-studio__caption { display: none; }
+}
+@media (prefers-reduced-motion: reduce), (scripting: none), (forced-colors: active) {
+  .wc-scene-studio { min-height: auto; }
+  .wc-scene-studio .wc-home-scene__stage { position: relative; min-height: auto; }
+  .wc-studio { height: auto; display: flex; flex-direction: column; padding: calc(var(--wc-header-height) + var(--wc-space-8)) var(--wc-page-gutter) var(--wc-space-12); }
+  .wc-studio__copy, .wc-studio__transition-placement { position: relative; inset: auto; width: 100%; transform: none; translate: none; }
+  .wc-studio__copy .wc-display { font-size: clamp(4.75rem, 18vw, 7rem); }
+  .wc-studio__principles { gap: var(--wc-space-6); margin-top: 0; }
+  .wc-studio__art { position: relative; inset: auto; order: 1; width: 100%; margin: var(--wc-space-4) auto; transform: none; }
+  .wc-studio__transition-placement { order: 2; }
+  .wc-studio__transition { opacity: 1; visibility: visible; }
+  .wc-studio__transition .wc-display { font-size: clamp(2.5rem, 9vw, 4rem); }
+  .wc-studio__caption { display: none; }
+}
+@media (prefers-reduced-motion: reduce), (scripting: none), (forced-colors: active) {
+  .wc-scene-orbit__system { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); align-items: center; gap: var(--wc-space-12); }
+  .wc-scene-orbit__editorial { grid-row: 1; grid-column: 1; inset: auto; width: 100%; max-height: none; }
+  .wc-scene-orbit__fallback { inset: auto; grid-row: 1; grid-column: 2; width: 100%; height: 38rem; }
+  .wc-scene-orbit__destinations .wc-destination-card { transform: none; }
+}
+@media (max-width: 63.999rem) and (prefers-reduced-motion: reduce) {
+  .wc-scene-orbit__system { grid-template-columns: 1fr; }
+  .wc-scene-orbit__fallback, .wc-scene-orbit__editorial { grid-row: auto; grid-column: auto; }
+}

@@ -438,7 +438,9 @@
   }
 }
 
-/* Phones: a composed document with one large shirt and a peek at the other. */
+/* Phones: an app-style picker. A Front/Back switch sits above a frameless,
+   full-width shirt (nothing overlaps the garment), one cycler edits the side
+   in view, and the full kit becomes a swipeable strip. */
 @media (max-width: 47.999rem) {
   .wc-scene-apparel .wc-home-scene__stage {
     min-height: auto;
@@ -451,7 +453,8 @@
   }
 
   .wc-apparel__intro { order: 1; }
-  .wc-apparel__main { order: 2; margin-top: 2.25rem; gap: 1.5rem; }
+  /* Zero-minimum columns: the kit strip's full row width must not widen them. */
+  .wc-apparel__main { order: 2; grid-template-columns: minmax(0, 1fr); margin-top: 1.25rem; gap: 2rem; }
   .wc-apparel__expertise { order: 3; margin-top: 2.5rem; }
   .wc-apparel__cta-wrap { order: 4; }
 
@@ -468,93 +471,86 @@
   }
 
   .wc-apparel-mixer {
-    gap: 0.9rem;
+    grid-template-areas:
+      "bar"
+      "stage"
+      "controls";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
   }
 
   .wc-apparel-mixer__tag {
     display: none;
   }
 
+  .wc-apparel-mixer__bar {
+    grid-area: bar;
+    justify-self: center;
+  }
+
   .wc-apparel-mixer__views {
     display: flex;
-    width: 100%;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid rgb(236 232 220 / 16%);
+    border-radius: var(--wc-radius-pill);
+    background: rgb(12 12 11 / 62%);
+    box-shadow: 0 0.75rem 1.75rem rgb(0 0 0 / 35%);
+    -webkit-backdrop-filter: blur(14px) saturate(130%);
+    backdrop-filter: blur(14px) saturate(130%);
   }
 
+  .wc-apparel-mixer__views .wc-segmented__option {
+    min-width: 4.75rem;
+    min-height: 2.5rem;
+    border-color: transparent;
+    background: transparent;
+    font-size: 0.625rem;
+  }
+
+  .wc-apparel-mixer__views .wc-segmented__option[aria-pressed="true"] {
+    background: var(--wc-bone);
+  }
+
+  .wc-apparel-mixer__views .wc-icon-button {
+    width: 2.5rem;
+  }
+
+  /* Full-bleed stage: the garment, a warm glow, no window. */
   .wc-apparel-mixer__stage {
-    aspect-ratio: 1;
+    grid-area: stage;
+    aspect-ratio: 1 / 1.08;
+    margin-inline: -1.25rem;
     overflow: hidden;
-    border: 1px solid var(--wc-dark-border);
-    border-radius: 1rem;
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 45%, rgb(181 67 22 / 16%), transparent 72%),
-      rgb(17 17 15 / 60%);
+    background: radial-gradient(
+      ellipse 62% 52% at 50% 52%,
+      rgb(181 67 22 / 22%),
+      transparent 72%
+    );
   }
 
+  /* Both sides share the stage and crossfade; only the side in view shows. */
   .wc-apparel-shirt {
     position: absolute;
     z-index: 1;
-    top: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 0.75rem;
+    top: 3%;
+    left: 4%;
+    width: 92%;
     transition:
-      top 520ms var(--wc-ease-snap),
-      left 520ms var(--wc-ease-snap),
-      width 520ms var(--wc-ease-snap),
-      background-color 300ms ease,
-      box-shadow 300ms ease;
+      opacity 360ms ease,
+      transform 520ms var(--wc-ease-snap),
+      visibility 0s linear 0s;
   }
 
   .wc-apparel-shirt:not([data-active]) {
-    z-index: 2;
-    overflow: hidden;
-    top: calc(100% - 30% - 0.75rem);
-    left: calc(100% - 30% - 0.75rem);
-    width: 30%;
-    border: 1px solid rgb(236 232 220 / 22%);
-    background: rgb(12 12 11 / 88%);
-    box-shadow: 0 0.75rem 1.5rem rgb(0 0 0 / 45%);
-  }
-
-  .wc-apparel-shirt:not([data-active]) .wc-apparel-shirt__ring {
     opacity: 0;
-  }
-
-  .wc-apparel-shirt:not([data-active]) .wc-apparel-shirt__frame::after {
-    display: none;
-  }
-
-  .wc-apparel-shirt__peek {
-    position: absolute;
-    inset: 0;
-    align-items: end;
-    justify-content: center;
-    padding-bottom: 0.4rem;
-    border: 0;
-    border-radius: inherit;
-    background: transparent;
-    cursor: pointer;
-  }
-
-  .wc-apparel-shirt:not([data-active]) .wc-apparel-shirt__peek {
-    display: flex;
-  }
-
-  .wc-apparel-shirt__peek:focus-visible {
-    outline: 2px solid var(--wc-coastal-bright);
-    outline-offset: 2px;
-  }
-
-  .wc-apparel-shirt__peek > span {
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--wc-radius-pill);
-    background: var(--wc-bone);
-    color: var(--wc-black);
-    font-family: var(--wc-font-mono);
-    font-size: 0.5625rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.96);
+    transition:
+      opacity 360ms ease,
+      transform 520ms var(--wc-ease-snap),
+      visibility 0s linear 360ms;
   }
 
   .wc-apparel-shirt__ring::after {
@@ -569,8 +565,8 @@
   .wc-apparel-mixer__hint {
     position: absolute;
     z-index: 3;
-    bottom: 0.9rem;
-    left: 0.9rem;
+    bottom: 1.1rem;
+    left: 1.25rem;
     display: block;
     color: var(--wc-stone-500);
     font-family: var(--wc-font-mono);
@@ -579,11 +575,14 @@
     text-transform: uppercase;
   }
 
+  /* One cycler: the side in view. */
   .wc-apparel-mixer__controls {
+    grid-area: controls;
     grid-template-columns: 1fr;
-    gap: 0.625rem;
   }
 
+  .wc-apparel-mixer[data-view="front"] .wc-apparel-cycler[data-side="back"],
+  .wc-apparel-mixer[data-view="back"] .wc-apparel-cycler[data-side="front"],
   .wc-apparel-mixer__x {
     display: none;
   }
@@ -600,23 +599,77 @@
     font-size: 0.75rem;
   }
 
+  /* Full kit: a header line over a swipeable strip of compact tiles. */
+  .wc-apparel-kit.wc-glass-card {
+    min-width: 0;
+    margin-inline: -1.25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .wc-apparel-kit__header {
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    padding-inline: 1.25rem;
+  }
+
+  .wc-apparel-kit__title {
+    font-size: 0.9375rem;
+  }
+
   .wc-apparel-kit__note {
-    margin-left: 0;
-    flex-basis: 100%;
+    display: none;
+  }
+
+  .wc-apparel-kit__header::after {
+    margin-left: auto;
+    color: var(--wc-stone-500);
+    content: "Swipe \2192";
+    font-family: var(--wc-font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .wc-apparel-kit__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 0.75rem;
+    display: flex;
+    gap: 0.625rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    padding: 0.125rem 1.25rem 0.5rem;
+    scroll-padding-inline: 1.25rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 2.5rem), transparent);
+  }
+
+  .wc-apparel-kit__grid::-webkit-scrollbar {
+    display: none;
   }
 
   .wc-apparel-kit__item {
+    flex: 0 0 min(42vw, 10.5rem);
+    flex-direction: column;
     align-items: flex-start;
-    padding-left: 0.7rem;
+    gap: 0.6rem;
+    padding: 0.85rem 0.8rem 0.9rem;
+    border: 1px solid rgb(236 232 220 / 14%);
+    border-radius: 0.9rem;
+    background:
+      linear-gradient(160deg, rgb(245 131 78 / 9%), transparent 55%),
+      rgb(17 17 15 / 70%);
+    scroll-snap-align: start;
   }
 
   .wc-apparel-kit__item-icon {
-    margin-top: 0.05rem;
+    color: var(--wc-signal-soft);
   }
 
   .wc-apparel__expertise-detail {
@@ -625,8 +678,8 @@
 }
 
 @media (max-width: 22.5rem) {
-  .wc-apparel-kit__grid {
-    grid-template-columns: 1fr;
+  .wc-apparel-kit__item {
+    flex-basis: 64vw;
   }
 }
 

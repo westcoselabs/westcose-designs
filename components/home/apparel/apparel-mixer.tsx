@@ -104,6 +104,7 @@ function Cycler({
       shape="pill"
       tone={side === "front" ? "signal-soft" : "coastal"}
       className="wc-apparel-cycler"
+      data-side={side}
     >
       <IconButton
         label={`Previous ${label.toLowerCase()} design`}
@@ -137,7 +138,8 @@ function Cycler({
 export function ApparelMixer() {
   const [front, setFront] = useState(APPAREL_FRONTS.length - 1);
   const [back, setBack] = useState(0);
-  const [view, setView] = useState<Side>("front");
+  // Phones show one side at a time and open on the back print.
+  const [view, setView] = useState<Side>("back");
   const [loaded, setLoaded] = useState<ReadonlySet<string>>(() => new Set());
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
 

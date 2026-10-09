@@ -29,12 +29,14 @@ The falling studio is the peak (440svh). The gallery immediately before it gives
 | Falling studio | Video scrub and flexible 3D prints | 440svh |
 | Identity systems | Board handoff and ordered presentation | 400svh |
 | Sketchbook | Segmented curved page turns and paper wipe | 320svh |
-| Corporate | Stationery assembly and monogram bridge | 200svh |
-| Ecosystem | Existing interactive 3D orbit and release | 200svh |
+| Built Here | Designs artwork close-up, reversible pullback into a complete world | 220svh |
+| Explore WestCose | Pins on the studio's last frame; Designs still lands in orbit as the system assembles; tinted destination cards; project-brief release | 280svh (first 100svh overlaps Built Here) |
 | Brief | Natural-flow working form | At least 100svh |
 
-21.4 desktop screen heights, plus form overflow. Mobile uses normal-flow galleries and a 260svh portrait paper sequence. Reduced motion, forced colors, data saving, video failure, and unavailable WebGL receive a static artwork sequence.
+21.4 desktop screen heights, plus form overflow. Phones with motion pin the same chapters in phone compositions (hero dock, sideways rail, 260svh portrait paper sequence, stacked logo beats and orbit). Reduced motion, forced colors, data saving, video failure, and unavailable WebGL receive a static artwork sequence.
 
 ## Fingerprint
+
+October 2026 scene update: the approved `.pen` concept replaces the corporate chapter and its monogram bridge with Built Here. The visitor first sees the studio's craft up close, then the camera pulls back to reveal the Designs world. The next chapter makes the three destinations explicit: design portfolio, website design/development, and official merchandise. Warm tan lighting connects both scenes. The orbit stage pins on the studio's final frame, so the pullback continues into the orbit with no scroll seam. Glass destination cards reuse the shared card/button/type system; Labs and Shop cards carry their planet's colour; their buttons navigate directly. Planet hover keeps the slow orbit running; a click opens the existing inspector. Phones pin both chapters in a stacked composition (planets above, cards below); reduced motion retains artwork and destination clarity without the pullback.
 
 Custom connected-chapter grammar: persistent liquid navigation, layered illustrated hero, gallery → paper flight → systems → sketchbook → stationery → orbit, form ending. It follows the already approved project sequence rather than imposing a new template. No prior local registry rows to compare.
